@@ -42,7 +42,7 @@
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
             <el-button type="danger" size="mini" @click="handleReset(scope.$index, scope.row)">密码重置</el-button>
-            <el-button type="warning" size="mini" @click="handleModify(scope.$index, scope.row)">修改</el-button>
+          <!--  <el-button type="warning" size="mini" @click="handleModify(scope.$index, scope.row)">修改</el-button>-->
             <el-button type="info" size="mini" @click="handleDetail(scope.$index, scope.row)">详情</el-button>
           </template>
         </el-table-column>
