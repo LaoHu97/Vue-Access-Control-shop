@@ -72,7 +72,7 @@
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <el-button type="success" size="mini" @click="handleDetail(scope.$index, scope.row)">订单详情</el-button>
-            <el-button type="danger" size="mini" @click="handleRefund(scope.$index, scope.row)">退款</el-button>
+          <!--  <el-button type="danger" size="mini" @click="handleRefund(scope.$index, scope.row)">退款</el-button>-->
           </template>
         </el-table-column>
       </el-table>
