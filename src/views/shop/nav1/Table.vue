@@ -12,14 +12,14 @@
     <el-form :inline="true" :model="filters" ref="filters">
       <el-row>
         <el-form-item prop="startTime">
-          <el-date-picker v-model="filters.startTime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1"
-            :clearable="false" :editable='false'>
+          <el-date-picker v-model="filters.startTime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false"
+            :editable='false'>
           </el-date-picker>
         </el-form-item>
         <el-form-item>至</el-form-item>
         <el-form-item prop="endTime">
-          <el-date-picker v-model="filters.endTime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2"
-            :clearable="false" :editable='false'>
+          <el-date-picker v-model="filters.endTime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false"
+            :editable='false'>
           </el-date-picker>
         </el-form-item>
       </el-row>
@@ -72,7 +72,7 @@
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <el-button type="success" size="mini" @click="handleDetail(scope.$index, scope.row)">订单详情</el-button>
-          <!--  <el-button type="danger" size="mini" @click="handleRefund(scope.$index, scope.row)">退款</el-button>-->
+           <el-button type="danger" size="mini" @click="handleRefund(scope.$index, scope.row)">退款</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -122,12 +122,16 @@
     </el-dialog>
     <!--退款界面-->
     <el-dialog title="退款" :visible.sync="refundFormVisible" :close-on-click-modal="false" width="600px">
-      <el-form :model="refundForm" :rules="refundFormRules" ref="refundForm">
+      <el-form :model="refundForm" :rules="refundFormRules" ref="refundForm" label-position="left" label-width="120px">
         <el-form-item label="订单号：">
           <span>{{refundForm.orderId}}</span>
         </el-form-item>
         <el-form-item label="第三方订单号：">
           <span>{{refundForm.transactionId}}</span>
+        </el-form-item>
+        <el-form-item label="验证码" prop="code">
+          <el-input v-model="refundForm.code" style="width:220px"></el-input>
+          <el-button plain @click="getCode" :disabled="disabledCode">{{auth_time}}{{codeText}}</el-button>
         </el-form-item>
         <el-form-item label="退款金额" prop="amount">
           <el-input v-model="refundForm.amount" auto-complete="off" placeholder="请输入退款金额"></el-input>
@@ -157,7 +161,8 @@
     supplyPrint,
     selectStoreList,
     checkdownOrderExcelNew,
-    queryOrderDetail
+    queryOrderDetail,
+    sendVerCodeT
   } from '../../../api/shop';
 
   export default {
@@ -224,6 +229,11 @@
 
         },
         refundFormRules: {
+          code: [{
+            required: true,
+            message: '请输入验证码',
+            trigger: 'blur'
+          }],
           amount: [{
               required: true,
               validator: rules.validatorAmount,
@@ -235,7 +245,10 @@
               trigger: 'blur'
             }
           ]
-        }
+        },
+        codeText: '获取验证码',
+        auth_time: null,
+        disabledCode: false
       }
     },
     methods: {
@@ -248,12 +261,33 @@
       format_payWay(row, column) {
         return util.formatPayment(row.payWay)
       },
-      format_payTime(props){
+      format_payTime(props) {
         return util.formatDate.format(new Date(props), 'yyyy-MM-dd hh:mm:ss')
       },
       //格式化金额
       format_amount(row, column) {
         return util.number_format(row.goodsPrice, 2, ".", ",")
+      },
+      getCode() {
+        let para = {
+          orderId: this.refundForm.orderId
+        }
+        sendVerCodeT(para).then((res) => {
+          if (res.status === 200) {
+            this.disabledCode = true
+            this.codeText = 's后重新获取'
+            this.auth_time = 60
+            let auth_timetimer = setInterval(() => {
+              this.auth_time--
+                if (this.auth_time <= 0) {
+                  this.codeText = '获取验证码'
+                  this.auth_time = null
+                  this.disabledCode = false
+                  clearInterval(auth_timetimer)
+                }
+            }, 1000)
+          }
+        })
       },
       //门店远程搜索
       clickShop: function () {
@@ -286,7 +320,9 @@
       },
       //补发打印
       Print() {
-        supplyPrint({orderId: this.editForm.orderId}).then((res) => {
+        supplyPrint({
+          orderId: this.editForm.orderId
+        }).then((res) => {
           let {
             status,
             message
@@ -343,7 +379,11 @@
       //显示退款
       handleRefund: function (index, row) {
         this.refundFormVisible = true
-        this.refundForm = Object.assign({}, row);
+        queryOrderDetail({
+          id: row.id
+        }).then(res => {
+          this.refundForm  = res.data.order
+        })
       },
       //确定退款
       refundSubmit() {
@@ -357,7 +397,8 @@
               let para = {
                 authCode: this.refundForm.orderId,
                 amount: this.refundForm.amount,
-                desc: this.refundForm.desc
+                desc: this.refundForm.desc,
+                verCode: this.refundForm.code
               }
               merRefund(para).then((res) => {
                 let {

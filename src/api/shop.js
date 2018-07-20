@@ -347,3 +347,8 @@ export const addYuBaoDevice = params => { return instance.post(`${preUrlPath}/ad
 export const updateYuBaoDevice = params => { return instance.post(`${preUrlPath}/admin/wp/mer/updateYuBaoDevice`,params).then(res => res.data); };
 
 export const getDeviceQrCode = `${preUrlPath}/admin/wp/mer/getDeviceQrCode`;
+
+/*
+2018-7-18
+*/ 
+export const merInfoShow = params => { return instance.post(`${preUrlPath}/admin/wp/mer/merInfoShow`,params).then(res => res.data); };
