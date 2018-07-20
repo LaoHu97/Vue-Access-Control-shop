@@ -25,21 +25,21 @@
             <p>
               <i class="iconfont icon-weixin"></i>
               <span>微信：</span>
-              {{profilesForm.returnMap.WX || '暂无'}}
+              {{format_rate(profilesForm.returnMap.WX)}}
             </p>
           </el-col>
           <el-col :span="8">
             <p>
               <i class="iconfont icon-zhifubao"></i>
               <span>支付宝：</span>
-              {{profilesForm.returnMap.ALI || '暂无'}}
+              {{format_rate(profilesForm.returnMap.ALI)}}
             </p>
           </el-col>
           <el-col :span="8">
             <p>
               <i class="iconfont icon-paybest"></i>
               <span>翼支付：</span>
-              {{profilesForm.returnMap.BEST || '暂无'}}
+              {{format_rate(profilesForm.returnMap.BEST)}}
             </p>
           </el-col>
         </el-row>
@@ -48,21 +48,21 @@
             <p>
               <i class="iconfont icon-card"></i>
               <span>借记卡：</span>
-              {{profilesForm.returnMap.DEBIT || '暂无'}}
+              {{format_rate(profilesForm.returnMap.DEBIT)}}
             </p>
           </el-col>
           <el-col :span="8">
             <p>
               <i class="iconfont icon-cardb"></i>
               <span>贷记卡：</span>
-              {{profilesForm.returnMap.CREDIT || '暂无'}}
+              {{format_rate(profilesForm.returnMap.CREDIT)}}
             </p>
           </el-col>
           <el-col :span="8">
             <p>
               <i class="iconfont icon-yinlian1193427easyiconnet"></i>
               <span>银联二维码：</span>
-              {{profilesForm.returnMap.UNIONPAY || '暂无'}}
+              {{format_rate(profilesForm.returnMap.UNIONPAY)}}
             </p>
           </el-col>
         </el-row>
@@ -78,12 +78,23 @@
   export default {
     data() {
       return {
-        profilesForm: {}
+        profilesForm: {
+          creatTime: '',
+          maccount: '',
+          malias: '',
+          mname: '',
+          returnMap: {
+
+          }
+        }
       }
     },
     methods: {
       format_payTime(props) {
         return util.formatDate.format(new Date(props), 'yyyy-MM-dd hh:mm:ss')
+      },
+      format_rate(props) {
+        return props !== undefined ? props : '暂无'
       },
       getUsers(){
         merInfoShow().then((res)=>{
@@ -91,7 +102,7 @@
         })
       }
     },
-    mounted() {
+    created() {
       this.getUsers();
     }
   }
