@@ -151,13 +151,10 @@
         //账单类型
         optionsPayType: [{
           value: '0',
-          label: '支付'
+          label: '支付成功'
         }, {
           value: '1',
-          label: '退款'
-        }, {
-          value: 'ALL',
-          label: '所有'
+          label: '退款成功'
         }],
         //支付方式
         optionsScene: data.optionsPaymentExcel

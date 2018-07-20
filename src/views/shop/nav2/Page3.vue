@@ -8,33 +8,62 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <p>
-              <span>商户信息：</span>{{profilesForm.name1}}</p>
+              <span>商户名称：</span>{{profilesForm.mname}}</p>
           </el-col>
           <el-col :span="8">
             <p>
-              <span>商户信息：</span>{{profilesForm.name2}}</p>
+              <span>商户账号：</span>{{profilesForm.maccount}}</p>
           </el-col>
           <el-col :span="8">
             <p>
-              <span>商户信息：</span>{{profilesForm.name3}}</p>
+              <span>入驻时间：</span>{{format_payTime(profilesForm.creatTime)}}</p>
           </el-col>
         </el-row>
-        <div class="main_title"><span>商户费率</span></div>
+        <div class="main_title"><span>商户费率（‰）</span></div>
         <el-row :gutter="20">
           <el-col :span="8">
             <p>
               <i class="iconfont icon-weixin"></i>
               <span>微信：</span>
-              {{profilesForm.name1}}
+              {{profilesForm.returnMap.WX || '暂无'}}
             </p>
           </el-col>
           <el-col :span="8">
             <p>
-              <span>商户信息：</span>{{profilesForm.name2}}</p>
+              <i class="iconfont icon-zhifubao"></i>
+              <span>支付宝：</span>
+              {{profilesForm.returnMap.ALI || '暂无'}}
+            </p>
           </el-col>
           <el-col :span="8">
             <p>
-              <span>商户信息：</span>{{profilesForm.name3}}</p>
+              <i class="iconfont icon-paybest"></i>
+              <span>翼支付：</span>
+              {{profilesForm.returnMap.BEST || '暂无'}}
+            </p>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <p>
+              <i class="iconfont icon-card"></i>
+              <span>借记卡：</span>
+              {{profilesForm.returnMap.DEBIT || '暂无'}}
+            </p>
+          </el-col>
+          <el-col :span="8">
+            <p>
+              <i class="iconfont icon-cardb"></i>
+              <span>贷记卡：</span>
+              {{profilesForm.returnMap.CREDIT || '暂无'}}
+            </p>
+          </el-col>
+          <el-col :span="8">
+            <p>
+              <i class="iconfont icon-yinlian1193427easyiconnet"></i>
+              <span>银联二维码：</span>
+              {{profilesForm.returnMap.UNIONPAY || '暂无'}}
+            </p>
           </el-col>
         </el-row>
       </div>
@@ -43,24 +72,23 @@
 </template>
 <script>
   import * as util from '../../../util/util.js'
-  // import {
-  //   mermerInfoShow
-  // } from '../../../api/shop';
+  import {
+    merInfoShow
+  } from '../../../api/shop';
   export default {
     data() {
       return {
-        profilesForm: {
-          name1: '0.01',
-          name2: '西安万鼎网络西安万鼎网络西安',
-          name3: '西安万鼎网络西安万鼎网络西安万鼎网络西安万鼎'
-        }
+        profilesForm: {}
       }
     },
     methods: {
+      format_payTime(props) {
+        return util.formatDate.format(new Date(props), 'yyyy-MM-dd hh:mm:ss')
+      },
       getUsers(){
-        // mermerInfoShow().then((res)=>{
-          
-        // })
+        merInfoShow().then((res)=>{
+          this.profilesForm = res.data
+        })
       }
     },
     mounted() {
@@ -82,9 +110,26 @@
     font-size: 18px;
   }
   .iconfont{
-    color: #3DA53C;
     font-size: 32px;
     vertical-align:middle;
     margin:  0 10px;
+  }
+  .icon-weixin{
+    color: #65da4e;
+  }
+  .icon-zhifubao{
+    color: #1296db;
+  }
+  .icon-card{
+    color: #2F559B;
+  }
+  .icon-paybest{
+    color: #F1900E;
+  }
+  .icon-cardb{
+    color: tomato;
+  }
+  .icon-yinlian1193427easyiconnet{
+    color: coral;
   }
 </style>
