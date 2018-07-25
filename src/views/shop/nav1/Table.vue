@@ -7,48 +7,79 @@
         <el-tag type="primary" style="margin:10px 10px 20px 0;">交易总笔数（笔）：{{whole.countRow}}笔</el-tag>
         <el-tag type="primary" style="margin:10px 10px 20px 0;">会员卡消费总金额（元）：{{whole.memAmt}}元</el-tag>
         <el-tag type="primary" style="">会员卡消费总笔数（笔）：{{whole.memCount}}笔</el-tag>
+        <el-form-item style="float: right;">
+          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
+          <el-button @click="resetForm('filters')" size="medium" round>重置</el-button>
+        </el-form-item>
       </el-form>
     </el-row>
     <el-form :inline="true" :model="filters" ref="filters">
       <el-row>
         <el-form-item prop="startTime">
-          <el-date-picker v-model="filters.startTime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false"
+          <el-date-picker v-model="filters.startTime"  class="fixed_search_input_datetime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false"
             :editable='false'>
           </el-date-picker>
         </el-form-item>
         <el-form-item>至</el-form-item>
         <el-form-item prop="endTime">
-          <el-date-picker v-model="filters.endTime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false"
+          <el-date-picker v-model="filters.endTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false"
             :editable='false'>
           </el-date-picker>
         </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item prop="parag">
-          <el-select v-model="filters.parag" placeholder="门店名称" :multiple="false" filterable remote :remote-method="remoteShop" :loading="loading"
-            clearable @visible-change="clickShop">
+        <el-form-item prop="storeName" class="fixed_search_input">
+          <el-select v-model="filters.storeName" placeholder="门店名称" :multiple="false" filterable remote :remote-method="remoteShop"
+            :loading="searchLoading" clearable @focus="clickShop" @change="selectStoreChange">
             <el-option v-for="item in optionsStore" :key="item.id" :value="item.id" :label="item.value">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="play">
-          <el-select v-model="filters.play" clearable placeholder="支付方式">
-            <el-option v-for="item in optionsScene" :label="item.labelScene" :value="item.valueScene" :key="item.valueScene">
+        <el-form-item prop="empName" class="fixed_search_input">
+          <el-select v-model="filters.empName" placeholder="款台名称" :multiple="false" filterable remote :remote-method="remoteEmp" :loading="empSearchLoading"
+            clearable @focus="clickEmp">
+            <el-option v-for="item in optionsEmp" :key="item.eid" :value="item.eid" :label="item.value">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="state">
+        <el-form-item prop="state" class="fixed_search_input">
           <el-select v-model="filters.state" clearable placeholder="支付状态">
-            <el-option v-for="item in optionsState" :label="item.labelState" :value="item.valueState" :key="item.valueState">
+            <el-option v-for="item in optionsPayState" :label="item.label" :value="item.value" :key="item.value">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item style="float: right;">
-          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
-          <el-button @click="resetForm('filters')" size="medium" round>重置</el-button>
-          <!-- <el-button type="text" @click="advancedOptions = !advancedOptions">{{advancedOptions ? '隐藏' : '显示'}}高级选项</el-button> -->
-        </el-form-item>
+        <!-- <el-form-item>
+          <el-button type="text" @click="advancedOptions = !advancedOptions">{{advancedOptions ? '隐藏' : '显示'}}高级选项</el-button>
+        </el-form-item> -->
       </el-row>
+      <el-collapse-transition>
+        <div v-show="advancedOptions">
+          <el-row>
+            <el-form-item prop="play" class="fixed_search_seach">
+              <el-select v-model="filters.play" clearable placeholder="支付方式">
+                <el-option v-for="item in optionsScene" :label="item.label" :value="item.value" :key="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item prop="cardType" class="fixed_search_seach">
+              <el-select v-model="filters.cardType" clearable placeholder="银行卡类型">
+                <el-option v-for="item in optionsBank" :label="item.label" :value="item.value" :key="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item prop="goodsprice" class="fixed_search_input">
+              <el-input v-model.trim="filters.goodsprice" placeholder="交易金额">
+                <i slot="prefix" class="iconfont icon-50"></i>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="orderId" class="fixed_search_input">
+              <el-input v-model.trim="filters.orderId" placeholder="订单号"></el-input>
+            </el-form-item>
+            <el-form-item prop="transaction_id" class="fixed_search_input">
+              <el-input v-model.trim="filters.transaction_id" placeholder="第三方订单号"></el-input>
+            </el-form-item>
+          </el-row>
+        </div>
+      </el-collapse-transition>
+
       <el-row>
         <el-alert title="可查询最近30天的交易" type="warning" center close-text="知道了" show-icon>
         </el-alert>
@@ -72,7 +103,7 @@
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
             <el-button type="success" size="mini" @click="handleDetail(scope.$index, scope.row)">订单详情</el-button>
-           <el-button type="danger" size="mini" @click="handleRefund(scope.$index, scope.row)">退款</el-button>
+            <el-button type="danger" size="mini" @click="handleRefund(scope.$index, scope.row)">退款</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -100,7 +131,7 @@
           <span>{{format_payTime(editForm.payTime)}}</span>
         </el-form-item>
         <el-form-item label="交易状态：">
-          <span>{{editForm.status === '1' ? '已支付' : editForm.status === '3' ? '已支付（有退款）' : '未知'}}</span>
+          <span>{{formatPay2(editForm)}}</span>
         </el-form-item>
         <el-form-item label="退款金额（元）：">
           <span>{{editForm.refundAmount}}</span>
@@ -152,6 +183,7 @@
   import * as util from '../../../util/util.js'
   import * as rules from '../../../util/rules.js'
   import * as data from '../../../util/data.js'
+  import getUsersList from '../../../mixins/getUsersList'
 
   import {
     getUserListPage,
@@ -162,26 +194,21 @@
     selectStoreList,
     checkdownOrderExcelNew,
     queryOrderDetail,
-    sendVerCodeT
+    sendVerCodeT,
+    selectEmpsBySid
   } from '../../../api/shop';
 
   export default {
+    mixins: [getUsersList],
     data() {
       var myDate = new Date();
       return {
         //支付方式
-        optionsScene: data.optionsPayment,
+        optionsScene: data.optionsPaymentCopy,
+        //银行卡类型
+        optionsBank: data.optionsBank,
         //支付状态
-        optionsState: [{
-          valueState: '1',
-          labelState: '已支付'
-        }, {
-          valueState: '3',
-          labelState: '已支付（有退款）'
-        }, {
-          valueState: '5',
-          labelState: '未知'
-        }],
+        optionsPayState: data.optionsPayState,
         //选择款台
         optionsStore: [],
         //时间控制
@@ -200,24 +227,27 @@
             }
           }
         },
-        loading: false,
+        searchLoading: false,
+        empSearchLoading: false,
         //商户名
         filters: {
           startTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate()),
           endTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate(), 23, 59, 59),
           play: '',
-          state: '',
-          parag: ''
+          state: 'SUCCESS',
+          storeName: '',
+          empName: '',
+          goodsprice: '',
+          transaction_id: '',
+          goodsprice: '',
+          cardType: ''
         },
         whole: {
           sumAmt: "",
           countRow: ""
         },
-        total: 0,
-        page: 1,
-        users: [],
-        listLoading: false,
-        advancedOptions: false,
+        optionsEmp: [],
+        advancedOptions: true,
 
         editFormVisible: false, //编辑界面是否显示
         editLoading: false,
@@ -253,7 +283,7 @@
     },
     methods: {
       formatPay2: function (row, column) {
-        return row.status == 1 ? '已支付' : row.status == 3 ? '已支付（有退款）' : '未知';
+        return util.formatPayStatus(row.status, row.orderType)
       },
       formatPay1: function (row) {
         return util.formatPayment(row)
@@ -289,9 +319,53 @@
           }
         })
       },
+      //款台远程搜索
+      clickEmp: function () {
+        this.empSearchLoading = true;
+        let para = {
+          mid: sessionStorage.getItem('mid'),
+          storeId: String(this.filters.storeName),
+          ename: ''
+        }
+        selectEmpsBySid(para).then((res) => {
+          this.empSearchLoading = false;
+          let {
+            status,
+            data
+          } = res
+          this.optionsEmp = data.emplyeeList
+        })
+      },
+      remoteEmp(query) {
+        if (query !== '') {
+          this.empSearchLoading = true;
+          setTimeout(() => {
+            this.empSearchLoading = false;
+            let para = {
+              mid: sessionStorage.getItem('mid'),
+              storeId: String(this.filters.storeName),
+              ename: query
+            }
+            selectEmpsBySid(para).then((res) => {
+              let {
+                status,
+                data
+              } = res
+              this.optionsEmp = data.emplyeeList
+            })
+          }, 200);
+        } else {
+          this.optionsEmp = [];
+        }
+      },
       //门店远程搜索
+      selectStoreChange() {
+        this.filters.empName = ''
+      },
       clickShop: function () {
+        this.searchLoading = true;
         selectStoreList().then((res) => {
+          this.searchLoading = false;
           let {
             status,
             data
@@ -301,9 +375,9 @@
       },
       remoteShop(query) {
         if (query !== '') {
-          this.loading = true;
+          this.searchLoading = true;
           setTimeout(() => {
-            this.loading = false;
+            this.searchLoading = false;
             selectStoreList({
               sname: query
             }).then((res) => {
@@ -335,10 +409,6 @@
           }
         })
       },
-      handleCurrentChange(val) {
-        this.page = val;
-        this.getList()
-      },
       //获取用户列表
       getList() {
         this.listLoading = true;
@@ -346,16 +416,20 @@
           pageNum: this.page,
           payWay: this.filters.play,
           status: this.filters.state,
-          storeId: String(this.filters.parag),
+          storeId: String(this.filters.storeName),
           startTime: this.filters.startTime,
-          endTime: this.filters.endTime
+          endTime: this.filters.endTime,
+          orderId: this.filters.orderId,
+          transactionId: this.filters.transaction_id,
+          goodsPrice: this.filters.goodsprice,
+          cardType: this.filters.cardType,
+          eid: String(this.filters.empName)
         };
         para.startTime = (!para.startTime || para.startTime == '') ? '' : String(Date.parse(util.formatDate.format(new Date(
           para.startTime), 'yyyy/MM/dd hh:mm:ss'))); //开始时间
         para.endTime = (!para.endTime || para.endTime == '') ? '' : String(Date.parse(util.formatDate.format(new Date(
           para.endTime), 'yyyy/MM/dd hh:mm:ss'))); //开始时间
         getUserListPage(para).then((res) => {
-          var _this = this;
           let {
             data,
             message,
@@ -372,17 +446,13 @@
           this.listLoading = false;
         })
       },
-      getUsers() {
-        this.page = 1
-        this.getList()
-      },
       //显示退款
       handleRefund: function (index, row) {
         this.refundFormVisible = true
         queryOrderDetail({
           id: row.id
         }).then(res => {
-          this.refundForm  = res.data.order
+          this.refundForm = res.data.order
         })
       },
       //确定退款
@@ -438,20 +508,7 @@
       //查询重置
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      },
-    },
-    mounted() {
-      this.getUsers();
-      lookupUser().then((res) => {
-        var _this = this;
-        let {
-          status,
-          message
-        } = res;
-        if (status == 200) {
-          this.optionsStore = res.data.storeList;
-        }
-      });
+      }
     }
   }
 

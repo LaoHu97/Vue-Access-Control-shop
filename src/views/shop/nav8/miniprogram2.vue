@@ -2,7 +2,7 @@
   <section>
     <!--工具条-->
     <el-row>
-      <el-form :inline="true" :model="filters">
+      <el-form :inline="true">
         <el-form-item style="float:right">
           <el-button type="primary" v-on:click="getUsers" size="medium" round>刷新</el-button>
           <el-button type="primary" @click="addCarousel" size="medium" round>新增轮播图</el-button>

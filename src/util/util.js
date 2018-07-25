@@ -1,7 +1,4 @@
-// import Vue from 'vue'
-// import {
-//   Message
-// } from 'element-ui'
+import Vue from 'vue'
 
 var SIGN_REGEXP = /([yMdhsm])(\1*)/g;
 var DEFAULT_PATTERN = 'yyyy-MM-dd';
@@ -14,7 +11,7 @@ function padding(s, len) {
   return s;
 };
 //金额格式化
-export const number_format = function (number, decimals, dec_point, thousands_sep) {
+export const number_format = function (number) {
   /*
  2         /*
  3         * 参数说明：

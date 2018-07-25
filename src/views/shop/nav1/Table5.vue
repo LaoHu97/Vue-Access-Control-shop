@@ -6,6 +6,10 @@
         <el-form :inline="true" :model="whole">
           <el-tag type="primary" style="margin:10px 10px 20px 0;">交易总金额（元）：{{whole.sumAmt}}元</el-tag>
           <el-tag type="primary" style="margin:10px 10px 20px 0;">交易总笔数（笔）：{{whole.countRow}}笔</el-tag>
+          <el-form-item style="float: right;">
+            <el-button type="primary" @click="getUsers('filters')" size="medium" round>查询</el-button>
+            <el-button @click="resetForm('filters')" size="medium" round>重置</el-button>
+          </el-form-item>
         </el-form>
       </el-col>
     </el-row>
@@ -21,7 +25,7 @@
         </el-form-item>
         <el-form-item prop="endTime">
           <el-date-picker class="fixed_search_input_datetime" v-model="filters.endTime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2"
-            :clearable="false" :editable='false'>
+            :clearable="false" :editable='false' default-time="23:59:59">
           </el-date-picker>
         </el-form-item>
         <el-form-item prop="storeName" class="fixed_search_input">
@@ -38,32 +42,28 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="state" class="fixed_search_input">
+          <el-select v-model="filters.state" clearable placeholder="支付状态">
+            <el-option v-for="item in optionsPayState" :label="item.label" :value="item.value" :key="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <!-- <el-form-item>
           <el-button type="text" @click="advancedOptions = !advancedOptions">{{advancedOptions ? '隐藏' : '显示'}}高级选项</el-button>
-        </el-form-item>
-        <el-form-item style="float: right;">
-          <el-button type="primary" @click="getUsers('filters')" size="medium" round>查询</el-button>
-          <el-button @click="resetForm('filters')" size="medium" round>重置</el-button>
-        </el-form-item>
+        </el-form-item> -->
       </el-row>
       <el-collapse-transition>
         <div v-show="advancedOptions">
           <el-row>
-            <el-form-item prop="play" class="fixed_search_input">
+            <el-form-item prop="play" class="fixed_search_seach">
               <el-select v-model="filters.play" clearable placeholder="支付方式">
                 <el-option v-for="item in optionsScene" :label="item.label" :value="item.value" :key="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item prop="cardType" class="fixed_search_input">
+            <el-form-item prop="cardType" class="fixed_search_seach">
               <el-select v-model="filters.cardType" clearable placeholder="银行卡类型">
                 <el-option v-for="item in optionsBank" :label="item.label" :value="item.value" :key="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item prop="state" class="fixed_search_input">
-              <el-select v-model="filters.state" clearable placeholder="支付状态">
-                <el-option v-for="item in optionsPayState" :label="item.label" :value="item.value" :key="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -226,7 +226,7 @@
         page: 1,
         users: [],
         listLoading: false,
-        advancedOptions: false,
+        advancedOptions: true,
 
         editFormVisible: false, //编辑界面是否显示
         editLoading: false,

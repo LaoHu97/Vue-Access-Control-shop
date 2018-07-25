@@ -1,4 +1,4 @@
-<h1 align="center">Vue-Access-Control-shop</h1>
+<h1 align="center">商户后台管理系统</h1>
 
 <p align="center">
   <a href="https://github.com/vuejs/vue">
@@ -9,6 +9,9 @@
   </a>
   <a href="https://www.travis-ci.org/LaoHu97/Vue-Access-Control-shop">
     <img src="https://travis-ci.org/LaoHu97/Vue-Access-Control-shop.svg?branch=master" alt="travis-ci">
+  </a>
+  <a href="https://www.codefactor.io/repository/github/laohu97/vue-access-control-shop">
+    <img src="https://www.codefactor.io/repository/github/laohu97/vue-access-control-shop/badge" alt="CodeFactor">
   </a>
 </p>
 
