@@ -13,7 +13,7 @@
         </el-form>
       </el-col>
     </el-row>
-    <el-form :inline="true" :model="filters" ref="filters" :rules="filtersRules" class="top_input">
+    <el-form :inline="true" :model="filters" ref="filters" class="top_input">
       <el-row>
         <el-form-item prop="startTime">
           <el-date-picker class="fixed_search_input_datetime" v-model="filters.startTime" @change="changTime" type="datetime" placeholder="选择开始日期"
@@ -241,14 +241,14 @@
           refundAmount: '',
           payWay: ''
         },
-        filtersRules: {
-          endTime: [{
-            type: 'date',
-            required: true,
-            message: '请选择日期',
-            trigger: 'change'
-          }]
-        }
+        // filtersRules: {
+        //   endTime: [{
+        //     type: 'date',
+        //     required: true,
+        //     message: '请选择日期',
+        //     trigger: 'change'
+        //   }]
+        // }
       }
     },
     methods: {
@@ -256,7 +256,7 @@
         let end_time = Date.parse(new Date(util.formatDate.format(new Date(this.filters.endTime), 'yyyy-MM-dd')))
         let date_time = Date.parse(new Date(util.formatDate.format(new Date(date), 'yyyy-MM-dd')))
         if (date_time < end_time - 3600 * 1000 * 24 * 90) {
-          this.filters.endTime = ''
+          this.filters.endTime = new Date(this.filters.startTime.getFullYear(), this.filters.startTime.getMonth(), this.filters.startTime.getDate(), 23, 59, 59)
         }
       },
       formatPay2: function (row, column) {

@@ -40,7 +40,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog title="请填写绑定信息" :visible.sync="dialogVisibleBinding" width="500px" :close-on-click-modal="false">
+    <el-dialog title="请填写绑定信息" :visible.sync="dialogVisibleBinding" width="500px" :close-on-click-modal="false" @close="closeDialog">
       <el-form ref="bindeFrom" :inline="true" :model="bindeFrom" label-width="80px">
         <el-form-item label="验证码">
           <el-input v-model="bindeFrom.code"></el-input>
@@ -347,6 +347,11 @@
             this.bindeFrom.qrImg = ''
           }
         })
+      },
+      closeDialog() {
+        this.codeText = '获取验证码'
+        this.auth_time = null
+        this.disabledCode = false
       },
       getCode () {
         let para = {

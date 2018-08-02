@@ -16,14 +16,14 @@
     <el-form :inline="true" :model="filters" ref="filters">
       <el-row>
         <el-form-item prop="startTime">
-          <el-date-picker v-model="filters.startTime"  class="fixed_search_input_datetime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false"
-            :editable='false'>
+          <el-date-picker v-model="filters.startTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1"
+            :clearable="false" :editable='false'>
           </el-date-picker>
         </el-form-item>
         <el-form-item>至</el-form-item>
         <el-form-item prop="endTime">
-          <el-date-picker v-model="filters.endTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false"
-            :editable='false'>
+          <el-date-picker v-model="filters.endTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2"
+            :clearable="false" :editable='false'>
           </el-date-picker>
         </el-form-item>
         <el-form-item prop="storeName" class="fixed_search_input">
@@ -152,7 +152,7 @@
       </el-form>
     </el-dialog>
     <!--退款界面-->
-    <el-dialog title="退款" :visible.sync="refundFormVisible" :close-on-click-modal="false" width="600px">
+    <el-dialog title="退款" :visible.sync="refundFormVisible" :close-on-click-modal="false" width="600px" @close="closeDialog">
       <el-form :model="refundForm" :rules="refundFormRules" ref="refundForm" label-position="left" label-width="120px">
         <el-form-item label="订单号：">
           <span>{{refundForm.orderId}}</span>
@@ -297,6 +297,11 @@
       //格式化金额
       format_amount(row, column) {
         return util.number_format(row.goodsPrice, 2, ".", ",")
+      },
+      closeDialog() {
+        this.codeText = '获取验证码'
+        this.auth_time = null
+        this.disabledCode = false
       },
       getCode() {
         let para = {
