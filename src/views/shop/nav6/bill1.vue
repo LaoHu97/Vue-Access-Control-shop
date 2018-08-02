@@ -123,7 +123,7 @@
           parag: '',
           excel_type: 'od',
           accountType: '0',
-          recsonId: '',
+          recsonId: 'WX',
           storeName: '',
           empName: '',
           startTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate() - 1),
@@ -266,9 +266,9 @@
               excel_type: this.ruleForm.excel_type
             }
             para.startTime = (!para.startTime || para.startTime == '') ? '' : String(Date.parse(util.formatDate.format(
-              new Date(para.startTime), 'yyyy-MM-dd hh:mm:ss')));
+              new Date(para.startTime), 'yyyy/MM/dd hh:mm:ss')));
             para.endTime = (!para.endTime || para.endTime == '') ? '' : String(Date.parse(util.formatDate.format(
-              new Date(para.endTime), 'yyyy-MM-dd hh:mm:ss')));
+              new Date(para.endTime), 'yyyy/MM/dd hh:mm:ss')));
             checkDataExcel(para).then(res => {
               if (res.data.status === 200) {
                 window.location.href = res.data.data
