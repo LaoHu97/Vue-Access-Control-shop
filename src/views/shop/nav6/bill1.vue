@@ -123,7 +123,7 @@
           parag: '',
           excel_type: 'od',
           accountType: '0',
-          recsonId: 'WX',
+          recsonId: '',
           storeName: '',
           empName: '',
           startTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate() - 1),
