@@ -9,10 +9,6 @@ function resolve (dir) {
 }
 
 module.exports = {
-  externals: {
-    vue: 'Vue',
-    'element': 'element-ui'
-  },
   context: path.resolve(__dirname, '../'),
   entry: {
     app: ["babel-polyfill","./src/main.js"]
