@@ -1,62 +1,52 @@
 <style scoped lang="scss">
-  .navmenu {
-    background-color: #DCDFE6
-  }
+.navmenu {
+  background-color: #dcdfe6;
+}
 
-  .navmenu_vertical {
-    height: 100%;
-    background-color: #DCDFE6;
-    float: left;
-  }
-  .container_elMenu{
-    background-color: rgb(65, 79, 97);
-  }
-  .el_menu_vertical {
-    margin-top: -36px;
-    border: none;
-  }
+.navmenu_vertical {
+  height: 100%;
+  background-color: #dcdfe6;
+  float: left;
+}
+.el_menu_vertical {
+  margin-top: -36px;
+  border: none;
+}
+.ie9_elmain{
+  display: block\9;
+}
+.ie9_elcontainer{
+  height: 100%\9;
+}
+.ie9_elmenu{
+  float: left\9;
+  height: 100%\9;
+  background: rgb(65, 79, 97);
+}
 
-  .el_menu_vertical:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
-    margin-top: -36px;
-  }
+.el_menu_vertical:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 400px;
+  height: 100%\9;
+  margin-top: -36px;
+}
 
-  .route_icon {
-    color: #fff;
-  }
+.route_icon {
+  color: #fff;
+}
 
-  .el_menu_horizontal {
-    border: none;
-    float: right;
-  }
+.el_menu_horizontal {
+  border: none;
+  float: right;
+}
 
-  .top_logo {
-    width: 150px;
-    float: left;
-  }
+.menu_icon {
+  margin-top: 10px;
+}
 
-  .top_logo img {
-    width: 30%;
-    margin-top: 19px;
-    float: left;
-  }
-
-  .top_logo span {
-    font-size: 18px;
-    font-weight: bolder;
-    color: #284890;
-    line-height: 60px;
-  }
-
-  .menu_icon {
-    margin-top: 10px;
-  }
-
-  .menu_icon span i {
-    font-size: 18px;
-  }
-
+.menu_icon span i {
+  font-size: 18px;
+}
 </style>
 <template>
   <div>
@@ -70,8 +60,8 @@
         </EleHeader>
       </el-header>
       <TagsView v-bind:style="{ paddingLeft: isCollapseSty }"></TagsView>
-      <el-container>
-        <div class="container_elMenu">
+      <el-container class="ie9_elcontainer">
+        <div class="ie9_elmenu">
           <el-menu :default-active="activeMenu" class="el_menu_vertical" unique-opened :collapse="isCollapse" router background-color="#414F61" text-color="#fff" active-text-color="#409EFF">
             <template v-for="(route, index) in menus">
               <template v-if="route.children">
@@ -94,7 +84,7 @@
             </template>
           </el-menu>
         </div>
-        <el-main>
+        <el-main class="ie9_elmain">
           <template>
             <transition name="fade" mode="out-in">
               <keep-alive :include="cachedViews">

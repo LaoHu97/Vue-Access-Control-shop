@@ -3,19 +3,20 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item prop="time1">
-          <el-date-picker v-model="filters.startTime" type="date" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false"
+        <el-form-item label="日期时间">
+          <el-date-picker v-model="filters.startTime" class="fixed_search_input_date" type="date" placeholder="开始日期" :picker-options="pickerOptions1" :clearable="false"
             :editable='false'>
           </el-date-picker>
         </el-form-item>
-        <el-form-item prop="time2">
-          <el-date-picker v-model="filters.endTime" type="date" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false"
-            :editable='false'>
-          </el-date-picker>
-        </el-form-item>
+        <el-form-item>至</el-form-item>
         <el-form-item>
+          <el-date-picker v-model="filters.endTime" class="fixed_search_input_date" type="date" placeholder="结束日期" :picker-options="pickerOptions2" :clearable="false"
+            :editable='false'>
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="门店名称">
           <template>
-            <el-select v-model="filters.value" placeholder="请选择门店名称" :multiple="false" filterable remote :remote-method="remoteShop"
+            <el-select v-model="filters.value" class="fixed_search_input" placeholder="门店名称" :multiple="false" filterable remote :remote-method="remoteShop"
               :loading="loading" clearable @visible-change="clickShop">
               <el-option v-for="item in options" :key="item.id" :value="item.id" :label="item.value">
               </el-option>
@@ -23,7 +24,7 @@
           </template>
         </el-form-item>
         <el-form-item style="float:right">
-          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
+          <el-button type="primary" @click="getUsers" round>查询</el-button>
           <el-button type="text" @click="downExcel()">
             <i class="el-icon-date"></i>导出Excel</el-button>
         </el-form-item>
@@ -133,7 +134,7 @@
         para.endTime = (!para.endTime || para.endTime == '') ? '' : String(util.formatDate.format(new Date(para.endTime),
           'yyyy/MM/dd')); //开始时间
 
-        window.location.href = process.env.API_ROOT + "/pay/weixin/activity/downSumDetailExcelByMid" + "?" +
+        window.location.href = process.env.API_ROOT + "/admin/activity/downSumDetailExcelByMid" + "?" +
           "start_time=" + para.startTime + "&" + "end_time=" + para.endTime;
       },
       //订单状态

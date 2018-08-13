@@ -3,15 +3,15 @@
 		<!--工具条-->
 		<el-row>
 			<el-form :inline="true" :model="filters" ref="filters">
-				<el-form-item prop="title">
-					<el-input v-model="filters.title" placeholder="请输入卡券名称"></el-input>
+				<el-form-item label="卡券名称">
+					<el-input v-model="filters.title" class="fixed_search_input" placeholder="卡券名称"></el-input>
 				</el-form-item>
-				<el-form-item prop="code">
-					<el-input v-model="filters.code" placeholder="请输入卡券号码"></el-input>
+				<el-form-item label="卡券号码">
+					<el-input v-model="filters.code" class="fixed_search_input" placeholder="卡券号码"></el-input>
 				</el-form-item>
 				<el-form-item style="float:right">
-					<el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
-					<el-button type="primary" @click="dialogClick" size="medium" round>核销卡券</el-button>
+					<el-button type="primary" @click="getUsers" round>查询</el-button>
+					<el-button type="primary" @click="dialogClick" round>核销卡券</el-button>
 				</el-form-item>
 			</el-form>
 		</el-row>

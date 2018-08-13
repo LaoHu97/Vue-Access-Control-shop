@@ -3,12 +3,12 @@
 		<!--工具条-->
 		<el-row>
 			<el-form :inline="true" :model="filters">
-				<el-form-item>
-					<el-input v-model="filters.name" placeholder="商品名称"></el-input>
+				<el-form-item label="商品名称">
+					<el-input v-model="filters.name" class="fixed_search_input" placeholder="商品名称"></el-input>
 				</el-form-item>
-        <el-form-item>
+        <el-form-item label="商品状态">
           <template>
-            <el-select v-model="filters.status" clearable placeholder="请选择">
+            <el-select v-model="filters.status" class="fixed_search_input" clearable placeholder="商品状态">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -19,8 +19,8 @@
           </template>
         </el-form-item>
 				<el-form-item style="float:right">
-          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
-					<el-button type="primary" @click="handleAdd" size="medium" round>新增商品</el-button>
+          <el-button type="primary" @click="getUsers" round>查询</el-button>
+					<el-button type="primary" @click="handleAdd" round>新增商品</el-button>
 				</el-form-item>
 			</el-form>
 		</el-row>

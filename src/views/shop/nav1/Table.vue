@@ -7,79 +7,89 @@
         <el-tag type="primary" style="margin:10px 10px 20px 0;">交易总笔数（笔）：{{whole.countRow}}笔</el-tag>
         <el-tag type="primary" style="margin:10px 10px 20px 0;">会员卡消费总金额（元）：{{whole.memAmt}}元</el-tag>
         <el-tag type="primary" style="">会员卡消费总笔数（笔）：{{whole.memCount}}笔</el-tag>
-        <el-form-item style="float: right;">
-          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
-          <el-button @click="resetForm('filters')" size="medium" round>重置</el-button>
-        </el-form-item>
       </el-form>
     </el-row>
-    <el-form :inline="true" :model="filters" ref="filters">
+    <el-form :inline="true" :model="filters" ref="filters" label-position="left" label-width="100px">
       <el-row>
-        <el-form-item prop="startTime">
-          <el-date-picker v-model="filters.startTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1"
-            :clearable="false" :editable='false'>
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item>至</el-form-item>
-        <el-form-item prop="endTime">
-          <el-date-picker v-model="filters.endTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2"
-            :clearable="false" :editable='false'>
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item prop="storeName" class="fixed_search_input">
-          <el-select v-model="filters.storeName" placeholder="门店名称" :multiple="false" filterable remote :remote-method="remoteShop"
-            :loading="searchLoading" clearable @focus="clickShop" @change="selectStoreChange">
-            <el-option v-for="item in optionsStore" :key="item.id" :value="item.id" :label="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="empName" class="fixed_search_input">
-          <el-select v-model="filters.empName" placeholder="款台名称" :multiple="false" filterable remote :remote-method="remoteEmp" :loading="empSearchLoading"
-            clearable @focus="clickEmp">
-            <el-option v-for="item in optionsEmp" :key="item.eid" :value="item.eid" :label="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="state" class="fixed_search_input">
-          <el-select v-model="filters.state" clearable placeholder="支付状态">
-            <el-option v-for="item in optionsPayState" :label="item.label" :value="item.value" :key="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <!-- <el-form-item>
-          <el-button type="text" @click="advancedOptions = !advancedOptions">{{advancedOptions ? '隐藏' : '显示'}}高级选项</el-button>
-        </el-form-item> -->
+        <el-col :span="6">
+          <el-form-item prop="storeName" label="门店名称">
+            <el-select v-model="filters.storeName" class="fixed_search_input" placeholder="门店名称" :multiple="false" filterable remote :remote-method="remoteShop" :loading="searchLoading" clearable @focus="clickShop" @change="selectStoreChange">
+              <el-option v-for="item in optionsStore" :key="item.id" :value="item.id" :label="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item prop="empName" label="款台名称">
+            <el-select v-model="filters.empName" class="fixed_search_input" placeholder="款台名称" :multiple="false" filterable remote :remote-method="remoteEmp" :loading="empSearchLoading" clearable @focus="clickEmp">
+              <el-option v-for="item in optionsEmp" :key="item.eid" :value="item.eid" :label="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item prop="play" label="支付方式">
+            <el-select v-model="filters.play" class="fixed_search_seach" clearable placeholder="支付方式">
+              <el-option v-for="item in optionsScene" :label="item.label" :value="item.value" :key="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item prop="cardType" label="银行卡类型">
+            <el-select v-model="filters.cardType" class="fixed_search_seach" clearable placeholder="银行卡类型">
+              <el-option v-for="item in optionsBank" :label="item.label" :value="item.value" :key="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
       </el-row>
-      <el-collapse-transition>
-        <div v-show="advancedOptions">
-          <el-row>
-            <el-form-item prop="play" class="fixed_search_seach">
-              <el-select v-model="filters.play" clearable placeholder="支付方式">
-                <el-option v-for="item in optionsScene" :label="item.label" :value="item.value" :key="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item prop="cardType" class="fixed_search_seach">
-              <el-select v-model="filters.cardType" clearable placeholder="银行卡类型">
-                <el-option v-for="item in optionsBank" :label="item.label" :value="item.value" :key="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item prop="goodsprice" class="fixed_search_input">
-              <el-input v-model.trim="filters.goodsprice" placeholder="交易金额">
-                <i slot="prefix" class="iconfont icon-50"></i>
-              </el-input>
-            </el-form-item>
-            <el-form-item prop="orderId" class="fixed_search_input">
-              <el-input v-model.trim="filters.orderId" placeholder="订单号"></el-input>
-            </el-form-item>
-            <el-form-item prop="transaction_id" class="fixed_search_input">
-              <el-input v-model.trim="filters.transaction_id" placeholder="第三方订单号"></el-input>
-            </el-form-item>
-          </el-row>
-        </div>
-      </el-collapse-transition>
-
+      <el-row>
+        <el-col :span="6">
+          <el-form-item prop="state" label="支付状态">
+            <el-select v-model="filters.state" class="fixed_search_input" clearable placeholder="支付状态">
+              <el-option v-for="item in optionsPayState" :label="item.label" :value="item.value" :key="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item prop="goodsprice" label="交易金额">
+            <el-input v-model.trim="filters.goodsprice" class="fixed_search_input" placeholder="交易金额">
+              <i slot="prefix" class="iconfont icon-50"></i>
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item prop="orderId" label="订单号">
+            <el-input v-model.trim="filters.orderId" class="fixed_search_input" placeholder="订单号"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item prop="transaction_id" label="第三方订单号">
+            <el-input v-model.trim="filters.transaction_id" class="fixed_search_input" placeholder="第三方订单号"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="18">
+          <el-form-item prop="startTime" label="日期时间">
+            <el-date-picker v-model="filters.startTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false" :editable='false'>
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>至</el-form-item>
+          <el-form-item prop="endTime">
+            <el-date-picker v-model="filters.endTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false" :editable='false'>
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item style="float: right;">
+            <el-button type="primary" @click="getUsers" round>查询</el-button>
+            <el-button @click="resetForm('filters')" round>重置</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-row>
         <el-alert title="可查询最近30天的交易" type="warning" center close-text="知道了" show-icon>
         </el-alert>
@@ -110,8 +120,7 @@
     </div>
     <!--工具条-->
     <el-row>
-      <el-pagination layout="prev, pager, next" :current-page="page" @current-change="handleCurrentChange" :page-size="20" :total="total"
-        background style="text-align:center;background:#fff;padding:15px;">
+      <el-pagination layout="prev, pager, next" :current-page="page" @current-change="handleCurrentChange" :page-size="20" :total="total" background style="text-align:center;background:#fff;padding:15px;">
       </el-pagination>
     </el-row>
 

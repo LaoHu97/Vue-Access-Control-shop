@@ -9,14 +9,14 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item>
-          <el-date-picker v-model="filters.startTime" :editable="false" :clearable="false" popper-class="startTime" :picker-options="pickerOptions"
+        <el-form-item label="选择日期">
+          <el-date-picker v-model="filters.startTime" class="fixed_search_input_date" :editable="false" :clearable="false" popper-class="startTime" :picker-options="pickerOptions"
             placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
         <el-tag type="gray">注：不能统计当天数据</el-tag>
         <el-form-item style="float:right">
-          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
+          <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
         </el-form-item>
       </el-form>
     </el-row>

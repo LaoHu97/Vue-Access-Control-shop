@@ -3,15 +3,15 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item>
-          <el-input v-model="filters.appid" placeholder="请输入APPID（小程序ID）"></el-input>
+        <el-form-item label="APPID（小程序ID）">
+          <el-input v-model="filters.appid" class="fixed_search_input" placeholder="APPID（小程序ID）"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input v-model="filters.title" placeholder="请输入导航标题"></el-input>
+        <el-form-item label="导航标题">
+          <el-input v-model="filters.title" class="fixed_search_input" placeholder="导航标题"></el-input>
         </el-form-item>
         <el-form-item style="float:right">
-          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
-          <el-button type="primary" @click="addCarousel" size="medium" round>新增导航</el-button>
+          <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
+          <el-button type="primary" @click="addCarousel" round>新增导航</el-button>
         </el-form-item>
       </el-form>
     </el-row>

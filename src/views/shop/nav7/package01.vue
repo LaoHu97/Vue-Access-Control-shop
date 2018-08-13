@@ -1,96 +1,86 @@
 <template>
-<section>
-  <!--工具条-->
-  <el-row>
-    <el-form :inline="true" :model="filters">
-      <el-form-item prop="startTime">
-        <el-date-picker v-model="filters.startTime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false" :editable='false'>
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item prop="endTime">
-        <el-date-picker v-model="filters.endTime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false" :editable='false'>
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item>
-        <el-select v-model="filters.pkg_id" placeholder="请选择套餐" :clearable = 'true'>
-          <el-option
-            v-for="item in pkg_idOptions"
-            :key="item.id"
-            :label="item.pkg_name"
-            :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-select v-model="filters.redpackets" placeholder="请选择红包状态" :clearable = 'true'>
-          <el-option
-            v-for="item in redpacketsOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-select v-model="filters.cardstatus" placeholder="请选择领卡状态" :clearable = 'true'>
-          <el-option
-            v-for="item in cardstatusOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item style="float:right">
-        <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
-        <el-button type="text" @click="downExcel()"><i class="el-icon-date"></i>导出Excel</el-button>
-      </el-form-item>
-    </el-form>
-  </el-row>
+  <section>
+    <!--工具条-->
+    <el-row>
+      <el-form :inline="true" :model="filters">
+        <el-form-item label="日期时间">
+          <el-date-picker v-model="filters.startTime" type="datetime" class="fixed_search_input_datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false" :editable='false'>
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item>至</el-form-item>
+        <el-form-item>
+          <el-date-picker v-model="filters.endTime" type="datetime" class="fixed_search_input_datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false" :editable='false'>
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="选择套餐">
+          <el-select v-model="filters.pkg_id" class="fixed_search_input" placeholder="选择套餐" clearable>
+            <el-option v-for="item in pkg_idOptions" :key="item.id" :label="item.pkg_name" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="红包状态">
+          <el-select v-model="filters.redpackets" class="fixed_search_input" placeholder="红包状态" clearable>
+            <el-option v-for="item in redpacketsOptions" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="领卡状态">
+          <el-select v-model="filters.cardstatus" class="fixed_search_input" placeholder="领卡状态" clearable>
+            <el-option v-for="item in cardstatusOptions" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item style="float:right">
+          <el-button type="primary" @click="getUsers" round>查询</el-button>
+          <el-button type="text" @click="downExcel()">
+            <i class="el-icon-date"></i>导出Excel</el-button>
+        </el-form-item>
+      </el-form>
+    </el-row>
 
-  <!--列表-->
-  <div v-loading="listLoading">
-    <el-table :data="users" border highlight-current-row style="width: 100%;">
-      <el-table-column prop="nick_name" label="购买人" min-width="140">
-      </el-table-column>
-      <el-table-column prop="pkg_name" label="套餐名称" min-width="140">
-      </el-table-column>
-      <el-table-column prop="commission" label="提成金额" min-width="120" :formatter="commission">
-      </el-table-column>
-      <el-table-column prop="gmt_create" label="交易时间" min-width="170" :formatter="gmt_create">
-      </el-table-column>
-      <el-table-column prop="pkgStatus" label="套餐激活状态" min-width="120" :formatter="pkgStatus">
-      </el-table-column>
-      <el-table-column prop="receive_card_status" label="领卡状态" width="110">
-        <template slot-scope="scope">
-          <el-button :type="scope.row.receive_card_status == 'Y' ? 'info' : 'success'" size="mini" @click="cardClick(scope.$index, scope.row)" :disabled="scope.row.receive_card_status == 'Y'">
-            {{ scope.row.receive_card_status == 'Y' ? '领卡成功' : '现在领卡' }}
-          </el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="红包状态" width="110">
-        <template slot-scope="scope">
-          <el-button :type="scope.row.send_red_status !=='N' ? 'info' : 'success'" size="mini" @click="sendRedClick(scope.$index, scope.row)" :disabled="scope.row.send_red_status!=='N'">
-            {{ scope.row.send_red_status == 'Y' ? '发送成功' : scope.row.send_red_status == 'N' ? '发送失败' : '不发红包' }}
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+    <!--列表-->
+    <div v-loading="listLoading">
+      <el-table :data="users" border highlight-current-row style="width: 100%;">
+        <el-table-column prop="nick_name" label="购买人" min-width="140">
+        </el-table-column>
+        <el-table-column prop="pkg_name" label="套餐名称" min-width="140">
+        </el-table-column>
+        <el-table-column prop="commission" label="提成金额" min-width="120" :formatter="commission">
+        </el-table-column>
+        <el-table-column prop="gmt_create" label="交易时间" min-width="170" :formatter="gmt_create">
+        </el-table-column>
+        <el-table-column prop="pkgStatus" label="套餐激活状态" min-width="120" :formatter="pkgStatus">
+        </el-table-column>
+        <el-table-column prop="receive_card_status" label="领卡状态" width="110">
+          <template slot-scope="scope">
+            <el-button :type="scope.row.receive_card_status == 'Y' ? 'info' : 'success'" size="mini" @click="cardClick(scope.$index, scope.row)" :disabled="scope.row.receive_card_status == 'Y'">
+              {{ scope.row.receive_card_status == 'Y' ? '领卡成功' : '现在领卡' }}
+            </el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="红包状态" width="110">
+          <template slot-scope="scope">
+            <el-button :type="scope.row.send_red_status !=='N' ? 'info' : 'success'" size="mini" @click="sendRedClick(scope.$index, scope.row)" :disabled="scope.row.send_red_status!=='N'">
+              {{ scope.row.send_red_status == 'Y' ? '发送成功' : scope.row.send_red_status == 'N' ? '发送失败' : '不发红包' }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
-  <!--工具条-->
-  <el-row>
-    <el-pagination layout="prev, pager, next" :current-page="page" @current-change="handleCurrentChange" :page-size="20" :total="total" background style="text-align:center;background:#fff;padding:15px;">
-    </el-pagination>
-  </el-row>
-  <!-- 二维码 -->
-  <el-dialog :visible.sync="receiveCard" :close-on-click-modal="true" width="600px">
-    <el-form :model="receive" label-width="" ref="editCode" style="width:auto">
-      <img :src="receive.code" alt="二维码" width="100%">
-      <el-button type="primary" @click="clickCode" style="position:absolute;left:50%;margin-left:-44px;margin-top:-20px;">点击下载</el-button>
-    </el-form>
-  </el-dialog>
-</section>
+    <!--工具条-->
+    <el-row>
+      <el-pagination layout="prev, pager, next" :current-page="page" @current-change="handleCurrentChange" :page-size="20" :total="total" background style="text-align:center;background:#fff;padding:15px;">
+      </el-pagination>
+    </el-row>
+    <!-- 二维码 -->
+    <el-dialog :visible.sync="receiveCard" :close-on-click-modal="true" width="600px">
+      <el-form :model="receive" label-width="" ref="editCode" style="width:auto">
+        <img :src="receive.code" alt="二维码" width="100%">
+        <el-button type="primary" @click="clickCode" style="position:absolute;left:50%;margin-left:-44px;margin-top:-20px;">点击下载</el-button>
+      </el-form>
+    </el-dialog>
+  </section>
 </template>
 
 <script>

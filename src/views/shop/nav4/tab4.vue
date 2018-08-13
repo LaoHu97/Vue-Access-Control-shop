@@ -3,15 +3,15 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item>
-          <el-input v-model="filters.name" placeholder="持卡人姓名"></el-input>
+        <el-form-item label="持卡人姓名">
+          <el-input v-model="filters.name" class="fixed_search_input" placeholder="持卡人姓名"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input v-model="filters.card_no" placeholder="会员卡号"></el-input>
+        <el-form-item label="会员卡号">
+          <el-input v-model="filters.card_no" class="fixed_search_input" placeholder="会员卡号"></el-input>
         </el-form-item>
         <el-form-item style="float:right">
-          <el-button type="primary" @click="getUsers" size="medium" round>查询</el-button>
-          <el-button type="primary" v-on:click="cogradientCard" size="medium" round>同步会员卡</el-button>
+          <el-button type="primary" @click="getUsers" round>查询</el-button>
+          <el-button type="primary" v-on:click="cogradientCard" round>同步会员卡</el-button>
         </el-form-item>
       </el-form>
     </el-row>

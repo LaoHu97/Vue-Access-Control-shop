@@ -3,9 +3,9 @@
 		<!--工具条-->
 		<el-row>
 			<el-form :inline="true" :model="filters">
-				<el-form-item>
+				<el-form-item label="订单状态">
 					<template>
-					  <el-select v-model="filters.status" clearable placeholder="请选择订单状态">
+					  <el-select v-model="filters.status" class="fixed_search_input" clearable placeholder="订单状态">
 					    <el-option
 					      v-for="item in statusOptions"
 					      :key="item.value"
@@ -16,7 +16,7 @@
 					</template>
 				</el-form-item>
 				<el-form-item style="float:right">
-					<el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
+					<el-button type="primary" @click="getUsers" round>查询</el-button>
 				</el-form-item>
 			</el-form>
 		</el-row>
