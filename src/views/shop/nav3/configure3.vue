@@ -3,19 +3,19 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item>
-          <el-input v-model.trim="filters.otpCode" placeholder="请输入设备编号"></el-input>
+        <el-form-item label="设备编号">
+          <el-input v-model.trim="filters.otpCode" class="fixed_search_input" placeholder="设备编号"></el-input>
         </el-form-item>
-        <el-form-item prop="empName" class="fixed_search_input">
-          <el-select v-model="filters.eid" placeholder="款台名称" :multiple="false" filterable remote :remote-method="remoteEmp" :loading="empSearchLoading"
+        <el-form-item label="款台名称">
+          <el-select v-model="filters.eid" placeholder="款台名称" class="fixed_search_input" :multiple="false" filterable remote :remote-method="remoteEmp" :loading="empSearchLoading"
             clearable @focus="clickEmp">
             <el-option v-for="item in optionsEmp" :key="item.eid" :value="item.eid" :label="item.value">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item style="float: right;">
-          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
-          <el-button type="primary" @click="handleAdd" size="medium" round>新增</el-button>
+          <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
+          <el-button type="primary" @click="handleAdd" round>新增</el-button>
         </el-form-item>
       </el-form>
     </el-row>

@@ -3,12 +3,12 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item prop="name">
-          <el-input v-model="filters.name" placeholder="请输入套餐名称"></el-input>
+        <el-form-item label="套餐名称">
+          <el-input v-model="filters.name" class="fixed_search_input" placeholder="套餐名称"></el-input>
         </el-form-item>
         <el-form-item style="float:right">
-          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
-          <el-button type="primary" v-on:click="establishClick" size="medium" round>创建套餐</el-button>
+          <el-button type="primary" @click="getUsers" round>查询</el-button>
+          <el-button type="primary" @click="establishClick" round>创建套餐</el-button>
         </el-form-item>
       </el-form>
     </el-row>

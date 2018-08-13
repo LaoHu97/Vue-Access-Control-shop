@@ -3,20 +3,21 @@
   <!--工具条-->
   <el-row>
     <el-form :inline="true" :model="filters">
-      <el-form-item prop="time1">
-        <el-date-picker v-model="filters.startTime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false" :editable='false'>
+      <el-form-item label="日期时间">
+        <el-date-picker v-model="filters.startTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false" :editable='false'>
         </el-date-picker>
       </el-form-item>
-      <el-form-item prop="time2">
-        <el-date-picker v-model="filters.endTime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false" :editable='false'>
+      <el-form-item>至</el-form-item>
+      <el-form-item>
+        <el-date-picker v-model="filters.endTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false" :editable='false'>
         </el-date-picker>
       </el-form-item>
-      <el-form-item>
-        <el-input v-model="filters.card_no" placeholder="会员卡号"></el-input>
+      <el-form-item label="会员卡号">
+        <el-input v-model="filters.card_no" class="fixed_search_input" placeholder="会员卡号"></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item label="支付状态">
         <template>
-					  <el-select v-model="filters.status" clearable placeholder="请选择支付状态">
+					  <el-select v-model="filters.status" class="fixed_search_input" clearable placeholder="支付状态">
 					    <el-option
 					      v-for="item in statusOptions"
 					      :key="item.value"
@@ -26,9 +27,9 @@
 					  </el-select>
 					</template>
       </el-form-item>
-      <el-form-item>
+      <el-form-item label="交易类型">
         <template>
-						<el-select v-model="filters.reason_id" clearable placeholder="请选择交易类型">
+						<el-select v-model="filters.reason_id" class="fixed_search_input" clearable placeholder="交易类型">
 							<el-option
 								v-for="item in typeOptions"
 								:key="item.value"
@@ -39,7 +40,7 @@
 					</template>
       </el-form-item>
       <el-form-item style="float:right">
-        <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
+        <el-button type="primary" @click="getUsers" round>查询</el-button>
       </el-form-item>
     </el-form>
   </el-row>

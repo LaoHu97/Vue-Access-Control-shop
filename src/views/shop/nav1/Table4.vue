@@ -12,7 +12,7 @@
     </el-row>
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item>
+        <el-form-item label="日期时间">
           <el-date-picker v-model="filters.startTime" class="fixed_search_input_date" :editable="false" :clearable="false" type="date"
             placeholder="请选择开始时间" :picker-options="pickerOptions1">
           </el-date-picker>
@@ -26,7 +26,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item style="float:right">
-          <el-button type="primary" @click="getUsers(true)" size="medium" round>查询</el-button>
+          <el-button type="primary" @click="getUsers(true)" round>查询</el-button>
         </el-form-item>
       </el-form>
     </el-row>

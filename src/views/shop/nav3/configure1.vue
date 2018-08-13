@@ -3,12 +3,12 @@
   <!--工具条-->
   <el-row>
     <el-form :inline="true" :model="filters">
-      <el-form-item>
-        <el-input v-model="filters.printname" placeholder="请输入终端名称"></el-input>
+      <el-form-item label="终端名称">
+        <el-input v-model="filters.printname" class="fixed_search_input" placeholder="终端名称"></el-input>
       </el-form-item>
       <el-form-item style="float: right;">
-        <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
-        <el-button type="primary" @click="handleAdd" size="medium" round>新增</el-button>
+        <el-button type="primary" @click="getUsers" round>查询</el-button>
+        <el-button type="primary" @click="handleAdd" round>新增</el-button>
       </el-form-item>
     </el-form>
   </el-row>

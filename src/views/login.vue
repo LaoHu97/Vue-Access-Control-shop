@@ -16,10 +16,10 @@
         </el-row>
       </el-header>
       <div class="centers" @keyup.enter="show()" :style="{backgroundImage: 'url(' +bImg + ')'}">
-        <el-form :model="user" ref="user" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+        <el-form :model="user" ref="user" class="demo-ruleForm login-container">
           <h3 class="title">商户登录</h3>
           <el-form-item prop="account">
-            <el-input type="text" v-model.trim="user.account" size="medium" placeholder="请输入用户名">
+            <el-input v-model.trim="user.account" size="medium" placeholder="请输入用户名">
               <template slot="prepend">
                 <i class="iconfont">&#xe715;</i>
               </template>

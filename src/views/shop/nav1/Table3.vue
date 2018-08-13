@@ -12,31 +12,29 @@
     </el-row>
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item>
-          <el-date-picker v-model="filters.startTime" class="fixed_search_input_date" :editable="false" :clearable="false" type="date"
-            placeholder="请选择开始时间" :picker-options="pickerOptions1">
+        <el-form-item label="日期时间">
+          <el-date-picker v-model="filters.startTime" class="fixed_search_input_date" :editable="false" :clearable="false" type="date" placeholder="请选择开始时间" :picker-options="pickerOptions1">
           </el-date-picker>
         </el-form-item>
+        <el-form-item>至</el-form-item>
         <el-form-item>
-          <el-date-picker v-model="filters.endTime" class="fixed_search_input_date" :editable="false" :clearable="false" type="date"
-            placeholder="请选择结束时间" :picker-options="pickerOptions2">
+          <el-date-picker v-model="filters.endTime" class="fixed_search_input_date" :editable="false" :clearable="false" type="date" placeholder="请选择结束时间" :picker-options="pickerOptions2">
           </el-date-picker>
         </el-form-item>
-        <el-form-item class="fixed_search_input">
-          <el-select v-model="filters.state1" placeholder="门店名称" :multiple="false" filterable remote :remote-method="remoteShop" :loading="storeLoading"
-            clearable @visible-change="clickShop">
+        <el-form-item label="门店名称">
+          <el-select v-model="filters.state1" class="fixed_search_input" placeholder="门店名称" :multiple="false" filterable remote :remote-method="remoteShop" :loading="storeLoading" clearable @visible-change="clickShop">
             <el-option v-for="item in optionsMers" :key="item.id" :value="item.id" :label="item.value">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item class="fixed_search_input">
-          <el-select v-model="filters.payType" clearable placeholder="支付方式">
+        <el-form-item label="支付方式">
+          <el-select v-model="filters.payType" class="fixed_search_input" clearable placeholder="支付方式">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item style="float:right">
-          <el-button type="primary" @click="getUsers(true)" size="medium" round>查询</el-button>
+          <el-button type="primary" @click="getUsers(true)" round>查询</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -68,8 +66,7 @@
 
     <!--工具条-->
     <el-row>
-      <el-pagination layout="prev, pager, next" :current-page="page" @current-change="handleCurrentChange" :page-size="20" :total="total"
-        background style="text-align:center;background:#fff;padding:15px;">
+      <el-pagination layout="prev, pager, next" :current-page="page" @current-change="handleCurrentChange" :page-size="20" :total="total" background style="text-align:center;background:#fff;padding:15px;">
       </el-pagination>
     </el-row>
   </section>

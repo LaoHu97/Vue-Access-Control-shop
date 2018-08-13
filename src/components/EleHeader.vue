@@ -11,6 +11,7 @@
 
   .top_logo img {
     width: 30%;
+    height: auto;
     margin-top: 19px;
     float: left;
   }

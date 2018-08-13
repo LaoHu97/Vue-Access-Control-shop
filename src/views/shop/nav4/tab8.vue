@@ -3,17 +3,17 @@
   <!--工具条-->
   <el-row>
     <el-form :inline="true" :model="filters" ref="filters">
-      <el-form-item>
-        <el-input auto-complete="off" v-model="filters.phone" placeholder="请输入手机号"></el-input>
+      <el-form-item label="手机号">
+        <el-input v-model="filters.phone" class="fixed_search_input" placeholder="请输入手机号"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-input auto-complete="off" v-model="filters.cardNum" placeholder="请输入卡号"></el-input>
+      <el-form-item label="卡号">
+        <el-input v-model="filters.cardNum" class="fixed_search_input" placeholder="请输入卡号"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-input auto-complete="off" v-model="filters.carNum" placeholder="请输入车牌号"></el-input>
+      <el-form-item label="车牌号">
+        <el-input v-model="filters.carNum" class="fixed_search_input" placeholder="请输入车牌号"></el-input>
       </el-form-item>
       <el-form-item style="float:right">
-        <el-button type="primary" @click="getUsers" size="medium" round>查询</el-button>
+        <el-button type="primary" @click="getUsers" round>查询</el-button>
       </el-form-item>
     </el-form>
   </el-row>

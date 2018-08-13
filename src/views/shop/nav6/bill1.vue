@@ -271,7 +271,7 @@
               new Date(para.endTime), 'yyyy/MM/dd hh:mm:ss')));
             checkDataExcel(para).then(res => {
               if (res.data.status === 200) {
-                window.location.href = res.data.data
+                window.open(res.data.data)
               }
             })
           }

@@ -3,29 +3,29 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item>
-          <el-input v-model="filters.name" clearable placeholder="请输入资讯名称"></el-input>
+        <el-form-item label="资讯名称">
+          <el-input v-model="filters.name" class="fixed_search_input" clearable placeholder="资讯名称"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-select v-model="filters.newsType" clearable placeholder="请选择资讯类型">
+        <el-form-item label="资讯类型">
+          <el-select v-model="filters.newsType" class="fixed_search_input" clearable placeholder="资讯类型">
             <el-option v-for="item in newsOptions" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
-          <el-date-picker v-model="filters.startTime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false"
+        <el-form-item label="日期时间">
+          <el-date-picker v-model="filters.startTime" class="fixed_search_input_datetime" type="datetime" placeholder="开始日期" :picker-options="pickerOptions1" :clearable="false"
             :editable='false'>
           </el-date-picker>
         </el-form-item>
         <el-form-item>至</el-form-item>
         <el-form-item prop="endTime">
-          <el-date-picker v-model="filters.endTime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false"
+          <el-date-picker v-model="filters.endTime" class="fixed_search_input_datetime" type="datetime" placeholder="结束日期" :picker-options="pickerOptions2" :clearable="false"
             :editable='false'>
           </el-date-picker>
         </el-form-item>
         <el-form-item style="float:right">
-          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
-          <el-button type="primary" @click="addCarousel" size="medium" round>新增资讯</el-button>
+          <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
+          <el-button type="primary" @click="addCarousel" round>新增资讯</el-button>
         </el-form-item>
       </el-form>
     </el-row>

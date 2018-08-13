@@ -3,11 +3,11 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters" ref="filters">
-        <el-form-item prop="storeName">
-          <el-input v-model="filters.storeName" placeholder="请输入门店名称"></el-input>
+        <el-form-item label="门店名称">
+          <el-input v-model="filters.storeName" class="fixed_search_input" placeholder="门店名称"></el-input>
         </el-form-item>
         <el-form-item style="float: right;">
-          <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
+          <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
           <!-- <el-button type="primary" @click="handleAdd" size="medium" round>新增</el-button> -->
         </el-form-item>
       </el-form>
