@@ -12,13 +12,10 @@
   margin-top: -36px;
   border: none;
 }
-.ie9_elmain{
+.ie9_elmain {
   display: block\9;
 }
-.ie9_elcontainer{
-  height: 100%\9;
-}
-.ie9_elmenu{
+.ie9_elmenu {
   float: left\9;
   height: 100%\9;
   background: rgb(65, 79, 97);
@@ -49,54 +46,52 @@
 }
 </style>
 <template>
-  <div>
-    <el-container style="height:100%">
-      <el-header style="background: #fff;height:auto">
-        <EleHeader @login="login" @logout="logout">
-          <el-button type="text" @click="isCollapse=!isCollapse" class="menu_icon">
-            <i class="iconfont icon-weibiaoti12" v-if="!isCollapse"></i>
-            <i class="iconfont icon-weibiaoti12-copy" v-else></i>
-          </el-button>
-        </EleHeader>
-      </el-header>
-      <TagsView v-bind:style="{ paddingLeft: isCollapseSty }"></TagsView>
-      <el-container class="ie9_elcontainer">
-        <div class="ie9_elmenu">
-          <el-menu :default-active="activeMenu" class="el_menu_vertical" unique-opened :collapse="isCollapse" router background-color="#414F61" text-color="#fff" active-text-color="#409EFF">
-            <template v-for="(route, index) in menus">
-              <template v-if="route.children">
-                <el-submenu :key="index" :index="route.name">
-                  <template slot="title">
-                    <i class="iconfont route_icon" v-bind:class="[route.meta.icon]"></i>
-                    <span slot="title">{{route.meta.name || route.name}}</span>
-                  </template>
-                  <el-menu-item v-for="(cRoute, cIndex) in route.children" :key="cIndex" :index="cRoute.name" :route="cRoute" v-if="!cRoute.meta.hidden">
-                    {{cRoute.meta.name || cRoute.name}}
-                  </el-menu-item>
-                </el-submenu>
-              </template>
-              <template v-else>
-                <el-menu-item :key="index" :route="route" :index="route.name">
+  <el-container>
+    <el-header style="background: #fff;height:auto">
+      <EleHeader @login="login" @logout="logout">
+        <el-button type="text" @click="isCollapse=!isCollapse" class="menu_icon">
+          <i class="iconfont icon-weibiaoti12" v-if="!isCollapse"></i>
+          <i class="iconfont icon-weibiaoti12-copy" v-else></i>
+        </el-button>
+      </EleHeader>
+    </el-header>
+    <TagsView v-bind:style="{ paddingLeft: isCollapseSty }"></TagsView>
+    <el-container class="ie9_elcontainer">
+      <div class="ie9_elmenu">
+        <el-menu :default-active="activeMenu" class="el_menu_vertical" unique-opened :collapse="isCollapse" router background-color="#414F61" text-color="#fff" active-text-color="#409EFF">
+          <template v-for="(route, index) in menus">
+            <template v-if="route.children">
+              <el-submenu :key="index" :index="route.name">
+                <template slot="title">
                   <i class="iconfont route_icon" v-bind:class="[route.meta.icon]"></i>
                   <span slot="title">{{route.meta.name || route.name}}</span>
+                </template>
+                <el-menu-item v-for="(cRoute, cIndex) in route.children" :key="cIndex" :index="cRoute.name" :route="cRoute" v-if="!cRoute.meta.hidden">
+                  {{cRoute.meta.name || cRoute.name}}
                 </el-menu-item>
-              </template>
+              </el-submenu>
             </template>
-          </el-menu>
-        </div>
-        <el-main class="ie9_elmain">
-          <template>
-            <transition name="fade" mode="out-in">
-              <keep-alive :include="cachedViews">
-                <ErrorPage v-if="accessPerMission"></ErrorPage>
-                <router-view v-else id="main"></router-view>
-              </keep-alive>
-            </transition>
+            <template v-else>
+              <el-menu-item :key="index" :route="route" :index="route.name">
+                <i class="iconfont route_icon" v-bind:class="[route.meta.icon]"></i>
+                <span slot="title">{{route.meta.name || route.name}}</span>
+              </el-menu-item>
+            </template>
           </template>
-        </el-main>
-      </el-container>
+        </el-menu>
+      </div>
+      <el-main class="ie9_elmain">
+        <template>
+          <transition name="fade" mode="out-in">
+            <keep-alive :include="cachedViews">
+              <ErrorPage v-if="accessPerMission"></ErrorPage>
+              <router-view v-else id="main"></router-view>
+            </keep-alive>
+          </transition>
+        </template>
+      </el-main>
     </el-container>
-  </div>
+  </el-container>
 </template>
 <script>
   import {
