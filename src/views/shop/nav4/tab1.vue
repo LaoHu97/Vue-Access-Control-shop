@@ -27,11 +27,11 @@
         <el-table-column label="剩余库存" min-width="250">
           <template slot-scope="scope">
             <el-tag type="gray" style="width:80px;text-align: center;">{{scope.row.quantity}}</el-tag>
-            <el-input size="mini" style="width:80px;" v-model="scope.row.addQuantity" :maxlength="6"></el-input>
-            <el-button plain type="success" size="mini" @click="stockClick(scope.$index, scope.row)">增加</el-button>
+            <el-input style="width:80px;" v-model="scope.row.addQuantity" :maxlength="6"></el-input>
+            <el-button plain type="success" @click="stockClick(scope.$index, scope.row)">增加</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="120">
+        <el-table-column label="操作" width="130">
           <template slot-scope="scope">
             <el-dropdown trigger="click">
               <el-button size="mini" type="warning">
@@ -47,12 +47,6 @@
                 <el-dropdown-item v-else :disabled="true">已上传</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <!-- <el-button type="primary" size="mini" @click="vipDataClick(scope.$index, scope.row)">会员日</el-button>
-							<el-button type="primary" size="mini" @click="modifyClick(scope.$index, scope.row)">修改</el-button>
-							<el-button type="primary" size="mini" @click="rechargeClick(scope.$index, scope.row)">充值设置</el-button>
-							<el-button type="info" size="mini" @click="deliveryCode(scope.$index, scope.row)">投放二维码</el-button>
-							<el-button type="primary" size="mini" v-if="scope.row.status!=2" @click="uploadWinxin(scope.$index, scope.row)">上传微信<i class="el-icon-upload el-icon--right"></i></el-button>
-							<el-button type="primary" size="mini" v-else :disabled="true">已上传</el-button> -->
           </template>
         </el-table-column>
       </el-table>
