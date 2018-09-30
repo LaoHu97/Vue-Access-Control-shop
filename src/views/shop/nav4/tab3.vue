@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column prop="balance" label="余额￥" min-width="120" :formatter="format_balance">
       </el-table-column>
-      <el-table-column label="操作" width="370">
+      <el-table-column label="操作" width="390">
         <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="clickBind(scope.$index, scope.row)">绑定<i class="el-icon-edit el-icon--right"></i></el-button>
             <el-button type="success" size="mini" @click="clickSee(scope.$index, scope.row)">已绑定会员</el-button>

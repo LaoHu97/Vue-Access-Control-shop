@@ -38,7 +38,7 @@
 				</el-table-column>
 				<el-table-column prop="status" label="状态" min-width="90" :formatter="status">
 				</el-table-column>
-				<el-table-column label="操作" width="270">
+				<el-table-column label="操作" width="290">
 					<template slot-scope="scope">
 							<el-button type="warning" size="mini" @click="editCard(scope.$index, scope.row)">修改</el-button>
 							<el-button type="success" size="mini" v-if="scope.row.status!=2" @click="uploadWinxin(scope.$index, scope.row)">上传<i class="el-icon-upload el-icon--right"></i></el-button>

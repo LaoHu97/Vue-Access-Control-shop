@@ -24,13 +24,13 @@
         </el-table-column>
         <el-table-column prop="saccount" label="登录帐号" min-width="120">
         </el-table-column>
-        <el-table-column label="门店状态">
+        <el-table-column label="门店状态" width="120">
           <template slot-scope="scope">
             <el-switch name="value" @change="test(scope.$index, scope.row)" v-model="scope.row.state">
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="250">
+        <el-table-column label="操作" width="260">
           <template slot-scope="scope">
             <el-button type="danger" size="mini" @click="handleReset(scope.$index, scope.row)">密码重置</el-button>
             <el-button type="warning" size="mini" @click="handleBinding(scope.$index, scope.row)">{{!scope.row.sopenId ? '绑定' : '解绑'}}</el-button>
