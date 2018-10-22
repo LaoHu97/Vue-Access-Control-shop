@@ -174,6 +174,7 @@ import {
 export default {
   data() {
     var regPhone = (rule, value, callback) => {
+      
      if (!/^1(3|4|5|7|8)\d{9,10}$/.test(value) && value !== '') {
         callback(new Error('请输入正确的联系人手机号'));
       } else {
