@@ -86,7 +86,7 @@
         <el-input v-model="editForm.machineKey" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="电话" prop="phone">
-        <el-input v-model="editForm.phone" auto-complete="off"></el-input>
+        <el-input v-model="editForm.phone"></el-input>
       </el-form-item>
       <el-form-item label="打印份数" prop="pnum">
         <el-input v-model="editForm.pnum" auto-complete="off"></el-input>
@@ -173,19 +173,19 @@ import {
 
 export default {
   data() {
-    var phone = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入联系人手机号'));
-      } else if (!/^1(3|4|5|7|8)\d{9,10}$/.test(value)) {
+    var regPhone = (rule, value, callback) => {
+     if (!/^1(3|4|5|7|8)\d{9,10}$/.test(value) && value !== '') {
         callback(new Error('请输入正确的联系人手机号'));
       } else {
         callback();
       }
     };
     var pnum = (rule, value, callback) => {
+      console.log(value);
+      
       if (value === '') {
         callback(new Error('请输入打印份数'));
-      } else if (!/^\+?[1-9][0-9]*$/.test(value)) {
+      } else if (!/^([1-9][0-9]*){1,3}$/.test(value)) {
         callback(new Error('请输入正确的打印份数'));
       } else {
         callback();
@@ -239,7 +239,11 @@ export default {
           trigger: 'blur'
         }],
         phone: [{
-          validator: phone,
+          required: false,
+          message: '请输入联系人手机号',
+          trigger: 'blur'
+        }, {
+          validator: regPhone,
           trigger: 'blur'
         }],
         pnum: [{
@@ -260,6 +264,15 @@ export default {
       //编辑界面数据
       editForm: {
         value: '',
+        phone: '',
+        printname: '',
+        machineCode: '',
+        machineKey: '',
+        phone: '',
+        pnum: '',
+        pformat: '',
+        isOpen: '',
+        id: ''
       },
 
       addFormVisible: false, //新增界面是否显示
@@ -288,9 +301,12 @@ export default {
           trigger: 'blur'
         }],
         phone: [{
-          min: 11,
-          max: 12,
-          message: '请输入正确的手机号码'
+          required: false,
+          message: '请输入联系人手机号',
+          trigger: 'blur'
+        }, {
+          validator: regPhone,
+          trigger: 'blur'
         }],
         pnum: [{
           required: true,
@@ -495,10 +511,10 @@ export default {
     //编辑
     editSubmit: function() {
       this.$refs.editForm.validate((valid) => {
+        console.log(this.editForm);
         if (valid) {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true;
-            
             let para = {
               id: this.editForm.id,
               printname: this.editForm.printname,
