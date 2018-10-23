@@ -174,7 +174,6 @@ import {
 export default {
   data() {
     var regPhone = (rule, value, callback) => {
-      
      if (!/^1(3|4|5|7|8)\d{9,10}$/.test(value) && value !== '') {
         callback(new Error('请输入正确的联系人手机号'));
       } else {
@@ -182,8 +181,6 @@ export default {
       }
     };
     var pnum = (rule, value, callback) => {
-      console.log(value);
-      
       if (value === '') {
         callback(new Error('请输入打印份数'));
       } else if (!/^([1-9][0-9]*){1,3}$/.test(value)) {
