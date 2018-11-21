@@ -348,7 +348,7 @@ export default [{
     path: '/bill2',
     name: '更多对账单下载',
     meta: {
-      title: '更多对账单下载', icon: 'icon-icon--', noCache: true, code: ''
+      title: '更多对账单下载', icon: 'icon-icon--', noCache: true, code: '20181121143250_4'
     },
     component: (resolve) => require(['../views/shop/nav6/bill2.vue'], resolve)
   }]
