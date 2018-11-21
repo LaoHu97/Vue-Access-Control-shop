@@ -354,3 +354,8 @@ export const getDeviceQrCode = `${preUrlPath}/admin/wp/mer/getDeviceQrCode`;
 export const merInfoShow = params => { return instance.post(`${preUrlPath}/admin/wp/mer/merInfoShow`,params).then(res => res.data); };
 
 export const memberAccountDeposit = params => { return instance.post(`${preUrlPath}/admin/wxmember/memberAccountDeposit`,params).then(res => res.data); };
+/*
+2018-11-21
+*/
+export const checkFuiouDataExcel = params => { return instance.get(`${downloadPath}/download/wp/mer/checkFuiouDataExcel`, { params: params }); };
+

@@ -344,4 +344,11 @@ export default [{
       title: '对账单下载', icon: 'icon-icon--', noCache: true, code:''
     },
     component: (resolve) => require(['../views/shop/nav6/bill1.vue'], resolve)
+  }, {
+    path: '/bill2',
+    name: '更多对账单下载',
+    meta: {
+      title: '更多对账单下载', icon: 'icon-icon--', noCache: true, code: ''
+    },
+    component: (resolve) => require(['../views/shop/nav6/bill2.vue'], resolve)
   }]
