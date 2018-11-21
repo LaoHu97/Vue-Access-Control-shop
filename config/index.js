@@ -19,7 +19,7 @@ module.exports = {
         }
       },
       '/download': {
-        target: 'http://test.weupay.com:8080',
+        target: 'http://test.weupay.com:8081',
         changeOrigin: true,
         pathRewrite: {
           '^/download': '/download'
