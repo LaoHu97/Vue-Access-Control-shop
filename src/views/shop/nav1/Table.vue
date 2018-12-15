@@ -231,7 +231,7 @@
           disabledDate: (time) => {
             let startTimeOne = Date.parse(new Date(util.formatDate.format(new Date(this.filters.startTime),
               'yyyy-MM-dd hh:mm:ss')));
-            if (time.getTime() < startTimeOne || time.getTime() > Date.now()) {
+            if (time.getTime() + 24 * 60 * 60 * 1000 - 1 < startTimeOne || time.getTime() > Date.now()) {
               return true;
             }
           }
