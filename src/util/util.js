@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import router from '../router'
 
 var SIGN_REGEXP = /([yMdhsm])(\1*)/g;
 var DEFAULT_PATTERN = 'yyyy-MM-dd';
@@ -152,20 +153,20 @@ export const catchError = function (error) {
       case 301:
         Vue.prototype.$message({
           message: error.data.message || '登录超时！请重新登录',
-          type: 'warning',
-          onClose: function () {
-            location.reload();
-          }
+          type: 'warning'
         });
+        router.replace({
+          path: '/login'
+        })
         break;
       case 302:
         Vue.prototype.$message({
           message: error.data.message || '尚未登陆！请重新登录',
-          type: 'warning',
-          onClose: function () {
-            location.reload();
-          }
+          type: 'warning'
         });
+        router.replace({
+          path: '/login'
+        })
         break;
       default:
         Vue.prototype.$message({
