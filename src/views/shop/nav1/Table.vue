@@ -81,7 +81,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-alert title="可查询最近30天的交易" type="warning" center close-text="知道了" show-icon>
+        <el-alert title="查询区间最多为31天" type="warning" center close-text="知道了" show-icon>
         </el-alert>
       </el-row>
     </el-form>
