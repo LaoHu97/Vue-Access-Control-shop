@@ -82,12 +82,10 @@
       </div>
       <el-main class="ie9_elmain">
         <template>
-          <transition name="fade" mode="out-in">
-            <keep-alive :include="cachedViews">
+            <keep-alive>
               <ErrorPage v-if="accessPerMission"></ErrorPage>
-              <router-view v-else id="main"></router-view>
+              <router-view v-else></router-view>
             </keep-alive>
-          </transition>
         </template>
       </el-main>
     </el-container>

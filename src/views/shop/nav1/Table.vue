@@ -3,10 +3,8 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="whole">
-        <el-tag type="primary" style="margin:10px 10px 20px 0;">交易总金额（元）：{{whole.sumAmt}}元</el-tag>
-        <el-tag type="primary" style="margin:10px 10px 20px 0;">交易总笔数（笔）：{{whole.countRow}}笔</el-tag>
-        <el-tag type="primary" style="margin:10px 10px 20px 0;">会员卡消费总金额（元）：{{whole.memAmt}}元</el-tag>
-        <el-tag type="primary" style="">会员卡消费总笔数（笔）：{{whole.memCount}}笔</el-tag>
+        <el-tag type="primary" style="margin:10px 10px 20px 0;">交易总金额（元）：{{whole.sumAmt}}</el-tag>
+        <el-tag type="primary" style="margin:10px 10px 20px 0;">交易总笔数（笔）：{{whole.countRow}}</el-tag>
       </el-form>
     </el-row>
     <el-form :inline="true" :model="filters" ref="filters" label-position="left" label-width="100px">
@@ -36,16 +34,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item prop="cardType" label="银行卡类型">
-            <el-select v-model="filters.cardType" class="fixed_search_seach" clearable placeholder="银行卡类型">
-              <el-option v-for="item in optionsBank" :label="item.label" :value="item.value" :key="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="6">
           <el-form-item prop="state" label="支付状态">
             <el-select v-model="filters.state" class="fixed_search_input" clearable placeholder="支付状态">
               <el-option v-for="item in optionsPayState" :label="item.label" :value="item.value" :key="item.value">
@@ -53,6 +41,8 @@
             </el-select>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="6">
           <el-form-item prop="goodsprice" label="交易金额">
             <el-input v-model.trim="filters.goodsprice" class="fixed_search_input" placeholder="交易金额">
@@ -73,8 +63,8 @@
       </el-row>
       <el-row>
         <el-col :span="18">
-          <el-form-item prop="startTime" label="日期时间">
-            <el-date-picker v-model="filters.startTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false" :editable='false'>
+          <el-form-item prop="startTime" label="交易时间">
+            <el-date-picker v-model="filters.startTime" class="fixed_search_input_datetime" type="datetime" @change="changTime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false" :editable='false'>
             </el-date-picker>
           </el-form-item>
           <el-form-item>至</el-form-item>
@@ -98,21 +88,21 @@
     <!--列表-->
     <div v-loading="listLoading">
       <el-table :data="users" border highlight-current-row>
-        <el-table-column prop="payTime" label="付款时间" min-width="165">
-        </el-table-column>
         <el-table-column prop="orderId" label="订单号" min-width="285">
         </el-table-column>
-        <el-table-column prop="goodsPrice" label="交易金额" width="120" :formatter="format_amount">
+        <el-table-column prop="payTime" label="交易时间" min-width="165">
+        </el-table-column>
+        <el-table-column prop="goodsPrice" label="交易金额" width="120">
         </el-table-column>
         <el-table-column prop="payWay" label="支付方式" width="120" :formatter="format_payWay">
         </el-table-column>
-        <el-table-column prop="status" label="交易状态" width="150" :formatter="formatPay2">
+        <el-table-column prop="status" label="支付状态" width="150" :formatter="formatPay2">
         </el-table-column>
         <el-table-column prop="storeName" label="收款门店" width="120">
         </el-table-column>
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
-            <el-button type="success" size="mini" @click="handleDetail(scope.$index, scope.row)">订单详情</el-button>
+            <el-button type="success" size="mini" @click="handleDetail(scope.$index, scope.row)">交易详情</el-button>
             <el-button type="danger" size="mini" @click="handleRefund(scope.$index, scope.row)">退款</el-button>
           </template>
         </el-table-column>
@@ -136,10 +126,10 @@
         <el-form-item label="交易金额（元）：">
           <span>{{editForm.goodsPrice}}</span>
         </el-form-item>
-        <el-form-item label="付款时间：">
+        <el-form-item label="交易时间：">
           <span>{{format_payTime(editForm.payTime)}}</span>
         </el-form-item>
-        <el-form-item label="交易状态：">
+        <el-form-item label="支付状态：">
           <span>{{formatPay2(editForm)}}</span>
         </el-form-item>
         <el-form-item label="退款金额（元）：">
@@ -148,7 +138,7 @@
         <el-form-item label="收款门店：">
           <span>{{editForm.storeName}}</span>
         </el-form-item>
-        <el-form-item label="款台：">
+        <el-form-item label="收款款台：">
           <span>{{editForm.username}}</span>
         </el-form-item>
         <el-form-item label="支付方式：">
@@ -161,7 +151,7 @@
       </el-form>
     </el-dialog>
     <!--退款界面-->
-    <el-dialog title="退款" :visible.sync="refundFormVisible" :close-on-click-modal="false" width="600px" @close="closeDialog">
+    <el-dialog title="退款" :visible.sync="refundFormVisible" :close-on-click-modal="false" width="600px">
       <el-form :model="refundForm" :rules="refundFormRules" ref="refundForm" label-position="left" label-width="120px">
         <el-form-item label="订单号：">
           <span>{{refundForm.orderId}}</span>
@@ -169,15 +159,20 @@
         <el-form-item label="第三方订单号：">
           <span>{{refundForm.transactionId}}</span>
         </el-form-item>
-        <el-form-item label="验证码" prop="code">
-          <el-input v-model="refundForm.code" style="width:220px"></el-input>
-          <el-button plain @click="getCode" :disabled="disabledCode">{{auth_time}}{{codeText}}</el-button>
+        <el-form-item label="交易时间：">
+          <span>{{format_payTime(refundForm.payTime)}}</span>
         </el-form-item>
-        <el-form-item label="退款金额" prop="amount">
-          <el-input v-model="refundForm.amount" auto-complete="off" placeholder="请输入退款金额"></el-input>
+        <el-form-item label="支付方式：">
+          <span>{{formatPay1(refundForm.payWay)}}</span>
         </el-form-item>
-        <el-form-item label="备注">
-          <el-input v-model="refundForm.desc" auto-complete="off"></el-input>
+        <el-form-item label="交易金额(元)：">
+          <span>{{refundForm.goodsPrice}}</span>
+        </el-form-item>
+        <el-form-item label="退款金额(元)：" prop="amount">
+          <el-input v-model="refundForm.amount" placeholder="请输入退款金额"></el-input>
+        </el-form-item>
+        <el-form-item label="备注：">
+          <el-input v-model="refundForm.desc"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -222,16 +217,18 @@
         optionsStore: [],
         //时间控制
         pickerOptions1: {
-          disabledDate(time) {
-            let date = new Date();
-            return time.getTime() > Date.now() || time.getTime() < Date.now() - 3600 * 1000 * 24 * 35;
+          disabledDate: (time) => {
+            if (time.getTime() > Date.now()) {
+              return true;
+            }
           }
         },
         pickerOptions2: {
           disabledDate: (time) => {
             let startTimeOne = Date.parse(new Date(util.formatDate.format(new Date(this.filters.startTime),
-              'yyyy-MM-dd hh:mm:ss')));
-            if (time.getTime() + 24 * 60 * 60 * 1000 - 1 < startTimeOne || time.getTime() > Date.now()) {
+              'yyyy-MM-dd')));
+            if (time.getTime() > startTimeOne + 3600 * 1000 * 24 * 30 || time.getTime() < startTimeOne - 3600 * 1000 *
+              24 * 1) {
               return true;
             }
           }
@@ -268,11 +265,6 @@
 
         },
         refundFormRules: {
-          code: [{
-            required: true,
-            message: '请输入验证码',
-            trigger: 'blur'
-          }],
           amount: [{
               required: true,
               validator: rules.validatorAmount,
@@ -284,10 +276,7 @@
               trigger: 'blur'
             }
           ]
-        },
-        codeText: '获取验证码',
-        auth_time: null,
-        disabledCode: false
+        }
       }
     },
     methods: {
@@ -303,35 +292,12 @@
       format_payTime(props) {
         return util.formatDate.format(new Date(props), 'yyyy-MM-dd hh:mm:ss')
       },
-      //格式化金额
-      format_amount(row, column) {
-        return util.number_format(row.goodsPrice, 2, ".", ",")
-      },
-      closeDialog() {
-        this.codeText = '获取验证码'
-        this.auth_time = null
-        this.disabledCode = false
-      },
-      getCode() {
-        let para = {
-          orderId: this.refundForm.orderId
+      changTime(date) {
+        let end_time = Date.parse(new Date(util.formatDate.format(new Date(this.filters.endTime), 'yyyy-MM-dd')))
+        let date_time = Date.parse(new Date(util.formatDate.format(new Date(date), 'yyyy-MM-dd')))
+        if (date_time < end_time - 3600 * 1000 * 24 * 30) {
+          this.filters.endTime = new Date(this.filters.startTime.getFullYear(), this.filters.startTime.getMonth(), this.filters.startTime.getDate(), 23, 59, 59)
         }
-        sendVerCodeT(para).then((res) => {
-          if (res.status === 200) {
-            this.disabledCode = true
-            this.codeText = 's后重新获取'
-            this.auth_time = 60
-            let auth_timetimer = setInterval(() => {
-              this.auth_time--
-                if (this.auth_time <= 0) {
-                  this.codeText = '获取验证码'
-                  this.auth_time = null
-                  this.disabledCode = false
-                  clearInterval(auth_timetimer)
-                }
-            }, 1000)
-          }
-        })
       },
       //款台远程搜索
       clickEmp: function () {
@@ -481,8 +447,7 @@
               let para = {
                 authCode: this.refundForm.orderId,
                 amount: this.refundForm.amount,
-                desc: this.refundForm.desc,
-                verCode: this.refundForm.code
+                desc: this.refundForm.desc
               }
               merRefund(para).then((res) => {
                 let {
@@ -510,14 +475,18 @@
       },
       //显示编辑界面
       handleDetail(index, row) {
-        this.editFormVisible = true;
-        queryOrderDetail({
-          id: row.id
-        }).then(res => {
-          if (res.status === 200) {
-            this.editForm = res.data.order
-          }
-        })
+        this.$router.push({
+          path: "/index1/table5",
+          query: { id: row.id }
+        });
+        // this.editFormVisible = true;
+        // queryOrderDetail({
+        //   id: row.id
+        // }).then(res => {
+        //   if (res.status === 200) {
+        //     this.editForm = res.data.order
+        //   }
+        // })
       },
       //查询重置
       resetForm(formName) {

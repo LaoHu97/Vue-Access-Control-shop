@@ -26,7 +26,7 @@
 			<el-table :data="users" border highlight-current-row style="width: 100%;">
 				<el-table-column prop="name" label="姓名" min-width="120">
 				</el-table-column>
-				<el-table-column prop="phone" label="电话" min-width="140">
+				<el-table-column prop="phone" label="联系电话" min-width="140">
 				</el-table-column>
 				<el-table-column prop="product_name" label="商品名称" min-width="180">
 				</el-table-column>

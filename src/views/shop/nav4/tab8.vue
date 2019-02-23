@@ -3,8 +3,8 @@
   <!--工具条-->
   <el-row>
     <el-form :inline="true" :model="filters" ref="filters">
-      <el-form-item label="手机号">
-        <el-input v-model="filters.phone" class="fixed_search_input" placeholder="请输入手机号"></el-input>
+      <el-form-item label="联系电话">
+        <el-input v-model="filters.phone" class="fixed_search_input" placeholder="请输入联系电话"></el-input>
       </el-form-item>
       <el-form-item label="卡号">
         <el-input v-model="filters.cardNum" class="fixed_search_input" placeholder="请输入卡号"></el-input>
@@ -22,7 +22,7 @@
   <el-table :data="users" highlight-current-row v-loading="listLoading" style="width: 100%;" border>
     <el-table-column prop="name" label="姓名">
     </el-table-column>
-    <el-table-column prop="phone" label="手机号" min-width="120">
+    <el-table-column prop="phone" label="联系电话" min-width="120">
     </el-table-column>
     <el-table-column prop="card_num" label="会员卡号" min-width="120">
     </el-table-column>
@@ -48,7 +48,7 @@
       <el-form-item label="姓名：" prop="name">
         <el-tag type="gray">{{form.name}}</el-tag>
       </el-form-item>
-      <el-form-item label="手机号：" prop="phone">
+      <el-form-item label="联系电话：" prop="phone">
         <el-tag type="gray">{{form.phone}}</el-tag>
       </el-form-item>
       <el-form-item label="充值金额：" prop="amount">

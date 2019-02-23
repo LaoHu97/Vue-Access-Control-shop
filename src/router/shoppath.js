@@ -2,26 +2,28 @@ import Abstract from '../views/common/abstract.vue';
 
 export default [{
     path: '/index1',
-    name: '交易明细查询',
+    name: '交易管理',
     meta: {
       icon: 'icon-shujutongji'
     },
     component: Abstract,
     children: [{
       path: 'table',
-      name: '实时交易查询',
+      name: '交易查询',
       meta: {
-        title: '实时交易查询', icon: 'table1', noCache: false, code:'',
+        title: '交易查询', icon: 'table1', noCache: false, code:'',
       },
       component: (resolve) => require(['../views/shop/nav1/Table.vue'], resolve)
-    },{
+    },
+    {
       path: 'table5',
-      name: '历史交易查询',
+      name: '交易详情',
       meta: {
-        title: '历史交易查询', icon: 'table', noCache: true, code:''
+        title: '交易详情', icon: 'table', noCache: true, code: '', hidden: true
       },
       component: (resolve) => require(['../views/shop/nav1/Table5.vue'], resolve)
-    },{
+    },
+    {
       path: 'table2',
       name: '门店汇总查询',
       meta: {
@@ -29,38 +31,37 @@ export default [{
       },
       component: (resolve) => require(['../views/shop/nav1/Table2.vue'], resolve)
     }]
-  },{
+  }, {
     path: '/index1',
-    name: '交易汇总查询',
+    name: '对账结算',
     meta: {
-      icon: 'icon-daohang-shujufenxi'
+      icon: 'icon-xiaochengxu'
     },
     component: Abstract,
     children: [{
-      path: 'table4',
-      name: '商户日汇总查询',
+      path: 'bill1',
+      name: '对账单下载',
       meta: {
-        title: '商户日汇总查询', icon: 'table', noCache: true, code:''
+        title: '对账单下载',
+        icon: 'icon-icon--',
+        noCache: true,
+        code: ''
       },
-      component: (resolve) => require(['../views/shop/nav1/Table4.vue'], resolve)
-    },{
-      path: 'table3',
-      name: '门店日汇总查询',
+      component: (resolve) => require(['../views/shop/nav6/bill1.vue'], resolve)
+    }, {
+      path: 'settlement1',
+      name: '结算查询',
       meta: {
-        title: '门店日汇总查询', icon: 'table', noCache: true, code:''
+        title: '结算查询',
+        icon: 'table1',
+        noCache: true,
+        code: '',
       },
-      component: (resolve) => require(['../views/shop/nav1/Table3.vue'], resolve)
-    },{
-      path: 'table6',
-      name: '门店数据查询（汇总）',
-      meta: {
-        title: '门店数据查询（汇总）', icon: 'table', noCache: true, code:''
-      },
-      component: (resolve) => require(['../views/shop/nav1/Table6.vue'], resolve)
+      component: (resolve) => require(['../views/shop/nav9/settlement1.vue'], resolve)
     }]
-  },{
+  }, {
     path: '/index2',
-    name: '商家设置',
+    name: '商户管理',
     meta: {
       icon: 'icon-shangjia'
     },
@@ -69,53 +70,56 @@ export default [{
       path: 'page3',
       name: '商户信息',
       meta: {
-        title: '商户信息', icon: 'table', noCache: true, code:''
+        title: '商户信息', icon: 'table', noCache: false, code:''
       },
       component: (resolve) => require(['../views/shop/nav2/Page3.vue'], resolve)
     },{
       path: 'page1',
-      name: '门店管理',
+      name: '门店信息',
       meta: {
-        title: '门店管理', icon: 'table', noCache: true, code:''
+        title: '门店信息', icon: 'table', noCache: false, code: ''
       },
       component: (resolve) => require(['../views/shop/nav2/Page1.vue'], resolve)
     },{
       path: 'page2',
-      name: '款台管理',
+      name: '款台信息',
       meta: {
-        title: '款台管理', icon: 'table', noCache: true, code:''
+        title: '款台信息', icon: 'table', noCache: false, code: ''
       },
       component: (resolve) => require(['../views/shop/nav2/Page2.vue'], resolve)
     }]
   },{
     path: '/index2',
-    name: '配置设置',
+    name: '硬件管理',
     meta: {
       icon: 'icon-peizhi'
     },
     component: Abstract,
     children: [{
       path: 'configure1',
-      name: '打印配置',
+      name: '打印机配置',
       meta: {
-        title: '打印配置', icon: 'table', noCache: true, code:''
+        title: '打印机配置', icon: 'table', noCache: true, code:''
       },
       component: (resolve) => require(['../views/shop/nav3/configure1.vue'], resolve)
-    },{
-      path: 'configure2',
-      name: '喇叭配置',
-      meta: {
-        title: '喇叭配置', icon: 'table', noCache: true, code:''
-      },
-      component: (resolve) => require(['../views/shop/nav3/configure2.vue'], resolve)
-    },{
-      path: 'configure3',
-      name: '充电桩管理',
-      meta: {
-        title: '充电桩管理', icon: 'table', noCache: true, code:''
-      },
-      component: (resolve) => require(['../views/shop/nav3/configure3.vue'], resolve)
-    }]
+    },
+    // {
+    //   path: 'configure2',
+    //   name: '喇叭配置',
+    //   meta: {
+    //     title: '喇叭配置', icon: 'table', noCache: true, code:''
+    //   },
+    //   component: (resolve) => require(['../views/shop/nav3/configure2.vue'], resolve)
+    // },
+    // {
+    //   path: 'configure3',
+    //   name: '充电桩管理',
+    //   meta: {
+    //     title: '充电桩管理', icon: 'table', noCache: true, code:''
+    //   },
+    //   component: (resolve) => require(['../views/shop/nav3/configure3.vue'], resolve)
+    // }
+  ]
   },{
     path: '/index3',
     name: '会员管理',
@@ -337,18 +341,5 @@ export default [{
       },
       component: (resolve) => require(['../views/shop/nav8/miniprogram5.vue'], resolve)
     }]
-  },{
-    path: '/bill1',
-    name: '对账单下载',
-    meta: {
-      title: '对账单下载', icon: 'icon-icon--', noCache: true, code:''
-    },
-    component: (resolve) => require(['../views/shop/nav6/bill1.vue'], resolve)
-  }, {
-    path: '/bill2',
-    name: '更多对账单下载',
-    meta: {
-      title: '更多对账单下载', icon: 'icon-icon--', noCache: true, code: '20181121143250_4'
-    },
-    component: (resolve) => require(['../views/shop/nav6/bill2.vue'], resolve)
-  }]
+  }
+]

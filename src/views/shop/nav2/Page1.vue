@@ -16,24 +16,24 @@
     <!--列表-->
     <div v-loading="listLoading">
       <el-table :data="users" border highlight-current-row style="width: 100%;">
+        <el-table-column prop="saccount" label="门店编号" min-width="120">
+        </el-table-column>
         <el-table-column prop="storeName" label="门店名称" min-width="120">
         </el-table-column>
         <el-table-column prop="address" label="门店地址" min-width="180">
         </el-table-column>
         <el-table-column prop="telephone" label="联系电话" min-width="120">
         </el-table-column>
-        <el-table-column prop="saccount" label="登录帐号" min-width="120">
-        </el-table-column>
-        <el-table-column label="门店状态" width="120">
+        <!-- <el-table-column label="门店状态" width="120">
           <template slot-scope="scope">
             <el-switch name="value" @change="test(scope.$index, scope.row)" v-model="scope.row.state">
             </el-switch>
           </template>
-        </el-table-column>
-        <el-table-column label="操作" width="260">
+        </el-table-column> -->
+        <el-table-column label="操作" width="100">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="handleReset(scope.$index, scope.row)">密码重置</el-button>
-            <el-button type="warning" size="mini" @click="handleBinding(scope.$index, scope.row)">{{!scope.row.sopenId ? '绑定' : '解绑'}}</el-button>
+            <!-- <el-button type="danger" size="mini" @click="handleReset(scope.$index, scope.row)">密码重置</el-button> -->
+            <!-- <el-button type="warning" size="mini" @click="handleBinding(scope.$index, scope.row)">{{!scope.row.sopenId ? '绑定' : '解绑'}}</el-button> -->
             <!-- <el-button type="warning" size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button> -->
             <el-button type="info" size="mini" @click="handleDet(scope.$index, scope.row)">详情</el-button>
           </template>
@@ -73,17 +73,11 @@
         <el-form-item label="门店名称：">
           <span>{{detForm.storeName}}</span>
         </el-form-item>
-        <el-form-item label="管理员：">
-          <span>{{detForm.wxNickName || '暂无'}}</span>
-        </el-form-item>
-        <el-form-item label="电话：">
+        <el-form-item label="联系电话：">
           <span>{{detForm.telephone}}</span>
         </el-form-item>
         <el-form-item label="详细地址：">
           <span>{{detForm.address}}</span>
-        </el-form-item>
-        <el-form-item label="门店编号：">
-          <span>{{detForm.storeName}}</span>
         </el-form-item>
         <el-form-item label="营业时间：">
           <span>{{detForm.shopHours}}</span>
@@ -139,7 +133,7 @@
         <el-form-item label="详细地址" prop="address">
           <el-input v-model="addForm.address" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="电话" prop="telephone">
+        <el-form-item label="联系电话" prop="telephone">
           <el-input v-model="addForm.telephone" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="营业时间">
@@ -192,9 +186,9 @@
     data() {
       var telephone = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入联系人手机号'));
+          callback(new Error('请输入联系人联系电话'));
         } else if (!/^1(3|4|5|7|8)\d{9,10}$/.test(value)) {
-          callback(new Error('请输入正确的联系人手机号'));
+          callback(new Error('请输入正确的联系人联系电话'));
         } else {
           callback();
         }
@@ -244,7 +238,7 @@
           ],
           telephone: [{
               required: true,
-              message: '请输入联系人手机号',
+              message: '请输入联系人联系电话',
               trigger: 'blur'
             },
             {
@@ -292,7 +286,7 @@
           ],
           telephone: [{
               required: true,
-              message: '请输入联系人手机号',
+              message: '请输入联系人联系电话',
               trigger: 'blur'
             },
             {
@@ -482,37 +476,6 @@
           this.listLoading = false;
         });
       },
-      //删除
-      // handleDel: function (index, row) {
-      //     this.$confirm('确认删除该记录吗?', '提示', {
-      //         type: 'warning'
-      //     }).then(() => {
-      //         this.listLoading = true;
-      //         
-      //         let para = { storeId: row.id };
-      //         deleteStore(para).then((res) => {
-      //             this.listLoading = false;
-      //             
-      //             let {status,message}=res;
-      //             if(status==200){
-      // 	this.$notify({
-      // 		title: '成功',
-      // 		message: message,
-      // 		type: 'success'
-      // 	});
-      //             }else {
-      //                 this.$notify({
-      //                     title: '失败',
-      //                     message: message,
-      //                     type: 'success'
-      //                 });
-      // }
-      //             this.getUsers();
-      //         });
-      //     }).catch(() => {
-      //
-      //     });
-      // },
       // //重置密码
       handleReset: function (index, row) {
         this.$prompt('请输入新密码', '提示', {
@@ -661,6 +624,9 @@
     },
     mounted() {
       this.getUsers();
+    },
+    activated() {
+      console.log('keep');
     }
   }
 

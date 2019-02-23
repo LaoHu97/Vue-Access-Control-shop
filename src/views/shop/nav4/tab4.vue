@@ -24,7 +24,7 @@
         </el-table-column>
         <el-table-column prop="name" label="持卡人" min-width="120">
         </el-table-column>
-        <el-table-column prop="phone" label="手机号" min-width="120">
+        <el-table-column prop="phone" label="联系电话" min-width="120">
         </el-table-column>
         <el-table-column prop="creat_time" label="领卡时间" :formatter="creat_time" min-width="95">
         </el-table-column>

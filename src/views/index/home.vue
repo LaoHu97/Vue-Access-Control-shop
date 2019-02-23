@@ -156,7 +156,7 @@
           </el-col>
         </el-row>
       </el-main>
-      <el-footer class="element_footer">版权所有：西安万鼎网络科技有限公司 | ICP备 陕17002918号</el-footer>
+      <el-footer class="element_footer">版权所有：包商银行股份有限公司 | ICP备 XXXXXXXX号 </el-footer>
     </el-container>
   </div>
 </template>

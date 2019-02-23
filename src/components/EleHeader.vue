@@ -1,7 +1,7 @@
 <style scoped lang="scss">
   .el_menu_horizontal {
     border: none;
-    float: right;
+    margin-left: 250px;
   }
 
   .top_logo {
@@ -10,7 +10,7 @@
   }
 
   .top_logo img {
-    width: 30%;
+    width: 100%;
     height: auto;
     margin-top: 19px;
     float: left;
@@ -36,8 +36,7 @@
     <el-row>
       <el-col :span="5">
         <div class="top_logo">
-          <img src="../assets/images/logo4.png" />
-          <span>万鼎科技</span>
+          <img src="../assets/images/webwxgetmsgimg.png" />
         </div>
         <slot></slot>
       </el-col>
@@ -45,11 +44,11 @@
         <div class="navmenu_horizontal">
           <el-menu :default-active="activeIndex" class="el_menu_horizontal" mode="horizontal" @select="handleSelect" background-color="#fff">
             <el-menu-item index="1">首页</el-menu-item>
-            <el-menu-item index="2">交易中心</el-menu-item>
             <el-menu-item index="3">商户中心</el-menu-item>
-            <el-menu-item index="4">产品中心</el-menu-item>
+            <el-menu-item index="2">交易中心</el-menu-item>
+            <!-- <el-menu-item index="4">产品中心</el-menu-item>
             <el-menu-item index="5">营销中心</el-menu-item>
-            <el-menu-item index="6">帮助中心</el-menu-item>
+            <el-menu-item index="6">帮助中心</el-menu-item> -->
           </el-menu>
         </div>
       </el-col>

@@ -69,7 +69,7 @@
             <div class="grid-content">会员卡号：<span>{{vipMember.card_no}}</span></div>
           </el-col>
           <el-col :span="8">
-            <div class="grid-content">手机号：<span>{{vipMember.phone}}</span></div>
+            <div class="grid-content">联系电话：<span>{{vipMember.phone}}</span></div>
           </el-col>
         </el-row>
         <el-row>

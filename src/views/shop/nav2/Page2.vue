@@ -6,7 +6,7 @@
         <el-form-item label="款台名称">
           <el-input v-model="filters.username" class="fixed_search_input" placeholder="款台名称"></el-input>
         </el-form-item>
-        <el-form-item label="款台帐号">
+        <el-form-item label="款台编号">
           <el-input v-model="filters.account" class="fixed_search_input" placeholder="款台帐号"></el-input>
         </el-form-item>
         <el-form-item style="float: right;">
@@ -19,29 +19,20 @@
     <!--列表-->
     <div v-loading="listLoading">
       <el-table :data="users" border highlight-current-row style="width: 100%;">
+        <el-table-column prop="account" label="款台编号" min-width="120">
+        </el-table-column>
+        <el-table-column prop="reverse1" label="所属门店" min-width="120">
+        </el-table-column>
         <el-table-column prop="username" label="款台名称" min-width="120">
-        </el-table-column>
-        <el-table-column prop="account" label="登录帐号" min-width="120">
-        </el-table-column>
-        <el-table-column label="款台状态">
-          <template slot-scope="scope">
-            <el-switch name="value" @change="empStatusChange(scope.$index, scope.row)" v-model="scope.row.status">
-            </el-switch>
-          </template>
         </el-table-column>
         <el-table-column label="二维码" width="100">
           <template slot-scope="scope">
             <el-button type="success" size="mini" @click="handleCode(scope.$index, scope.row)">二维码</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="会员支付二维码" width="140" v-if="showVipCode">
-          <template slot-scope="scope">
-            <el-button type="success" size="mini" @click="handleVipCode(scope.$index, scope.row)">会员支付二维码</el-button>
-          </template>
-        </el-table-column>
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="handleReset(scope.$index, scope.row)">密码重置</el-button>
+            <!-- <el-button type="danger" size="mini" @click="handleReset(scope.$index, scope.row)">密码重置</el-button> -->
           <!--  <el-button type="warning" size="mini" @click="handleModify(scope.$index, scope.row)">修改</el-button>-->
             <el-button type="info" size="mini" @click="handleDetail(scope.$index, scope.row)">详情</el-button>
           </template>
@@ -62,7 +53,7 @@
         <el-form-item label="款台名称" prop="username">
           <el-input v-model="modForm.username" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
+        <el-form-item label="联系电话" prop="phone">
           <el-input v-model="modForm.phone" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
@@ -100,37 +91,37 @@
       </el-form>
     </el-dialog>
     <!-- 会员支付二维码 -->
-    <el-dialog :visible.sync="editFormVipCode" :close-on-click-modal="true" width="600px">
+    <!-- <el-dialog :visible.sync="editFormVipCode" :close-on-click-modal="true" width="600px">
       <el-form :model="editVipCode" label-width="" ref="editVipCode" style="width:auto">
         <img :src="editVipCode.vipCode" alt="二维码" width="100%">
         <el-button type="primary" @click="vipCode" style="position:absolute;left:50%;margin-left:-44px;margin-top:-20px;">点击下载</el-button>
       </el-form>
-    </el-dialog>
+    </el-dialog> -->
     <!--详情界面-->
-    <el-dialog title="交易详情" :visible.sync="editFormVisible" :close-on-click-modal="false" width="600px">
+    <el-dialog title="款台详情" :visible.sync="editFormVisible" :close-on-click-modal="false" width="600px">
       <el-form :model="editForm" label-width="140px" ref="editForm" label-position="left">
         <el-form-item label="款台名称：">
           <span>{{editForm.username}}</span>
         </el-form-item>
-        <el-form-item label="款台帐号：">
+        <el-form-item label="款台编号：">
           <span>{{editForm.account}}</span>
         </el-form-item>
-        <el-form-item label="手机号：">
+        <el-form-item label="联系电话：">
           <span>{{editForm.phone}}</span>
         </el-form-item>
         <el-form-item label="邮箱：">
           <span>{{editForm.email}}</span>
         </el-form-item>
-        <el-form-item label="终端号：">
+        <!-- <el-form-item label="终端号：">
           <span>{{editForm.terminal_id}}</span>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="所属门店：">
           <span>{{editForm.storeName}}</span>
         </el-form-item>
-        <el-form-item label="万鼎终端：">
+        <el-form-item label="对接终端号：">
           <span>{{editForm.reverse1}}</span>
         </el-form-item>
-        <el-form-item label="万鼎Token：">
+        <el-form-item label="对接token：">
           <span>{{editForm.etoken}}</span>
         </el-form-item>
       </el-form>
@@ -142,7 +133,7 @@
         <el-form-item label="款台名称" prop="username">
           <el-input v-model="addForm.username" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
+        <el-form-item label="联系电话" prop="phone">
           <el-input v-model="addForm.phone" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
@@ -199,7 +190,7 @@
         if (value === '') {
           callback();
         } else if (!/^1(3|4|5|7|8)\d{9,10}$/.test(value)) {
-          callback(new Error('请输入正确的联系人手机号'));
+          callback(new Error('请输入正确的联系人联系电话'));
         } else {
           callback();
         }
@@ -226,10 +217,10 @@
         editCode: {
           code: ''
         },
-        editFormVipCode: false,
-        editVipCode: {
-          vipCode: ''
-        },
+        // editFormVipCode: false,
+        // editVipCode: {
+        //   vipCode: ''
+        // },
         showVipCode: true,
         //编辑界面数据
         editForm: {},
@@ -411,16 +402,16 @@
         window.location.href = this.editCode.code
       },
       //显示会员支付二维码
-      handleVipCode: function (inde, row) {
-        this.editFormVipCode = true;
-        let para = {
-          mid: row.mid,
-          eid: row.eid,
-          storeId: row.storeId
-        }
-        this.editVipCode.vipCode = getEmpMemCode + "?" + "mid=" + para.mid + "&" +
-          "eid=" + para.eid + "&" + "storeId=" + para.storeId
-      },
+      // handleVipCode: function (inde, row) {
+      //   this.editFormVipCode = true;
+      //   let para = {
+      //     mid: row.mid,
+      //     eid: row.eid,
+      //     storeId: row.storeId
+      //   }
+      //   this.editVipCode.vipCode = getEmpMemCode + "?" + "mid=" + para.mid + "&" +
+      //     "eid=" + para.eid + "&" + "storeId=" + para.storeId
+      // },
       vipCode: function () {
         window.location.href = this.editVipCode.vipCode
       },

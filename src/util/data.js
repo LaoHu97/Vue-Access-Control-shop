@@ -24,15 +24,6 @@ export const optionsPaymentCopy = [{
 }, {
   value: 'ALI',
   label: '支付宝'
-}, {
-  value: 'BANK',
-  label: '银行卡'
-}, {
-  value: 'BEST',
-  label: '翼支付'
-}, {
-  value: 'UNIONPAY',
-  label: '银联二维码'
 }]
 export const optionsPaymentExcel = [{
     value: '',
@@ -43,15 +34,6 @@ export const optionsPaymentExcel = [{
   }, {
     value: 'ALI',
     label: '支付宝'
-  }, {
-    value: 'BANK',
-    label: '银行卡'
-  }, {
-    value: 'BEST',
-    label: '翼支付'
-  }, {
-    value: 'UNIONPAY',
-    label: '银联二维码'
   }]
 export const optionsBank = [{
   value: 'DEBIT',

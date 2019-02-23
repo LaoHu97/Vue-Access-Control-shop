@@ -351,7 +351,7 @@ export const getDeviceQrCode = `${preUrlPath}/admin/wp/mer/getDeviceQrCode`;
 /*
 2018-7-18
 */ 
-export const merInfoShow = params => { return instance.post(`${preUrlPath}/admin/wp/mer/merInfoShow`,params).then(res => res.data); };
+export const queryAgentShopMer = params => { return instance.post(`${preUrlPath}/admin/wp/mer/queryAgentShopMer`,params).then(res => res.data); };
 
 export const memberAccountDeposit = params => { return instance.post(`${preUrlPath}/admin/wxmember/memberAccountDeposit`,params).then(res => res.data); };
 /*
@@ -359,3 +359,12 @@ export const memberAccountDeposit = params => { return instance.post(`${preUrlPa
 */
 export const checkFuiouDataExcel = params => { return instance.get(`${downloadPath}/download/wp/mer/checkFuiouDataExcel`, { params: params }); };
 
+// 2019/1/15
+
+export const queryMerDownRecord = params => { return instance.post(`${preUrlPath}/admin/wp/mer/queryMerDownRecord`, params).then(res => res.data); };
+
+export const queryDownloadData = params => { return instance.post(`${preUrlPath}/admin/wp/mer/queryDownloadData`, params).then(res => res.data); };
+
+export const queryStatementList = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/queryStatementList`, params).then(res => res.data);
+};

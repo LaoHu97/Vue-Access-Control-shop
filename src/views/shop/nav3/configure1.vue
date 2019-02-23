@@ -3,8 +3,8 @@
   <!--工具条-->
   <el-row>
     <el-form :inline="true" :model="filters">
-      <el-form-item label="终端名称">
-        <el-input v-model="filters.printname" class="fixed_search_input" placeholder="终端名称"></el-input>
+      <el-form-item label="打印机名称">
+        <el-input v-model="filters.printname" class="fixed_search_input" placeholder="打印机名称"></el-input>
       </el-form-item>
       <el-form-item style="float: right;">
         <el-button type="primary" @click="getUsers" round>查询</el-button>
@@ -22,7 +22,7 @@
       </el-table-column>
       <el-table-column prop="machineKey" label="终端密钥" min-width="120">
       </el-table-column>
-      <el-table-column prop="phone" label="电话" min-width="120">
+      <el-table-column prop="phone" label="电话号码" min-width="120">
       </el-table-column>
       <el-table-column prop="pnum" label="打印份数">
       </el-table-column>
@@ -62,10 +62,10 @@
       <el-form-item label="终端密钥：">
         <span>{{detForm.machineKey}}</span>
       </el-form-item>
-      <el-form-item label="电话：">
+      <el-form-item label="电话号码：">
         <span>{{detForm.phone}}</span>
       </el-form-item>
-      <el-form-item label="打印份数">
+      <el-form-item label="打印份数：">
         <span>{{detForm.pnum}}</span>
       </el-form-item>
       <el-form-item label="所属款台：">
@@ -85,11 +85,18 @@
       <el-form-item label="终端密钥" prop="machineKey">
         <el-input v-model="editForm.machineKey" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="电话" prop="phone">
+      <el-form-item label="电话号码" prop="phone">
         <el-input v-model="editForm.phone"></el-input>
       </el-form-item>
       <el-form-item label="打印份数" prop="pnum">
-        <el-input v-model="editForm.pnum" auto-complete="off"></el-input>
+        <el-select v-model="editForm.pnum" placeholder="请选择">
+          <el-option
+            v-for="item in optionsPnum"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="选择款台" prop="value">
         <template>
@@ -103,10 +110,10 @@
 						</el-select>
 					</template>
       </el-form-item>
-      <el-form-item label="打印模板	" prop="pformat">
+      <!-- <el-form-item label="打印模板	" prop="pformat">
         <el-input type="textarea" :rows="6" :disabled="true" v-model="editForm.pformat">
         </el-input>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click.native="editFormVisible = false">取消</el-button>
@@ -126,11 +133,18 @@
       <el-form-item label="终端密钥" prop="machineKey">
         <el-input v-model="addForm.machineKey" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="电话" prop="phone">
+      <el-form-item label="电话号码" prop="phone">
         <el-input v-model="addForm.phone" auto-complete="off" value="number"></el-input>
       </el-form-item>
       <el-form-item label="打印份数" prop="pnum">
-        <el-input v-model="addForm.pnum" auto-complete="off" value="number"></el-input>
+        <el-select v-model="addForm.pnum" placeholder="请选择">
+          <el-option
+            v-for="item in optionsPnum"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="选择款台" prop="value">
         <template>
@@ -144,10 +158,10 @@
 						</el-select>
 					</template>
       </el-form-item>
-      <el-form-item label="打印模板	" prop="pformat">
+      <!-- <el-form-item label="打印模板	" prop="pformat">
         <el-input type="textarea" :rows="6" :disabled="true" v-model="addForm.pformat">
         </el-input>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click.native="addFormVisible = false">取消</el-button>
@@ -175,7 +189,7 @@ export default {
   data() {
     var regPhone = (rule, value, callback) => {
      if (!/^1(3|4|5|7|8)\d{9,10}$/.test(value) && value !== '') {
-        callback(new Error('请输入正确的联系人手机号'));
+        callback(new Error('请输入正确的电话号码'));
       } else {
         callback();
       }
@@ -238,7 +252,7 @@ export default {
         }],
         phone: [{
           required: false,
-          message: '请输入联系人手机号',
+          message: '请输入电话号码',
           trigger: 'blur'
         }, {
           validator: regPhone,
@@ -246,11 +260,11 @@ export default {
         }],
         pnum: [{
           required: true,
-          message: '请输入打印份数',
+          message: '请选择打印份数',
           trigger: 'blur'
         }, {
           validator: pnum,
-          trigger: 'blur'
+          trigger: 'change'
         }],
         value: [{
           required: true,
@@ -300,7 +314,7 @@ export default {
         }],
         phone: [{
           required: false,
-          message: '请输入联系人手机号',
+          message: '请输入电话号码',
           trigger: 'blur'
         }, {
           validator: regPhone,
@@ -308,8 +322,8 @@ export default {
         }],
         pnum: [{
           required: true,
-          message: '请输入打印份数',
-          trigger: 'blur'
+          message: '请选择打印份数',
+          trigger: 'change'
         },
         {
           validator: pnum,
@@ -321,6 +335,13 @@ export default {
           message: '请选择款台'
         }],
       },
+      optionsPnum: [{
+          value: '1',
+          label: '1份'
+        }, {
+          value: '2',
+          label: '2份'
+      }],
       //新增界面数据
       addForm: {
         value: '',
@@ -338,7 +359,7 @@ export default {
   },
   methods: {
     test: function(index, row) {
-      this.$confirm('此操作将修改款台状态, 确定修改?', '提示', {
+      this.$confirm('此操作将修改打印机状态, 确定修改? ', '提示', {
         cancelButtonText: '取消',
         confirmButtonText: '确定',
         closeOnClickModal: false,

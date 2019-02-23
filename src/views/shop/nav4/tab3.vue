@@ -48,7 +48,7 @@
       <el-form-item label="姓名" prop="name">
         <el-input auto-complete="off" v-model="addForm.name"></el-input>
       </el-form-item>
-			<el-form-item label="手机号" prop="phone">
+			<el-form-item label="联系电话" prop="phone">
 				<el-input auto-complete="off" v-model="addForm.phone"></el-input>
 			</el-form-item>
 			<el-form-item label="会员卡号" prop="card_no">
@@ -95,7 +95,7 @@
      </el-form>
     <el-table border :data="detailedData">
       <el-table-column property="name" label="绑定人姓名"></el-table-column>
-      <el-table-column property="phone" label="绑定人手机号"></el-table-column>
+      <el-table-column property="phone" label="绑定人联系电话"></el-table-column>
       <el-table-column property="amount" label="交易金额￥"></el-table-column>
       <el-table-column property="creat_time" label="交易时间" :formatter="creat_time"></el-table-column>
       <el-table-column property="comments" label="交易描述"></el-table-column>

@@ -46,14 +46,14 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="12">
-          <el-form-item label="选择时间" prop="resource">
+        <el-col :span="11">
+          <el-form-item label="交易时间" prop="resource">
             <el-date-picker v-model="ruleForm.startTime" :editable="false" :clearable="false" :type="dateType" @change="changTime" :picker-options="pickerOptions1"
-              placeholder="选择日期">
+              placeholder="交易时间">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="1">
+        <el-col :span="1" style="margin-right:2px;">
           <el-form-item label-width="0">
             至
           </el-form-item>
@@ -61,7 +61,7 @@
         <el-col :span="8">
           <el-form-item label="" prop="endTime" label-width="0px">
             <el-date-picker v-model="ruleForm.endTime" :editable="false" :clearable="false" :type="dateType" :picker-options="pickerOptions2"
-              placeholder="选择日期" default-time="23:59:59">
+              placeholder="交易时间" default-time="23:59:59">
             </el-date-picker>
           </el-form-item>
         </el-col>
@@ -73,10 +73,32 @@
       </el-row>
       <el-row>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">立即下载</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">下载</el-button>
+          <el-button type="success" @click="downClick">下载记录</el-button>
         </el-form-item>
       </el-row>
     </el-form>
+    <el-dialog title="预约下载" :visible.sync="dialogTableVisible" width="50%">
+      <el-alert
+        title="报表文件生成后系统将保留7天，过期自动删除"
+        type="warning"
+        show-icon
+        :closable="false"
+        style="margin-bottom: 10px;">
+      </el-alert>
+      <div>
+        <el-table :data="gridData">
+          <el-table-column :formatter="formatter_gmt_create" property="gmt_create" label="申请时间"></el-table-column>
+          <el-table-column property="file_name" label="文件名"></el-table-column>
+          <el-table-column :formatter="formatter_status" label="状态"></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button plain type="success" :disabled="scope.row.status !== '1'" @click="excleClick(scope.$index, scope.row)">下载</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -87,8 +109,9 @@
     downOrderExcelNew,
     checkdownOrderExcelNew,
     selectStoreList,
-    checkDataExcel,
-    selectEmpsBySid
+    queryDownloadData,
+    selectEmpsBySid,
+    queryMerDownRecord
   } from '../../../api/shop';
   export default {
     data() {
@@ -133,12 +156,6 @@
         optionsExcel: [{
           value: 'od',
           label: '交易明细'
-        }, {
-          value: 'sd',
-          label: '门店日汇总'
-        }, {
-          value: 'ss',
-          label: '门店汇总'
         }],
         //账单类型
         optionsPayType: [{
@@ -149,7 +166,9 @@
           label: '退款成功'
         }],
         //支付方式
-        optionsScene: data.optionsPaymentExcel
+        optionsScene: data.optionsPaymentExcel,
+        dialogTableVisible: false,
+        gridData: []
       };
     },
     computed: {
@@ -171,6 +190,24 @@
       }
     },
     methods: {
+      formatter_gmt_create(row, cloumn){
+        return util.formatDate.format(new Date(row.gmt_create), 'yyyy-MM-dd hh:mm:ss')
+      },
+      formatter_status(row, cloumn){
+        return row.status === '0' ? '处理中' : row.status === '1' ? '成功' : '未知'
+      },
+      excleClick(index, row){
+        console.log(row.file_url);
+        window.open(row.file_url)
+      },
+      downClick() {
+        this.dialogTableVisible = true
+        this.$nextTick(() => {
+          queryMerDownRecord().then(res => {
+            this.gridData = res.data.dataList
+          })
+        })
+      },
       changTime(date) {
         let end_time = Date.parse(new Date(util.formatDate.format(new Date(this.ruleForm.endTime), 'yyyy-MM-dd')))
         let date_time = Date.parse(new Date(util.formatDate.format(new Date(date), 'yyyy-MM-dd')))
@@ -181,6 +218,12 @@
       },
       //款台远程搜索
       clickEmp: function () {
+        if (!this.ruleForm.storeName) {
+          return  this.$message({
+            message: '请先选择门店',
+            type: 'warning'
+          });
+        }
         this.empSearchLoading = true;
         let para = {
           mid: sessionStorage.getItem('mid'),
@@ -269,9 +312,14 @@
               new Date(para.startTime), 'yyyy/MM/dd hh:mm:ss')));
             para.endTime = (!para.endTime || para.endTime == '') ? '' : String(Date.parse(util.formatDate.format(
               new Date(para.endTime), 'yyyy/MM/dd hh:mm:ss')));
-            checkDataExcel(para).then(res => {
-              if (res.data.status === 200) {
-                window.open(res.data.data)
+            queryDownloadData(para).then(res => {
+              console.log(res);
+              
+              if (res.status === 200) {
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                });
               }
             })
           }
