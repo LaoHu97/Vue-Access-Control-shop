@@ -291,11 +291,10 @@ export const formatPayStatus = function (data, val) {
         payStatus = '支付失败'
         break;
       case '3':
-        payStatus = '支付成功'
+        payStatus = '支付成功（有退款）'
         break;
-      case '5':
+      default:
         payStatus = '未知'
-        break;
     }
   }else if(val === '1') {
     switch (data) {

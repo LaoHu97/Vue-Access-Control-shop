@@ -48,71 +48,115 @@
     <el-card class="box-card">
       <div slot="header">
         <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-xinxi"></use>
+          <use xlink:href="#icon-dingdan"></use>
         </svg>
-        <span>交易详情</span>
+        <span>交易订单</span>
       </div>
       <div class="box-card-text">
         <el-row>
           <el-col :span="12" style="font-size:20px;color:#F56C6C">
-            <span>订单号：</span>
-            {{ boxCardText.orderId }}
+            <span>商户名：</span>{{ boxCardText.mname }}
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <span>第三方订单号：</span>
-            {{ boxCardText.transactionId }}
+            <span>商户号：</span>{{ boxCardText.merchant_no }}
           </el-col>
           <el-col :span="8">
-            <span>支付方式：</span>
-            {{ formatPay1(boxCardText.payWay) }}
+            <span>门店名称：</span>{{ boxCardText.storeName }}
           </el-col>
           <el-col :span="8">
-            <span>商户名称：</span>
-            {{ boxCardText.mname }}
+            <span>款台名称：</span>{{ boxCardText.username }}
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <span>交易金额（元）：</span>
-            {{ boxCardText.goodsPrice }}
+            <span>交易订单号：</span>{{ boxCardText.orderId }}
           </el-col>
           <el-col :span="8">
-            <span>支付状态：</span>
-            {{ formatPay2(boxCardText) }}
+            <span>第三方订单号：</span>{{ boxCardText.transactionId }}
+          </el-col>
+        </el-row>
+      </div>
+    </el-card>
+    <el-card class="box-card">
+      <div slot="header">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-saomazhifu"></use>
+        </svg>
+        <span>支付信息</span>
+      </div>
+      <div class="box-card-text">
+        <el-row>
+          <el-col :span="8">
+            <span>支付方式：</span>{{ formatPay1(boxCardText.payWay) }}
           </el-col>
           <el-col :span="8">
-            <span>门店名称：</span>
-            {{ boxCardText.storeName }}
+            <span>支付类型：</span>{{ boxCardText.payType === 'MICRO' ? '刷卡支付' : boxCardText.payType === 'NATIVE' ? '扫码支付' : boxCardText.payType === 'JSAPI' ? '公众号支付' : '其他' }}
+          </el-col>
+          <el-col :span="8">
+            <span>支付状态：</span>{{ formatPay2(boxCardText) }}
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <span>退款金额（元）：</span>
-            {{ boxCardText.refundAmount }}
+            <span>交易金额：</span>{{ boxCardText.goodsPrice }}元
           </el-col>
           <el-col :span="8">
-            <span>支付类型：</span>
-            {{ boxCardText.payType === 'MICRO' ? '刷卡' : boxCardText.payType === 'NATIVE' ? '扫码' : boxCardText.payType === 'JSAPI' ? '公众号' : '其他' }}
+            <span>手续费：</span>{{ boxCardText.factorage }}元
+          </el-col>
+        </el-row>
+      </div>
+    </el-card>
+    <el-card class="box-card">
+      <div slot="header">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-shijian"></use>
+        </svg>
+        <span>时间信息</span>
+      </div>
+      <div class="box-card-text">
+        <el-row>
+          <el-col :span="8">
+            <span>订单创建时间：</span>{{ format_payTime(boxCardText.createTime) }}
           </el-col>
           <el-col :span="8">
-            <span>款台名称：</span>
-            {{ boxCardText.username }}
+            <span>订单支付时间：</span>{{ format_payTime(boxCardText.payTime) }}
+          </el-col>
+          <el-col :span="8">
+            <span>最后更新时间：</span>{{ format_payTime(boxCardText.update_time) }}
+          </el-col>
+        </el-row>
+      </div>
+    </el-card>
+    <el-card class="box-card" v-for="(item, index) in boxCardTextList" :key="index">
+      <div slot="header">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-tuikuan"></use>
+        </svg>
+        <span>退款信息</span>
+      </div>
+      <div class="box-card-text">
+        <el-row>
+          <el-col :span="8">
+            <span>退款处理单号：</span>{{ item.orderId }}
+          </el-col>
+          <el-col :span="8">
+            <span>退款金额：</span>{{ item.goodsPrice }}元
+          </el-col>
+          <el-col :span="8">
+            <span>退款状态：</span>{{ item.status === '0' ? '发起退款' : item.status === '1' ? '退款成功' : item.status === '2' ? '退款失败' : '未知'}}
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <span>手续费（元）：</span>
-            {{ boxCardText.factorage }}
+            <span>退款完成时间：</span>{{ format_payTime(item.payTime) }}
           </el-col>
           <el-col :span="8">
-            <span>交易时间：</span>
-            {{ format_payTime(boxCardText.payTime) }}
+            <span>退还手续费：</span>{{ item.factorage }}元
           </el-col>
           <el-col :span="8">
-            <span>商户号：</span>
-            {{ boxCardText.merchant_no }}
+            <span>备注：</span>{{ item.goodsDesc }}
           </el-col>
         </el-row>
       </div>
@@ -123,30 +167,27 @@
 import {
   queryOrderDetail
 } from "@/api/shop";
-import CryptoJS from "crypto-js";
-import * as util from "../../../util/util.js";
+import * as util from "@/util/util.js";
 export default {
   data() {
     return {
-      boxCardText: {}
+      boxCardText: {},
+      boxCardTextList: []
     };
   },
   mounted() {
     this.getMerDetails()
   },
   methods: {
-      formatPay2: function (row, column) {
-        return util.formatPayStatus(row.status, row.orderType)
-      },
-      formatPay1: function (row) {
-        return util.formatPayment(row)
-      },
-      format_payWay(row, column) {
-        return util.formatPayment(row.payWay)
-      },
-      format_payTime(props) {
-        return util.formatDate.format(new Date(props), 'yyyy-MM-dd hh:mm:ss')
-      },
+    formatPay2: function (row, column) {
+      return util.formatPayStatus(row.status, row.orderType)
+    },
+    formatPay1: function (row) {
+      return util.formatPayment(row)
+    },
+    format_payTime(props) {
+      return props ? util.formatDate.format(new Date(props), 'yyyy-MM-dd hh:mm:ss') : ''
+    },
     getMerDetails() {
       const loading = this.$loading({
         lock: true,
@@ -156,6 +197,7 @@ export default {
       });
       queryOrderDetail({ id: this.$route.query.id }).then(res => {
         this.boxCardText = res.data.order;
+        this.boxCardTextList = res.data.refundOrderList
         loading.close();
       });
     }

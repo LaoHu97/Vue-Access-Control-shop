@@ -2,7 +2,7 @@
   <div class="tags-view-container">
     <scroll-pane class='tags-view-wrapper' ref='scrollPane'>
       <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)"
-        :to="tag.path" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
+        :to="{ path: tag.path, query: tag.query }" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
         {{tag.title}}
         <span class='el-icon-close' @click.prevent.stop='closeSelectedTag(tag)'></span>
       </router-link>
@@ -60,7 +60,7 @@ export default {
     },
     addViewTags() {
       const route = this.generateRoute()
-      if (!route || route.meta.hidden) {
+      if (!route) {
         return false
       }
       this.$store.dispatch('addVisitedViews', route)
@@ -81,10 +81,11 @@ export default {
         if (this.isActive(view)) {
           const latestView = views.slice(-1)[0]
           if (latestView) {
-            this.$router.push(latestView.path)
+            this.$router.push({path: latestView.path, query: latestView.query})
           } else {
             this.$store.dispatch('top_nav', '1')
             this.$router.push('/home')
+            sessionStorage.setItem('activeIndex', '1');
           }
         }
       })

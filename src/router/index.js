@@ -22,8 +22,8 @@ let router = new Router({
 });
 
 router.beforeEach((to, from, next) => {  
-  let routeName = to.meta.name || to.name;
-  window.document.title = (routeName ? routeName + ' - ' : '') + '西安万鼎-后台管理系统';
+  let routeName = to.meta.title || to.name;
+  window.document.title = (routeName ? routeName + ' - ' : '') + '有氧金融商户端';
   next();
 });
 

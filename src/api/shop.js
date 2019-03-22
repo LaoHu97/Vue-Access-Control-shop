@@ -368,3 +368,11 @@ export const queryDownloadData = params => { return instance.post(`${preUrlPath}
 export const queryStatementList = params => {
   return instance.post(`${preUrlPath}/admin/wp/mer/queryStatementList`, params).then(res => res.data);
 };
+
+export const barcodepay = params => {
+  return instance.post(`${preUrlPath}/admin/bsb/barcodepay`, params).then(res => res.data);
+};
+
+export const prepay = params => {
+  return instance.post(`${preUrlPath}/admin/bsb/prepay`, params).then(res => res.data);
+};

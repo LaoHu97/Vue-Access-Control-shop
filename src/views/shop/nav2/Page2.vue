@@ -7,11 +7,10 @@
           <el-input v-model="filters.username" class="fixed_search_input" placeholder="款台名称"></el-input>
         </el-form-item>
         <el-form-item label="款台编号">
-          <el-input v-model="filters.account" class="fixed_search_input" placeholder="款台帐号"></el-input>
+          <el-input v-model="filters.account" class="fixed_search_input" placeholder="款台编号"></el-input>
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
-         <!-- <el-button type="primary" @click="handleAdd" size="medium" round>新增</el-button>-->
         </el-form-item>
       </el-form>
     </el-row>
@@ -25,64 +24,26 @@
         </el-table-column>
         <el-table-column prop="username" label="款台名称" min-width="120">
         </el-table-column>
-        <el-table-column label="二维码" width="100">
+        <el-table-column label="聚合支付码" width="120">
           <template slot-scope="scope">
-            <el-button type="success" size="mini" @click="handleCode(scope.$index, scope.row)">二维码</el-button>
+            <el-button type="success" size="mini" @click="handleCode(scope.$index, scope.row)">聚合支付码</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180">
+        <el-table-column label="操作" width="300">
           <template slot-scope="scope">
-            <!-- <el-button type="danger" size="mini" @click="handleReset(scope.$index, scope.row)">密码重置</el-button> -->
-          <!--  <el-button type="warning" size="mini" @click="handleModify(scope.$index, scope.row)">修改</el-button>-->
             <el-button type="info" size="mini" @click="handleDetail(scope.$index, scope.row)">详情</el-button>
+            <el-button type="info" size="mini" @click="handleMoney(scope.$index, scope.row)">刷卡收款</el-button>
+            <el-button type="info" size="mini" @click="handleAdvance(scope.$index, scope.row)">动态付款码</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-
-
     <!--工具条-->
     <el-row>
       <el-pagination layout="prev, pager, next" :current-page="page" @current-change="handleCurrentChange" :page-size="20" :total="total"
         background style="text-align:center;background:#fff;padding:15px;">
       </el-pagination>
     </el-row>
-    <!--修改界面-->
-    <el-dialog title="修改信息" :visible.sync="modFormVisible" :close-on-click-modal="false" width="600px">
-      <el-form :model="modForm" :rules="modFormRules" ref="editForm">
-        <el-form-item label="款台名称" prop="username">
-          <el-input v-model="modForm.username" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="联系电话" prop="phone">
-          <el-input v-model="modForm.phone" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="modForm.email"></el-input>
-        </el-form-item>
-        <el-form-item label="富友终端ID" prop="terminal_id">
-          <el-input v-model="modForm.terminal_id"></el-input>
-        </el-form-item>
-        <el-form-item label="微收银设备号" prop="wsy_num">
-          <el-input v-model="modForm.wsy_num"></el-input>
-        </el-form-item>
-        <el-form-item label="新大陆设备号" prop="ndl_num">
-          <el-input v-model="modForm.ndl_num"></el-input>
-        </el-form-item>
-        <el-form-item label="选择门店">
-          <template>
-            <el-select v-model="modForm.value" placeholder="请选择门店名称" :multiple="false" filterable remote :remote-method="remoteShop"
-              :loading="loading" clearable @visible-change="clickShop">
-              <el-option v-for="item in options" :key="item.id" :value="item.id" :label="item.value">
-              </el-option>
-            </el-select>
-          </template>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="modFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="editSubmit" :loading="modLoading">提交</el-button>
-      </div>
-    </el-dialog>
     <!-- 二维码 -->
     <el-dialog :visible.sync="editFormCode" :close-on-click-modal="true" width="600px">
       <el-form :model="editCode" label-width="" ref="editCode" style="width:auto">
@@ -90,14 +51,60 @@
         <el-button type="primary" @click="code" style="position:absolute;left:50%;margin-left:-44px;margin-top:-20px;">点击下载</el-button>
       </el-form>
     </el-dialog>
-    <!-- 会员支付二维码 -->
-    <!-- <el-dialog :visible.sync="editFormVipCode" :close-on-click-modal="true" width="600px">
-      <el-form :model="editVipCode" label-width="" ref="editVipCode" style="width:auto">
-        <img :src="editVipCode.vipCode" alt="二维码" width="100%">
-        <el-button type="primary" @click="vipCode" style="position:absolute;left:50%;margin-left:-44px;margin-top:-20px;">点击下载</el-button>
+    <!-- 动态付款码 -->
+    <el-dialog title="动态付款码" :visible.sync="dialogFormMoneyAdvanceVisible" width="380px">
+      <el-form :model="formMoneyAdvance" :rules="formMoneyAdvanceRules" ref="formMoneyAdvance" label-position="left" label-width="110px">
+        <el-form-item label="收款金额(元)" prop="total_fee">
+          <el-input v-model="formMoneyAdvance.total_fee" placeholder="请输入收款金额"></el-input>
+        </el-form-item>
+        <el-form-item label="支付方式" prop="pay_type">
+          <el-select v-model="formMoneyAdvance.pay_type" placeholder="请选择支付方式">
+            <el-option
+              v-for="item in optionsPayType"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="订单信息">
+          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="formMoneyAdvance.order_body">
+          </el-input>
+        </el-form-item>
+        <el-form-item label-width="0" v-show="qrCodeHeidder" style="margin-top:45px;text-align: center;">
+          <canvas ref="canvas"></canvas>
+        </el-form-item>
       </el-form>
-    </el-dialog> -->
-    <!--详情界面-->
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormMoneyAdvanceVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submiltMoneyAdvance('formMoneyAdvance')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 刷卡收款 -->
+    <el-dialog title="刷卡收款" :visible.sync="dialogFormMoneyVisible" width="380px">
+      <el-form :model="formMoney" :rules="formMoneyRules" ref="formMoney" label-position="left" label-width="110px">
+        <el-form-item label="收款金额(元)" prop="total_fee">
+          <el-input v-model="formMoney.total_fee" placeholder="请输入收款金额"></el-input>
+        </el-form-item>
+        <el-form-item label="付款码" prop="auth_no">
+          <el-input v-model="formMoney.auth_no" placeholder="请输入付款码" @change ="inputChange"></el-input>
+        </el-form-item>
+        <el-form-item label="订单信息">
+          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="formMoney.order_body">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="支付方式" v-show="formMoney.pay_type">
+          <el-tag>
+            <span>{{formMoney.pay_type === '010' ? '微信支付' : '支付宝支付'}}</span>
+          </el-tag>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormMoneyVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submiltMoney('formMoney')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 款台详情 -->
     <el-dialog title="款台详情" :visible.sync="editFormVisible" :close-on-click-modal="false" width="600px">
       <el-form :model="editForm" label-width="140px" ref="editForm" label-position="left">
         <el-form-item label="款台名称：">
@@ -112,9 +119,6 @@
         <el-form-item label="邮箱：">
           <span>{{editForm.email}}</span>
         </el-form-item>
-        <!-- <el-form-item label="终端号：">
-          <span>{{editForm.terminal_id}}</span>
-        </el-form-item> -->
         <el-form-item label="所属门店：">
           <span>{{editForm.storeName}}</span>
         </el-form-item>
@@ -126,62 +130,20 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-
-    <!--新增界面-->
-    <el-dialog title="新增款台" :visible.sync="addFormVisible" :close-on-click-modal="false" width="600px">
-      <el-form :model="addForm" :rules="addFormRules" ref="addForm">
-        <el-form-item label="款台名称" prop="username">
-          <el-input v-model="addForm.username" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="联系电话" prop="phone">
-          <el-input v-model="addForm.phone" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="addForm.email" auto-complete="off" value="number"></el-input>
-        </el-form-item>
-        <el-form-item label="富有终端ID" prop="terminal_id">
-          <el-input v-model="addForm.terminal_id" auto-complete="off" value="number"></el-input>
-        </el-form-item>
-        <el-form-item label="微收银设备号" prop="wsy_num">
-          <el-input v-model="addForm.wsy_num"></el-input>
-        </el-form-item>
-        <el-form-item label="新大陆设备号" prop="ndl_num">
-          <el-input v-model="addForm.ndl_num"></el-input>
-        </el-form-item>
-        <el-form-item label="选择门店" prop="value">
-          <template>
-            <el-select v-model="addForm.value" placeholder="请选择门店名称" :multiple="false" filterable remote :remote-method="remoteShop"
-              :loading="loading" clearable @visible-change="clickShop">
-              <el-option v-for="item in options" :key="item.id" :value="item.id" :label="item.value">
-              </el-option>
-            </el-select>
-          </template>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="addFormVisible = false">取消</el-button>
-        <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
-      </div>
-    </el-dialog>
   </section>
 </template>
 
 <script>
-  import * as util from '../../../util/util.js'
-
+  import QRCode from 'qrcode' 
+  import * as util from '@/util/util.js'
+  import * as data from '@/util/data.js'
   import CryptoJS from "crypto-js";
   import {
     queryEmployeeShop,
     queryEmployeeDetail,
-    updateEmployeePwd,
-    addEmployee,
-    selectStoreList,
-    updateEmployee,
-    deleteEmployee,
-    updateEmployeeStatus,
     getEmpTwoCode,
-    getEmpMemCode,
-
+    barcodepay,
+    prepay
   } from '../../../api/shop';
 
   export default {
@@ -195,196 +157,162 @@
           callback();
         }
       };
+      var money = (rule, value, callback) => {
+        if (value === '') {
+          callback();
+        } else if (!/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/.test(value)) {
+          callback(new Error('请输入正确的金额'));
+        } else {
+          callback();
+        }
+      };
       return {
         filters: {
           username: '',
           account: ''
         },
-        value: "",
-        options: [],
+        editForm: {},
         users: [],
         total: 1,
         page: 1,
         listLoading: false,
 
-        stateFormVisible: false,
-        stateLoading: false,
-
         editFormVisible: false, //编辑界面是否显示
-        editLoading: false,
-
         editFormCode: false,
         editCode: {
           code: ''
         },
-        // editFormVipCode: false,
-        // editVipCode: {
-        //   vipCode: ''
-        // },
-        showVipCode: true,
-        //编辑界面数据
-        editForm: {},
 
-        addFormVisible: false, //新增界面是否显示
-        addLoading: false,
-        addFormRules: {
-          username: [{
-              required: true,
-              message: '请输入款台名称',
-              trigger: 'blur'
-            },
-            {
-              max: 20,
-              message: '请输入正确的款台名称',
-              trigger: 'blur'
-            },
+        dialogFormMoneyVisible: false,
+        optionsPayType: [{
+          value: '010',
+          label: '微信'
+        }, {
+          value: '020',
+          label: '支付宝'
+        }],
+        formMoneyRules: {
+          total_fee: [
+            { required: true, message: '请输入收款金额', trigger: 'blur' },
+            { validator: money, trigger: 'blur' }
           ],
-          phone: [{
-            validator: phone,
-            trigger: 'blur'
-          }],
-          email: [{
-              message: '请输入邮箱',
-              trigger: 'blur'
-            },
-            {
-              type: 'email',
-              message: '请输入正确的邮箱',
-              trigger: 'blur'
-            }
-          ],
-          value: [{
-            required: true,
-            type: 'number',
-            message: '请选择款台',
-            trigger: 'change'
-          }],
-
+          auth_no: [
+            { required: true, message: '请输入付款码', trigger: 'blur' }
+          ]
         },
-        modFormVisible: false, //新增界面是否显示
-        modLoading: false,
-        modFormRules: {
-          username: [{
-              required: true,
-              message: '请输入款台名称',
-              trigger: 'blur'
-            },
-            {
-              max: 20,
-              message: '请输入正确的款台名称',
-              trigger: 'blur'
-            },
-          ],
-          phone: [{
-            validator: phone,
-            trigger: 'blur'
-          }],
-          email: [{
-              message: '请输入邮箱',
-              trigger: 'blur'
-            },
-            {
-              type: 'email',
-              message: '请输入正确的邮箱',
-              trigger: 'blur'
-            }
-          ],
-          value: [{
-            required: true,
-            message: '请选择款台'
-          }],
-        },
-        stateForm: {},
-        modForm: {
-          eid:'',
-          username: '',
-          phone: '',
-          email: '',
+        formMoney: {
+          merchant_no: '',
           terminal_id: '',
-          ali_operation_id: '',
-          wsy_num: '',
-          value: '',
-          ndl_num: '',
+          total_fee: '',
+          auth_no: '',
+          pay_type: '',
+          order_body: ''
         },
-        //新增界面数据
-        loading: false,
-        addForm: {
-          value: '',
-          username: '',
-          ali_operation_id: '',
-          phone: '',
-          email: '',
-          terminal_id: '',
-          wsy_num: '',
-          ndl_num: ''
-        }
 
+        dialogFormMoneyAdvanceVisible: false,
+        formMoneyAdvanceRules: {
+          total_fee: [
+            { required: true, message: '请输入收款金额', trigger: 'blur' },
+            { validator: money, trigger: 'blur' }
+          ],
+          pay_type: [
+            { required: true, message: '请选择支付方式', trigger: 'change' }
+          ]
+        },
+        formMoneyAdvance: {
+          merchant_no: '',
+          terminal_id: '',
+          total_fee: '',
+          pay_type: '010',
+          order_body: '',
+          QueryDetail: ''
+        },
+        qrCodeHeidder: false
       }
     },
     methods: {
-      //门店远程搜索
-      clickShop: function () {
-        selectStoreList().then((res) => {
-          let {
-            status,
-            data
-          } = res
-          this.options = data.storeList
+      submiltMoneyAdvance(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let para = this.formMoneyAdvance
+            prepay(para).then(res => {
+              if (res.data.return_code !== '01') {
+                return this.$message({
+                    message: res.data.return_msg,
+                    type: 'warning'
+                  });
+              }
+              this.formMoneyAdvance.QueryDetail= res.data.qr_code;
+              this.qrCodeHeidder = true
+              let canvas = this.$refs.canvas
+                QRCode.toCanvas(canvas, this.formMoneyAdvance.QueryDetail, function (error) {
+                  if (error) {
+                    console.log(error);
+                  }else{
+                    this.$message({
+                      message: res.data.return_msg,
+                      type: 'success'
+                    });
+                  }
+                })
+            })
+          } else {
+            return false;
+          }
+        });
+      },
+      handleAdvance(index, row) {
+        this.dialogFormMoneyAdvanceVisible = true
+        this.$nextTick(() => {
+          this.$refs.formMoneyAdvance.resetFields()
+          this.formMoneyAdvance.QueryDetail = ''
+          this.qrCodeHeidder = false
+          queryEmployeeDetail({eid:row.eid}).then(res => {
+            this.formMoneyAdvance.merchant_no = res.data.merPayNum
+            this.formMoneyAdvance.terminal_id = res.data.employee.reverse1
+          })
         })
       },
-      remoteShop(query) {
-        if (query !== '') {
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            selectStoreList({
-              sname: query
-            }).then((res) => {
-              let {
-                status,
-                data
-              } = res
-              this.options = data.storeList
+      submiltMoney(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let para = this.formMoney
+            barcodepay(para).then(res => {
+              if (res.data.return_code !== '01') {
+                this.$message({
+                  message: res.data.return_msg,
+                  type: 'warning'
+                });
+              }else{
+                this.dialogFormMoneyVisible = false
+                this.$message({
+                  message: res.data.return_msg,
+                  type: 'success'
+                });
+              }
             })
-          }, 200);
-        } else {
-          this.options = [];
-        }
-      },
-      empStatusChange(index, row) {
-        this.$confirm('此操作将修改款台状态, 确定修改?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          closeOnClickModal: false,
-          type: 'warning'
-        }).then(() => {
-          let para = {
-            eid: row.eid,
-            status: row.status == true ? 1 : row.status == false ? 0 : "未知"
+          } else {
+            return false;
           }
-          updateEmployeeStatus(para).then((res) => {
-            let {
-              status
-            } = res
-            if (status == 200) {
-              this.$message({
-                type: 'success',
-                message: '修改成功!'
-              });
-            } else {
-              this.$notify.error({
-                title: '错误',
-                message: message
-              });
-            }
-          })
-        }).catch(() => {
-          this.getUsers();
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });
         });
+      },
+      handleMoney(index, row) {
+        this.dialogFormMoneyVisible = true
+        this.$nextTick(() => {
+          this.$refs.formMoney.resetFields()
+          queryEmployeeDetail({eid:row.eid}).then(res => {
+            this.formMoney.merchant_no = res.data.merPayNum
+            this.formMoney.terminal_id = res.data.employee.reverse1
+          })
+        })
+      },
+      inputChange(val){
+        let leftTwo = val.slice(0,2)
+        if (leftTwo === '28') {
+          this.formMoney.pay_type = '020'
+        }else{
+          this.formMoney.pay_type = '010'
+        }
       },
       //显示二维码
       handleCode: function (inde, row) {
@@ -394,26 +322,11 @@
           eid: row.eid,
           storeId: row.storeId
         }
-        
         this.editCode.code = getEmpTwoCode + "?" + "mid=" + para.mid + "&" +
           "eid=" + para.eid + "&" + "storeId=" + para.storeId
       },
       code: function () {
         window.location.href = this.editCode.code
-      },
-      //显示会员支付二维码
-      // handleVipCode: function (inde, row) {
-      //   this.editFormVipCode = true;
-      //   let para = {
-      //     mid: row.mid,
-      //     eid: row.eid,
-      //     storeId: row.storeId
-      //   }
-      //   this.editVipCode.vipCode = getEmpMemCode + "?" + "mid=" + para.mid + "&" +
-      //     "eid=" + para.eid + "&" + "storeId=" + para.storeId
-      // },
-      vipCode: function () {
-        window.location.href = this.editVipCode.vipCode
       },
       //状态显示转换
       handleCurrentChange(val) {
@@ -432,7 +345,6 @@
           account: this.filters.account
         };
         this.listLoading = true;
-
         queryEmployeeShop(para).then((res) => {
           var _this = this;
           let {
@@ -453,71 +365,7 @@
             }
           }
           this.listLoading = false;
-
         });
-      },
-      //重置密码
-      handleReset: function (index, row) {
-        this.$prompt('请输入新密码', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPattern: /\S/,
-          inputErrorMessage: '密码格式不正确',
-          inputValue: '123456'
-        }).then(({
-          value
-        }) => {
-          let para = {
-            password: CryptoJS.MD5(value + row.account).toString(CryptoJS.enc.Hex),
-            eid: row.eid
-          };
-          updateEmployeePwd(para).then((res) => {
-            var _this = this;
-            let {
-              status,
-              message
-            } = res;
-            if (status == 200) {
-              this.$notify({
-                title: '成功',
-                message: message,
-                type: 'success'
-              });
-            }
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });
-        });
-      },
-      //修改款台列表
-      handleModify: function (index, row) {
-        this.clickShop();
-        this.modFormVisible = true;
-        let para = {
-          eid: row.eid
-        };
-        queryEmployeeDetail(para).then((res) => {
-          let {
-            status,
-            message
-          } = res;
-          if (status === 200) {
-            this.modForm.username = res.data.employee.username;
-            this.modForm.phone = res.data.employee.phone;
-            this.modForm.email = res.data.employee.email;
-            this.modForm.terminal_id = res.data.employee.terminal_id;
-            this.modForm.ali_operation_id = res.data.employee.ali_operation_id
-            this.modForm.wsy_num = res.data.employee.device_num
-            this.modForm.value = res.data.employee.storeId;
-            this.modForm.ndl_num = res.data.ndl_num;
-            this.modForm.eid = res.data.employee.eid;
-          }
-        })
-
-
       },
       //显示详情界面
       handleDetail: function (index, row) {
@@ -536,145 +384,10 @@
             this.editForm.storeName = res.data.storeName
           }
         })
-      },
-      //显示新增界面
-      handleAdd: function () {
-        this.addFormVisible = true;
-        this.addForm = {
-          value: '',
-          storeId: '',
-          username: '',
-          ali_operation_id: '',
-          phone: '',
-          email: '',
-          terminal_id: '',
-          options: '',
-          ndl_num: ''
-        };
-      },
-      //编辑
-      editSubmit: function () {
-        this.$refs.editForm.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.editLoading = true;
-              let para = {
-                eid: this.modForm.eid,
-                username: this.modForm.username,
-                phone: this.modForm.phone,
-                email: this.modForm.email,
-                terminal_id: this.modForm.terminal_id,
-                storeId: this.modForm.value,
-                ali_operation_id: this.modForm.ali_operation_id,
-                wsy_num: this.modForm.wsy_num,
-                ndl_num: this.modForm.ndl_num,
-              };
-              updateEmployee(para).then((res) => {
-                var _this = this;
-                this.editLoading = false;
-
-                let {
-                  status,
-                  message
-                } = res;
-                if (status == 200) {
-                  this.$message({
-                    message: message,
-                    type: 'success'
-                  });
-                }
-                this.modFormVisible = false;
-                this.getUsers();
-              });
-            });
-          }
-        });
-      },
-      //删除
-      // handleDel: function (index, row) {
-      //     this.$confirm('确认删除该记录吗?', '提示', {
-      //         type: 'warning'
-      //     }).then(() => {
-      //         this.listLoading = true;
-      //         
-      //         let para = { eid: row.eid };
-      //         deleteEmployee(para).then((res) => {
-      //             this.listLoading = false;
-      //             
-      //             let {status,message}=res;
-      //             if(status==200){
-      //                 this.$notify({
-      //                     title: '成功',
-      //                     message: message,
-      //                     type: 'success'
-      //                 });
-      //             }else {
-      //                 this.$notify({
-      //                     title: '失败',
-      //                     message: message,
-      //                     type: 'success'
-      //                 });
-      //             }
-      //             this.getUsers();
-      //         });
-      //     }).catch(() => {
-      //
-      //     });
-      // },
-      //新增
-      addSubmit: function () {
-        this.$refs.addForm.validate((valid) => {
-          if (valid) {
-            this.$confirm('确认提交吗？', '提示', {}).then(() => {
-              this.addLoading = true;
-
-              let para = {
-                storeId: this.addForm.value,
-                username: this.addForm.username,
-                ali_operation_id: this.addForm.ali_operation_id,
-                phone: this.addForm.phone,
-                email: this.addForm.email,
-                terminal_id: this.addForm.terminal_id,
-                wsy_num: this.addForm.wsy_num,
-                ndl_num: this.addForm.ndl_num,
-              };
-              addEmployee(para).then((res) => {
-                let {
-                  message,
-                  status
-                } = res;
-                this.addLoading = false;
-
-                if (status == 200) {
-                  this.$notify({
-                    title: '成功',
-                    message: message,
-                    type: 'success'
-                  });
-                }
-                this.$refs['addForm'].resetFields();
-                this.addFormVisible = false;
-                this.getUsers();
-              });
-            });
-          }
-        });
-      },
+      }
     },
     mounted() {
       this.getUsers();
-      let isMember = JSON.parse(sessionStorage.getItem('isMember'));
-      if (isMember == 'Y') {
-        this.showVipCode = true;
-      } else if (isMember == 'N') {
-        this.showVipCode = false;
-      }
     }
   }
-
 </script>
-
-<style scoped>
-
-
-</style>

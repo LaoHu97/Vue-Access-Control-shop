@@ -1,8 +1,9 @@
 <template>
   <div>
     <keep-alive>
-      <router-view></router-view>
+      <router-view v-if="!$route.meta.noCache"></router-view>
     </keep-alive>
+    <router-view v-if="$route.meta.noCache"></router-view>
   </div>
 </template>
 
@@ -31,6 +32,11 @@ export default {
       } else {
         this.children = null;
       }
+    }
+  },
+  computed: {
+    cachedViews() {
+      return this.$store.state.tagsView.cachedViews
     }
   }
 };

@@ -3,24 +3,24 @@
     <div class="bill1-top">
       <h3>交易账单</h3>
     </div>
-    <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="excelForm" ref="excelForm" :rules="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-row>
         <el-form-item label="账单类型">
-          <el-radio-group v-model="ruleForm.excel_type">
+          <el-radio-group v-model="excelForm.excel_type">
             <el-radio v-for="recson in optionsExcel" :label="recson.value" :key="recson.value">{{recson.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-row>
       <el-row>
         <el-form-item label="交易类型">
-          <el-radio-group v-model="ruleForm.accountType" :disabled="ruleForm.excel_type!=='od'">
+          <el-radio-group v-model="excelForm.accountType" :disabled="excelForm.excel_type!=='od'">
             <el-radio v-for="recson in optionsPayType" :label="recson.value" :key="recson.value">{{recson.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-row>
       <el-row>
         <el-form-item label="支付方式">
-          <el-radio-group v-model="ruleForm.recsonId">
+          <el-radio-group v-model="excelForm.recsonId">
             <el-radio v-for="recson in optionsScene" :label="recson.value" :key="recson.value">{{recson.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
@@ -28,7 +28,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="门店名称">
-            <el-select v-model="ruleForm.storeName" placeholder="门店名称" :multiple="false" filterable remote :remote-method="remoteShop"
+            <el-select v-model="excelForm.storeName" placeholder="门店名称" :multiple="false" filterable remote :remote-method="remoteShop"
               :loading="searchLoading" clearable @focus="clickShop" @change="selectStoreChange">
               <el-option v-for="item in optionsStore" :key="item.id" :value="item.id" :label="item.value">
               </el-option>
@@ -37,7 +37,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="款台名称">
-            <el-select v-model="ruleForm.empName" placeholder="款台名称" :disabled="ruleForm.excel_type!=='od'" :multiple="false" filterable
+            <el-select v-model="excelForm.empName" placeholder="款台名称" :disabled="excelForm.excel_type!=='od'" :multiple="false" filterable
               remote :remote-method="remoteEmp" :loading="empSearchLoading" clearable @focus="clickEmp">
               <el-option v-for="item in optionsEmp" :key="item.eid" :value="item.eid" :label="item.value">
               </el-option>
@@ -47,8 +47,8 @@
       </el-row>
       <el-row>
         <el-col :span="11">
-          <el-form-item label="交易时间" prop="resource">
-            <el-date-picker v-model="ruleForm.startTime" :editable="false" :clearable="false" :type="dateType" @change="changTime" :picker-options="pickerOptions1"
+          <el-form-item label="交易时间" prop="startTime">
+            <el-date-picker v-model="excelForm.startTime" :editable="false" :clearable="false" :type="dateType" @change="changTime" :picker-options="pickerOptions1"
               placeholder="交易时间">
             </el-date-picker>
           </el-form-item>
@@ -60,7 +60,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="" prop="endTime" label-width="0px">
-            <el-date-picker v-model="ruleForm.endTime" :editable="false" :clearable="false" :type="dateType" :picker-options="pickerOptions2"
+            <el-date-picker v-model="excelForm.endTime" :editable="false" :clearable="false" :type="dateType" :picker-options="pickerOptions2"
               placeholder="交易时间" default-time="23:59:59">
             </el-date-picker>
           </el-form-item>
@@ -73,7 +73,7 @@
       </el-row>
       <el-row>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">下载</el-button>
+          <el-button type="primary" @click="submitForm('excelForm')">下载</el-button>
           <el-button type="success" @click="downClick">下载记录</el-button>
         </el-form-item>
       </el-row>
@@ -127,7 +127,7 @@
         },
         pickerOptions2: {
           disabledDate: (time) => {
-            let startTimeOne = Date.parse(new Date(util.formatDate.format(new Date(this.ruleForm.startTime),
+            let startTimeOne = Date.parse(new Date(util.formatDate.format(new Date(this.excelForm.startTime),
               'yyyy-MM-dd')));
             if (time.getTime() > startTimeOne + 3600 * 1000 * 24 * 90 || time.getTime() < startTimeOne - 3600 * 1000 *
               24 * 1 || time.getTime() > Date.now() - 3600 * 1000 * 24) {
@@ -142,15 +142,23 @@
         optionsEmp: [],
         searchLoading: false,
         empSearchLoading: false,
-        ruleForm: {
+        excelForm: {
           parag: '',
           excel_type: 'od',
-          accountType: '0',
+          accountType: 'ALL',
           recsonId: '',
           storeName: '',
           empName: '',
           startTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate() - 1),
           endTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate() - 1, 23, 59, 59),
+        },
+        ruleForm: {
+          endTime: [{
+            type: 'date',
+            required: true,
+            message: '请选择日期',
+            trigger: 'change'
+          }]
         },
         //账单类型
         optionsExcel: [{
@@ -159,6 +167,9 @@
         }],
         //账单类型
         optionsPayType: [{
+          value: 'ALL',
+          label: '所有'
+        }, {
           value: '0',
           label: '支付成功'
         }, {
@@ -173,19 +184,19 @@
     },
     computed: {
       excel_type() {　　
-        return this.ruleForm.excel_type　
+        return this.excelForm.excel_type　
       }
     },
     watch: {
       excel_type(curVal, oldVal) {
-        let myDate = new Date(this.ruleForm.endTime)
+        let myDate = new Date(this.excelForm.endTime)
         if (curVal !== 'od') {
-          this.ruleForm.accountType = '0'
+          this.excelForm.accountType = '0'
           this.dateType = 'date'
-          this.ruleForm.empName = ''
+          this.excelForm.empName = ''
         } else {
           this.dateType = 'datetime'
-          this.ruleForm.endTime = new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate(), 23, 59, 59)
+          this.excelForm.endTime = new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate(), 23, 59, 59)
         }
       }
     },
@@ -209,16 +220,18 @@
         })
       },
       changTime(date) {
-        let end_time = Date.parse(new Date(util.formatDate.format(new Date(this.ruleForm.endTime), 'yyyy-MM-dd')))
+        let end_time = Date.parse(new Date(util.formatDate.format(new Date(this.excelForm.endTime), 'yyyy-MM-dd')))
         let date_time = Date.parse(new Date(util.formatDate.format(new Date(date), 'yyyy-MM-dd')))
-        if (date_time < end_time - 3600 * 1000 * 24 * 90) {
-          this.ruleForm.endTime = new Date(this.ruleForm.startTime.getFullYear(), this.ruleForm.startTime.getMonth(),
-            this.ruleForm.startTime.getDate(), 23, 59, 59)
+        let sat_time = Date.parse(new Date(util.formatDate.format(new Date(this.excelForm.startTime), 'yyyy-MM-dd')))
+        if (date_time < end_time - 3600 * 1000 * 24 * 90 || sat_time > end_time) {
+          this.excelForm.endTime = new Date(this.excelForm.startTime.getFullYear(), this.excelForm.startTime.getMonth(),
+            this.excelForm.startTime.getDate(), 23, 59, 59)
         }
       },
       //款台远程搜索
       clickEmp: function () {
-        if (!this.ruleForm.storeName) {
+        if (!this.excelForm.storeName) {
+          this.optionsEmp = []
           return  this.$message({
             message: '请先选择门店',
             type: 'warning'
@@ -227,7 +240,7 @@
         this.empSearchLoading = true;
         let para = {
           mid: sessionStorage.getItem('mid'),
-          storeId: String(this.ruleForm.storeName),
+          storeId: String(this.excelForm.storeName),
           ename: ''
         }
         selectEmpsBySid(para).then((res) => {
@@ -246,7 +259,7 @@
             this.empSearchLoading = false;
             let para = {
               mid: sessionStorage.getItem('mid'),
-              storeId: String(this.ruleForm.storeName),
+              storeId: String(this.excelForm.storeName),
               ename: query
             }
             selectEmpsBySid(para).then((res) => {
@@ -263,7 +276,7 @@
       },
       //门店远程搜索
       selectStoreChange() {
-        this.ruleForm.empName = ''
+        this.excelForm.empName = ''
       },
       clickShop: function () {
         this.searchLoading = true;
@@ -300,13 +313,13 @@
           if (valid) {
             let para = {
               mid: sessionStorage.getItem('mid'),
-              order_type: String(this.ruleForm.accountType),
-              payWay: this.ruleForm.recsonId,
-              startTime: this.ruleForm.startTime,
-              endTime: this.ruleForm.endTime,
-              storeId: String(this.ruleForm.storeName),
-              eid: String(this.ruleForm.empName),
-              excel_type: this.ruleForm.excel_type
+              order_type: String(this.excelForm.accountType),
+              payWay: this.excelForm.recsonId,
+              startTime: this.excelForm.startTime,
+              endTime: this.excelForm.endTime,
+              storeId: String(this.excelForm.storeName),
+              eid: String(this.excelForm.empName),
+              excel_type: this.excelForm.excel_type
             }
             para.startTime = (!para.startTime || para.startTime == '') ? '' : String(Date.parse(util.formatDate.format(
               new Date(para.startTime), 'yyyy/MM/dd hh:mm:ss')));

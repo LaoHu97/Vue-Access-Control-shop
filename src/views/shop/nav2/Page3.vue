@@ -153,11 +153,11 @@
         <el-row>
           <el-col :span="8">
             <span>微信费率：</span>
-            {{ boxCardText.wx_rate || '未配置' }}‰
+            {{ boxCardText.wx_rate === '' ? '未配置' : boxCardText.wx_rate}}‰
           </el-col>
           <el-col :span="8">
             <span>支付宝费率：</span>
-            {{ boxCardText.wx_rate || '未配置'  }}‰
+            {{ boxCardText.ali_rate === '' ? '未配置' : boxCardText.ali_rate}}‰
           </el-col>
         </el-row>
       </div>

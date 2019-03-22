@@ -9,7 +9,8 @@ const tagsView = {
       state.visitedViews.push({
         name: view.name,
         path: view.path,
-        title: view.meta.title || 'no-name'
+        title: view.meta.title || 'no-name',
+        query: view.query
       })
       if (!view.meta.noCache) {
         state.cachedViews.push(view.name)
@@ -52,6 +53,8 @@ const tagsView = {
   },
   actions: {
     addVisitedViews({ commit }, view) {
+      console.log(view);
+      
       commit('ADD_VISITED_VIEWS', view)
     },
     delVisitedViews({ commit, state }, view) {

@@ -5,18 +5,6 @@ export const optionsPayment = [{
 }, {
   valueScene: 'ALI',
   labelScene: '支付宝'
-}, {
-  valueScene: 'DEBIT',
-  labelScene: '借记卡'
-}, {
-  valueScene: 'CREDIT',
-  labelScene: '贷记卡'
-}, {
-  valueScene: 'BEST',
-  labelScene: '翼支付'
-}, {
-  valueScene: 'UNIONPAY',
-  labelScene: '银联二维码'
 }]
 export const optionsPaymentCopy = [{
   value: 'WX',

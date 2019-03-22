@@ -58,16 +58,16 @@
     <TagsView v-bind:style="{ paddingLeft: isCollapseSty }"></TagsView>
     <el-container class="ie9_elcontainer">
       <div class="ie9_elmenu">
-        <el-menu :default-active="activeMenu" class="el_menu_vertical" unique-opened :collapse="isCollapse" router background-color="#414F61" text-color="#fff" active-text-color="#409EFF">
+        <el-menu :default-active="activeMenu" :default-openeds="openeds" class="el_menu_vertical" unique-opened :collapse="isCollapse" router background-color="#414F61" text-color="#fff" active-text-color="#409EFF">
           <template v-for="(route, index) in menus">
             <template v-if="route.children">
               <el-submenu :key="index" :index="route.name">
                 <template slot="title">
                   <i class="iconfont route_icon" v-bind:class="[route.meta.icon]"></i>
-                  <span slot="title">{{route.meta.name || route.name}}</span>
+                  <span slot="title">{{route.meta.title || route.name}}</span>
                 </template>
                 <el-menu-item v-for="(cRoute, cIndex) in route.children" :key="cIndex" :index="cRoute.name" :route="cRoute" v-if="!cRoute.meta.hidden">
-                  {{cRoute.meta.name || cRoute.name}}
+                  {{cRoute.meta.title || cRoute.name}}
                 </el-menu-item>
               </el-submenu>
             </template>
@@ -82,10 +82,10 @@
       </div>
       <el-main class="ie9_elmain">
         <template>
-            <keep-alive>
-              <ErrorPage v-if="accessPerMission"></ErrorPage>
-              <router-view v-else></router-view>
-            </keep-alive>
+          <keep-alive>
+            <router-view v-if="!$route.meta.noCache"></router-view>
+          </keep-alive>
+          <router-view v-if="$route.meta.noCache"></router-view>
         </template>
       </el-main>
     </el-container>
@@ -113,7 +113,8 @@
       return {
         isCollapse: false,
         accessPerMission: false,
-        isCollapseSty: '200px'
+        isCollapseSty: '200px',
+        openeds: ['商户管理', '交易管理']
       };
     },
     watch: {

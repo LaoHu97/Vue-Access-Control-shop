@@ -5,14 +5,13 @@
   }
 
   .top_logo {
-    width: 150px;
+    width: 180px;
     float: left;
   }
 
   .top_logo img {
     width: 100%;
-    height: auto;
-    margin-top: 19px;
+    margin-top: 17px;
     float: left;
   }
 
@@ -46,9 +45,6 @@
             <el-menu-item index="1">首页</el-menu-item>
             <el-menu-item index="3">商户中心</el-menu-item>
             <el-menu-item index="2">交易中心</el-menu-item>
-            <!-- <el-menu-item index="4">产品中心</el-menu-item>
-            <el-menu-item index="5">营销中心</el-menu-item>
-            <el-menu-item index="6">帮助中心</el-menu-item> -->
           </el-menu>
         </div>
       </el-col>
@@ -63,23 +59,23 @@
       </el-col>
     </el-row>
     <!--修改密码-->
-    <el-dialog :visible.sync="editFormVisible" :close-on-click-modal="false" width="400px">
+    <el-dialog :visible.sync="editFormVisible" :close-on-click-modal="false" :show-close="false" :close-on-press-escape="false" width="380px">
       <el-alert title="提示：密码修改成功后需重新登录" type="warning" center show-icon :closable="false"></el-alert>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
         <el-form-item label="旧密码" prop="usedPass">
-          <el-input type="password" v-model="ruleForm.usedPass"></el-input>
+          <el-input type="password" v-model.trim="ruleForm.usedPass"></el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="pass">
-          <el-input type="password" v-model="ruleForm.pass"></el-input>
+          <el-input type="password" v-model.trim="ruleForm.pass"></el-input>
         </el-form-item>
         <el-form-item label="确认新密码" prop="checkPass">
-          <el-input type="password" v-model="ruleForm.checkPass"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="editFormVisible=false">取消</el-button>
-          <el-button type="primary" :loading="submitFormLogining" @click="submitForm('ruleForm')">提交</el-button>
+          <el-input type="password" v-model.trim="ruleForm.checkPass"></el-input>
         </el-form-item>
       </el-form>
+      <div slot="footer">
+        <el-button :disabled="doneEditPassword" @click="editFormVisible=false">取消</el-button>
+        <el-button type="primary" :loading="submitFormLogining" @click="submitForm('ruleForm')">提交</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -101,10 +97,14 @@
         }
       };
       var validatePass1 = (rule, value, callback) => {
+        let regex = new RegExp('(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{8,18}');
+        let han = new RegExp("[\\u4E00-\\u9FFF]+","g");
         if (value === '') {
           callback(new Error('请输入密码'));
-        } else if (!/^[a-zA-Z0-9]{6,18}$/.test(value)) {
-          callback(new Error('请输入不含汉字和空格的6到18位密码'));
+        } else if (!regex.test(value)) {
+          callback(new Error('请输入包含大小写字母、数字、特殊字符的8到18位密码'));
+        } else if (han.test(value)) {
+          callback(new Error('请输入包含大小写字母、数字、特殊字符的8到18位密码'));
         } else {
           if (this.ruleForm.checkPass !== '') {
             this.$refs.ruleForm.validateField('checkPass');
@@ -127,6 +127,7 @@
         editFormVisible: false, //修改密码弹窗是否显示
         editLoading: false,
         submitFormLogining: false,
+        doneEditPassword: false,
         //修改密码弹窗数据
         ruleForm: {
           pass: '',
@@ -138,12 +139,6 @@
               required: true,
               validator: validatePass,
               trigger: 'blur'
-            },
-            {
-              min: 6,
-              max: 18,
-              message: '密码为6到18位数字或字母',
-              trigger: 'blur'
             }
           ],
           pass: [{
@@ -152,21 +147,15 @@
               trigger: 'blur'
             },
             {
-              min: 6,
+              min: 8,
               max: 18,
-              message: '密码为6到18位数字或字母',
+              message: '请输入包含大小写字母、数字、特殊字符的8到18位密码',
               trigger: 'blur'
             }
           ],
           checkPass: [{
               required: true,
               validator: validatePass2,
-              trigger: 'blur'
-            },
-            {
-              min: 6,
-              max: 18,
-              message: '密码为6到18位数字或字母',
               trigger: 'blur'
             }
           ]
@@ -182,7 +171,9 @@
       //修改密码弹框是否弹出
       handleEdit: function (index, row) {
         this.editFormVisible = true;
-        this.editForm = Object.assign({}, row);
+        this.$nextTick(() => {
+          this.$refs.ruleForm.resetFields()
+        })
       },
       //修改密码提交按钮
       submitForm() {
@@ -218,6 +209,8 @@
                 //清除动态标签
                 this.$store.dispatch('delAllViews')
               }
+            }).catch(() => {
+              this.submitFormLogining = false;
             });
           }
         });
@@ -255,7 +248,7 @@
             break;
           case 2 : this.$emit('login', {path: '/index1/table', menu: '1'});
             break;
-          case 3 : this.$emit('login', {path: '/index2/page1', menu: '2'});
+          case 3 : this.$emit('login', {path: '/index2/page3', menu: '2'});
             break;
           case 4 : this.$emit('login', {path: '/index3/tab4', menu: '3'});
             break;
@@ -275,6 +268,13 @@
       if (user) {
         user = JSON.parse(user);
         this.sysUserName = user || '';
+      }
+    },
+    created() {
+      let first = JSON.parse(sessionStorage.getItem('first'))
+      if (first === 0) {
+        this.editFormVisible = true;
+        this.doneEditPassword = true
       }
     }
   };

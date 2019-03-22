@@ -290,7 +290,7 @@
         return util.formatPayment(row.payWay)
       },
       format_payTime(props) {
-        return util.formatDate.format(new Date(props), 'yyyy-MM-dd hh:mm:ss')
+        return props ? util.formatDate.format(new Date(props), 'yyyy-MM-dd hh:mm:ss') : ''
       },
       changTime(date) {
         let end_time = Date.parse(new Date(util.formatDate.format(new Date(this.filters.endTime), 'yyyy-MM-dd')))
