@@ -199,6 +199,8 @@ export default {
         this.boxCardText = res.data.order;
         this.boxCardTextList = res.data.refundOrderList
         loading.close();
+      }).catch(res => {
+        loading.close();
       });
     }
   }
