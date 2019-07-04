@@ -121,13 +121,26 @@ export const queryOrderDetail = params => { return instance.post(`${preUrlPath}/
 
 
 //同步门店接口
-export const synStoreList = params => { return instance.post(`${preUrlPath}/admin/wp/mer/synStoreList`,params).then(res => res.data); };
+export const synStoreList = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/synStoreList`, params).then(res => res.data);
+};
+export const synStoreListNew = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/synStoreList`, params).then(res => res.data);
+};
 //查询门店接口
-export const queryStoreList = params => { return instance.post(`${preUrlPath}/admin/wp/mer/queryStoreList`,params).then(res => res.data); };
+export const queryStoreListNew = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryStoreList`, params).then(res => res.data);
+};
+export const queryStoreList = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/queryStoreList`, params).then(res => res.data);
+};
 //会员卡列表
 export const queryMemCardList = params => { return instance.post(`${preUrlPath}/admin/wp/mer/queryMemCardList`,params).then(res => res.data); };
 //微信会员卡创建
 export const insertMenCard = params => { return instance.post(`${preUrlPath}/admin/wp/mer/insertMenCard`,params).then(res => res.data); };
+export const addCoupon = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/addCoupon`, params).then(res => res.data);
+};
 //微信上传
 export const uploadCreatCard = params => { return instance.post(`${preUrlPath}/admin/wp/mer/uploadCreatCard`,params).then(res => res.data); };
 //会员信息
@@ -137,7 +150,12 @@ export const queryAccTransList = params => { return instance.post(`${preUrlPath}
 //订单管理
 export const queryShopOrderList = params => { return instance.post(`${preUrlPath}/admin/wp/mer/queryShopOrderList`,params).then(res => res.data); };
 //卡卷列表
-export const queryCouponList = params => { return instance.post(`${preUrlPath}/admin/wp/mer/queryCouponList`,params).then(res => res.data); };
+export const queryCouponListNew = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryWdPlaformCoupon`, params).then(res => res.data);
+};
+export const queryCouponList = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/queryCouponList`, params).then(res => res.data);
+};
 //卡卷上传
 export const uploadCoupon = params => { return instance.post(`${preUrlPath}/admin/wp/mer/uploadCoupon`,params).then(res => res.data); };
 //核销卡卷查询
@@ -281,6 +299,8 @@ export const tinymceUploadimg = params => { return instance.post(`${preUrlPath}/
 
 export const uploadimg = `${preUrlPath}/admin/wp/mer/uploadimg`;
 
+export const uploadImgNew = `${preUrlPath}/admin/wp/mer/member/uploadimg`;
+
 export const insertPkgProductPic = `${preUrlPath}/admin/wp/mer/insertPkgProductPic`;
 
 /*
@@ -359,3 +379,121 @@ export const memberAccountDeposit = params => { return instance.post(`${preUrlPa
 */
 export const checkFuiouDataExcel = params => { return instance.get(`${downloadPath}/download/wp/mer/checkFuiouDataExcel`, { params: params }); };
 
+export const insertMemCard = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/insertMemCard`, params).then(res => res.data);
+};
+
+export const queryMemCardListNew = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryMemCardList`, params).then(res => res.data);
+};
+
+export const uploadMemCard = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/uploadCreatCard`, params).then(res => res.data);
+};
+
+export const queryMemCardByKey = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryMemCardByKey`, params).then(res => res.data);
+};
+
+export const updateMemCard = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateMemCard`, params).then(res => res.data);
+};
+
+export const queryCouponDetails = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryCouponDetails`, params).then(res => res.data);
+};
+
+export const modifyCardStock = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/modifyCardStock`, params).then(res => res.data);
+};
+
+export const updateCoupon = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateCoupon`, params).then(res => res.data);
+};
+
+export const uploadCouponNew = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/uploadCoupon`, params).then(res => res.data);
+};
+
+export const modifyCouponStock = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/modifyCouponStock`, params).then(res => res.data);
+};
+
+export const addWdFrequencyCard = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/addWdFrequencyCard`, params).then(res => res.data);
+};
+
+export const addWdGiftCoupon = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/addWdGiftCoupon`, params).then(res => res.data);
+};
+
+
+export const queryMemberListNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/queryMemberList`, params).then(res => res.data);
+};
+
+export const queryMemBalanceList = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/queryMemBalanceList`, params).then(res => res.data);
+};
+
+export const queryMemBounsList = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/queryMemBounsList`, params).then(res => res.data);
+};
+
+export const queryConsumeListNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/queryConsumeList`, params).then(res => res.data);
+};
+
+export const queryFrequencyList = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/queryFrequencyList`, params).then(res => res.data);
+};
+
+export const queryConsumeFrequencyList = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/queryConsumeFrequencyList`, params).then(res => res.data);
+};
+
+export const queryCouponWithOutWDGifi = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryCouponWithOutWDGifi`, params).then(res => res.data);
+};
+
+export const queryConsumeActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryConsumeActivity`, params).then(res => res.data);
+};
+
+export const addConsumeActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/addConsumeActivity`, params).then(res => res.data);
+};
+
+export const selectStoreListNew = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/selectStoreList`, params).then(res => res.data);
+};
+
+export const showOrderAppraise = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/showOrderAppraise`, params).then(res => res.data);
+};
+
+export const queryMiniProductList = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/queryMiniProductList`, params).then(res => res.data);
+};
+
+export const updateProductNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/updateProduct`, params).then(res => res.data);
+};
+
+export const addDepositActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/addDepositActivity`, params).then(res => res.data);
+};
+
+export const queryDepositActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryDepositActivity`, params).then(res => res.data);
+};
+
+export const uploadAgentImage = `${preUrlPath}/admin/mer/mall/uploadAgentImage`
+
+export const queryCodeNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/queryCode`, params).then(res => res.data);
+};
+
+export const consumeCodeNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/consumeCode`, params).then(res => res.data);
+};

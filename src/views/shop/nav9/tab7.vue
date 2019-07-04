@@ -4,7 +4,7 @@
 		<el-row>
 			<el-form :inline="true" :model="filters">
 				<el-form-item label="卡券名称">
-					<el-input v-model="filters.name" class="fixed_search_input" placeholder="卡券名称"></el-input>
+					<el-input v-model="filters.title" class="fixed_search_input" placeholder="卡券名称"></el-input>
 				</el-form-item>
         <el-form-item label="卡券类型">
           <template>
@@ -38,13 +38,6 @@
 				</el-table-column>
 				<el-table-column prop="status" label="状态" min-width="90" :formatter="status">
 				</el-table-column>
-        <el-table-column label="剩余库存" min-width="250">
-          <template slot-scope="scope">
-            <el-tag type="gray" style="width:80px;text-align: center;">{{scope.row.quantity}}</el-tag>
-            <el-input style="width:80px;" v-model="scope.row.addQuantity" :maxlength="6"></el-input>
-            <el-button plain type="success" @click="stockClick(scope.$index, scope.row)">增加</el-button>
-          </template>
-        </el-table-column>
 				<el-table-column label="操作" width="290">
 					<template slot-scope="scope">
 							<el-button type="warning" size="mini" @click="editCard(scope.$index, scope.row)">修改</el-button>
@@ -96,7 +89,7 @@
 		</el-dialog>
 		<!--二维码 -->
 		<!--新增界面-->
-		<el-dialog title="请选择新增卡券类型" :visible.sync="addFormVisible" :close-on-click-modal="false" width="600px">
+		<el-dialog title="请选择新增卡券类型" :visible.sync="addFormVisible" :close-on-click-modal="false" width="750px">
 			<el-form :model="addForm" label-width="120px" :rules="addFormRules" ref="addForm">
           <template>
             <el-radio-group v-model="addForm.card_type">
@@ -105,6 +98,8 @@
               <el-radio :label="3">折扣券</el-radio>
               <el-radio :label="4">兑换券</el-radio>
               <el-radio :label="5">优惠券</el-radio>
+							<el-radio :label="6">计次卡</el-radio>
+							<el-radio :label="7">礼包券</el-radio>
             </el-radio-group>
           </template>
 			</el-form>
@@ -119,12 +114,12 @@
 <script>
 	import * as util from '../../../util/util.js'
 	//
-	import { queryCouponList, uploadCoupon, selectStoreList, getUrlCode, modifyCouponStock } from '../../../api/shop';
+	import { queryCouponListNew, uploadCouponNew, selectStoreList, getUrlCode } from '../../../api/shop';
 	export default {
 		data() {
 			return {
 				filters: {
-					name: '',
+					title: '',
           card_type:''
 				},
         options: [{
@@ -179,36 +174,6 @@
 			}
 		},
 		methods: {
-      stockClick(index, row) {
-        console.log(row.addQuantity);
-        var reg = /^\+?[1-9][0-9]*$/;
-        if (reg.test(row.addQuantity)) {
-          let para = {
-            id: String(row.id),
-            addQuantity: row.addQuantity
-          }
-          modifyCouponStock(para).then((res) => {
-            let {
-              status,
-              message
-            } = res;
-            if (status == 200) {
-              this.$message({
-                message: message,
-                type: 'success'
-              });
-							this.getUsers()
-            } else {
-              this.$message({
-                message: message,
-                type: 'warning'
-              });
-            }
-          })
-        } else {
-          this.$message.error('请输入正确库存数量');
-        }
-      },
 			closeDialog(){
 				this.codeMode=false;
 				this.codeForm.scene='';
@@ -262,10 +227,12 @@
 				this.codeForm.wxcard_id=row.wxcard_id;
 			},
 			editCard(index,row){
-				var id=row.id;
+				var id=row.card_id;
+				var channel_type=row.channel_type;
 				sessionStorage.setItem('id', JSON.stringify(id));
+				sessionStorage.setItem('channel_type', JSON.stringify(channel_type));
 				this.$router.push({
-					path: '/index3/tab7-modify',
+					path: '/index3/tab7-modify-v',
 				});
 			},
 			//卡券状态转换
@@ -277,7 +244,7 @@
 				let para={
 					id:row.id
 				}
-				uploadCoupon(para).then((res)=>{
+				uploadCouponNew(para).then((res)=>{
 					let {status,message}=res;
 					if (status==200) {
 						this.$notify({
@@ -296,7 +263,7 @@
 			},
 			//卡券类型转换
 			card_type:function (row,column) {
-				return row.card_type == 'GIFT' ? '兑换券' : row.card_type=='GENERAL_COUPON' ? '优惠券' : row.card_type=='GROUPON' ? '团购券' : row.card_type=='CASH' ? '代金券' : row.card_type=='DISCOUNT' ? '折扣券' : '未知';
+				return row.card_type == 'GIFT' ? '兑换券' : row.card_type=='GENERAL_COUPON' ? '优惠券' : row.card_type=='GROUPON' ? '团购券' : row.card_type=='CASH' ? '代金券' : row.card_type=='DISCOUNT' ? '折扣券' : row.card_type== 'FREQUENCY' ? '计次卡': row.card_type== 'WDGIFT_COUPON' ? '礼包券':'未知';
 			},
 			handleCurrentChange(val) {
 				this.page = val;
@@ -310,14 +277,13 @@
 			getList() {
 				let para = {
 					pagNum: this.page,
-					name: this.filters.name,
+					title: this.filters.title,
           card_type:this.filters.card_type
 				};
 				this.listLoading = true;
-				//
-				queryCouponList(para).then((res) => {
+				queryCouponListNew(para).then((res) => {
 					this.total = res.data.total;
-					this.users = res.data.CouponList;
+					this.users = res.data.couponList;
 					this.listLoading = false;
 				});
 			},
@@ -329,9 +295,16 @@
 			addSubmit: function () {
 				let card_type=this.addForm.card_type;
 				sessionStorage.setItem('card_type', JSON.stringify(card_type));
-				this.$router.push({
-					path: '/index3/tab7s'
-				});
+				if (card_type === 6 || card_type === 7) {
+					this.$router.push({
+						path: '/index3/tab12-v',
+						query: {card_type: card_type}
+					});
+				}else{
+					this.$router.push({
+						path: '/index3/tab7s-v'
+					});
+				}
 			},
 		},
 		mounted() {
