@@ -112,10 +112,15 @@ export default {
   methods: {
     //时间转化
     create_time: function(row, column) {
-      return util.formatDate.format(
-        new Date(row.create_time),
-        "yyyy/MM/dd hh:mm:ss"
-      );
+      let begin_time = util.formatDate.format(
+        new Date(row.begin_time),
+        "yyyy/MM/dd"
+      )
+      let end_time = util.formatDate.format(
+        new Date(row.end_time),
+        "yyyy/MM/dd"
+      )
+      return `${begin_time} 至 ${end_time}`
     },
     formatterStatus: function(row) {
       return row.status === "Y" ? "启用" : row.status === "N" ? "未启用" : "未知";

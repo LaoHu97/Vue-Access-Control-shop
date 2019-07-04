@@ -20,7 +20,7 @@ instance.interceptors.response.use(response => {
   } else {
     util.catchError(response)
   }
-  return response
+  // return response
 }, error => {
  util.catchError(error)
 });

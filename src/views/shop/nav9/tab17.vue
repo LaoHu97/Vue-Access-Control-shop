@@ -91,7 +91,8 @@ import {
   queryConsumeActivity,
   queryCouponWithOutWDGifi,
   addConsumeActivity,
-  selectStoreListNew
+  selectStoreListNew,
+  selectConsumeByPrimaryKey
 } from "../../../api/shop";
 export default {
   data() {
@@ -197,12 +198,20 @@ export default {
         pla_coupon_id: "",
         name: ""
       });
+    },
+    getEditDele(id){
+      selectConsumeByPrimaryKey({id: parseInt(this.$route.query.id)}).then(res => {
+
+      })
     }
   },
   mounted() {
     queryCouponWithOutWDGifi().then(res => {
       this.optionsCoupons = res.data.couponList;
     });
+    if (this.$route.query.id) {
+      this.getEditDele()
+    }
   }
 };
 </script>

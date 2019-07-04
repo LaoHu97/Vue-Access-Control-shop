@@ -497,3 +497,24 @@ export const queryCodeNew = params => {
 export const consumeCodeNew = params => {
   return instance.post(`${preUrlPath}/admin/mer/member/consumeCode`, params).then(res => res.data);
 };
+
+export const updateConsumeStatus = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateConsumeStatus`, params).then(res => res.data);
+};
+
+
+export const queryReceiveCardActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryReceiveCardActivity`, params).then(res => res.data);
+};
+
+export const addReceiveCardActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/addReceiveCardActivity`, params).then(res => res.data);
+};
+
+export const selectMemberCard = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/selectMemberCard`, params).then(res => res.data);
+};
+
+export const selectConsumeByPrimaryKey = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/selectConsumeByPrimaryKey`, params).then(res => res.data);
+};

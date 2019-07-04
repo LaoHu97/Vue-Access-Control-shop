@@ -500,7 +500,6 @@ export default [{
         title: '开卡有礼-v',
         icon: 'table',
         noCache: true,
-        hidden: true,
         code: '20180316114906_58'
       },
       component: (resolve) => require(['../views/shop/nav9/tab20.vue'], resolve)

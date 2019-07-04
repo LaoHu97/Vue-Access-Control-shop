@@ -9,6 +9,26 @@
         label-width="120px"
         label-position="left"
       >
+        <el-form-item label="选择会员卡" prop="wx_card_id">
+          <el-select
+            v-model="expenseForm.wx_card_id"
+            placeholder="门店名称"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteStore"
+            :loading="searchLoading"
+            clearable
+            @focus="clickStore"
+          >
+            <el-option
+              v-for="item in optionsStore"
+              :key="item.id"
+              :value="item.wxcard_id"
+              :label="item.title"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="活动名称" prop="name">
           <el-input v-model="expenseForm.name" placeholder="活动名称"></el-input>
         </el-form-item>
@@ -22,58 +42,15 @@
             :default-time="['00:00:00', '00:00:00']"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="所属门店" prop="apply_sid">
-          <el-select
-            v-model="expenseForm.apply_sid"
-            placeholder="门店名称"
-            :multiple="false"
-            filterable
-            remote
-            :remote-method="remoteStore"
-            :loading="searchLoading"
-            clearable
-            @focus="clickStore"
-          >
+        <el-form-item label="优惠券" prop="wd_coupon_card_id">
+          <el-select v-model="expenseForm.wd_coupon_card_id" placeholder="请选择">
             <el-option
-              v-for="item in optionsStore"
+              v-for="item in optionsCoupons"
               :key="item.id"
-              :value="item.id"
-              :label="item.value"
+              :label="item.title"
+              :value="item.card_id"
             ></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item
-          v-for="(item, index) in expenseForm.activityRule"
-          :label="'投放规则' + (index + 1)"
-          :key="item.key"
-          :prop="'activityRule.' + index + '.pla_coupon_id'"
-          :rules="{
-            required: true, message: '投放规则不能为空', trigger: 'change'
-          }"
-        >
-          <div>
-            消费满
-            <el-input-number
-              :controls="false"
-              :min="0"
-              :precision="2"
-              v-model="item.amount"
-              label="商品零售价"
-              style="width:80px"
-            ></el-input-number>元，返
-            <el-select v-model="item.pla_coupon_id" placeholder="请选择">
-              <el-option
-                v-for="item in optionsCoupons"
-                :key="item.id"
-                :label="item.title"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-            <el-button size="mini" type="warning" round @click.prevent="removeDomain(item)">删除</el-button>
-          </div>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="addDomain">新增规则</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('expenseForm')">立即创建</el-button>
@@ -90,8 +67,8 @@ import * as util from "../../../util/util.js";
 import {
   queryConsumeActivity,
   queryCouponWithOutWDGifi,
-  addDepositActivity,
-  selectStoreListNew
+  addReceiveCardActivity,
+  selectMemberCard
 } from "../../../api/shop";
 export default {
   data() {
@@ -100,14 +77,8 @@ export default {
       expenseForm: {
         name: "",
         dateTimes: "",
-        apply_sid: "",
-        activityRule: [
-          {
-            amount: "",
-            pla_coupon_id: "",
-            name: ""
-          }
-        ]
+        wx_card_id: "",
+        wd_coupon_card_id: ''
       },
 
       expenseFormRules: {
@@ -122,9 +93,12 @@ export default {
             trigger: "change"
           }
         ],
-        apply_sid: [
+        wx_card_id: [
           { required: true, message: "请选择门店", trigger: "change" }
-        ]
+        ],
+        // wd_coupon_card_id: [
+        //   { required: true, message: "请选择门店", trigger: "change" }
+        // ]
       },
       optionsCoupons: [],
       searchLoading: false,
@@ -136,21 +110,17 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let para = util.deepcopy(this.expenseForm);
-          para.activityRule.map((data, index) => {
-            data.name = "消费规则" + (index + 1);
-            data.amount = data.amount.toString();
-            return;
-          });
           para.begin_time = para.dateTimes[0];
           para.end_time = para.dateTimes[1];
+          para.type = '1'
           delete para.dateTimes;
-          addDepositActivity(para).then(res => {
+          addReceiveCardActivity(para).then(res => {
             this.$message({
               message: res.message,
               type: "success"
             });
             this.$router.push({
-              path: "/index3/tab16-v"
+              path: "/index3/tab20-v"
             });
           });
         } else {
@@ -161,12 +131,12 @@ export default {
     },
     clickStore: function() {
       this.searchLoading = true;
-      selectStoreListNew({
-        sname: ""
+      selectMemberCard({
+        title: ""
       }).then(res => {
         this.searchLoading = false;
         let { status, data } = res;
-        this.optionsStore = data.storeList;
+        this.optionsStore = data.memCardList;
       });
     },
     remoteStore(query) {
@@ -174,30 +144,17 @@ export default {
         this.searchLoading = true;
         setTimeout(() => {
           this.searchLoading = false;
-          selectStoreListNew({
-            sname: query
+          selectMemberCard({
+            title: query
           }).then(res => {
             let { status, data } = res;
-            this.optionsStore = data.storeList;
+            this.optionsStore = data.memCardList;
           });
         }, 200);
       } else {
         this.optionsStore = [];
       }
     },
-    removeDomain(item) {
-      var index = this.expenseForm.activityRule.indexOf(item);
-      if (index !== 0) {
-        this.expenseForm.activityRule.splice(index, 1);
-      }
-    },
-    addDomain() {
-      this.expenseForm.activityRule.push({
-        amount: "",
-        pla_coupon_id: "",
-        name: ""
-      });
-    }
   },
   mounted() {
     queryCouponWithOutWDGifi().then(res => {

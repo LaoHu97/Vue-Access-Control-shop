@@ -28,7 +28,7 @@
         </el-form-item>
         <el-form-item style="float:right">
           <el-button type="primary" @click="getUsers" round>查询</el-button>
-          <el-button type="success" @click="addExpense" plain>添加充值有礼</el-button>
+          <el-button type="success" @click="addExpense" plain>添加开卡有礼</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -37,7 +37,7 @@
     <div v-loading="listLoading">
       <el-table :data="users" border highlight-current-row style="width: 100%;">
         <el-table-column prop="id" label="编号"></el-table-column>
-        <el-table-column prop="name" label="活动名称"></el-table-column>
+        <el-table-column prop="rule_name" label="活动名称"></el-table-column>
         <el-table-column label="活动时间" :formatter="create_time"></el-table-column>
         <el-table-column prop="status" label="活动状态" :formatter="formatterStatus"></el-table-column>
       </el-table>
@@ -62,7 +62,7 @@
 import * as util from "../../../util/util.js";
 //
 import {
-  queryDepositActivity,
+  queryReceiveCardActivity,
   sendVerCode,
   checkVerCode
 } from "../../../api/shop";
@@ -112,17 +112,22 @@ export default {
   methods: {
     //时间转化
     create_time: function(row, column) {
-      return util.formatDate.format(
-        new Date(row.create_time),
-        "yyyy/MM/dd hh:mm:ss"
-      );
+      let begin_time = util.formatDate.format(
+        new Date(row.begin_time),
+        "yyyy/MM/dd"
+      )
+      let end_time = util.formatDate.format(
+        new Date(row.end_time),
+        "yyyy/MM/dd"
+      )
+      return `${begin_time} 至 ${end_time}`
     },
     formatterStatus: function(row) {
       return row.status === "Y" ? "启用" : row.status === "N" ? "未启用" : "未知";
     },
     addExpense() {
       this.$router.push({
-        path: "/index3/tab19-v"
+        path: "/index3/tab21-v"
       });
     },
     handleCurrentChange(val) {
@@ -163,9 +168,9 @@ export default {
               )
             ); //开始时间
       this.listLoading = true;
-      queryDepositActivity(para).then(res => {
+      queryReceiveCardActivity(para).then(res => {
         this.total = res.data.total;
-        this.users = res.data.memCardList;
+        this.users = res.data.activityList;
         this.listLoading = false;
       });
     }
