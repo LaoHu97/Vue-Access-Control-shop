@@ -516,6 +516,17 @@ export default [{
       component: (resolve) => require(['../views/shop/nav9/tab21.vue'], resolve)
     }, {
       path: 'tab22-v',
+      name: '充值规则明细-v',
+      meta: {
+        title: '充值规则明细-v',
+        icon: 'table',
+        noCache: true,
+        hidden: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab22.vue'], resolve)
+    }, {
+      path: 'tab23-v',
       name: '消费规则明细-v',
       meta: {
         title: '消费规则明细-v',
@@ -524,7 +535,7 @@ export default [{
         hidden: true,
         code: '20180316114906_58'
       },
-      component: (resolve) => require(['../views/shop/nav9/tab22.vue'], resolve)
+      component: (resolve) => require(['../views/shop/nav9/tab23.vue'], resolve)
     }]
   }, {
     path: '/index3',

@@ -516,7 +516,7 @@ export const selectMemberCard = params => {
 };
 
 export const selectConsumeByPrimaryKey = params => {
-  return instance.post(`${preUrlPath}/admin/wp/mer/member/selectConsumeByPrimaryKey`, params).then(res => res.data);
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/selectConsumeByPk`, params).then(res => res.data);
 };
 
 export const selectReceiveCardAcPk = params => {
@@ -549,4 +549,16 @@ export const queryDepositDetailList = params => {
 
 export const updateDepositDetailActivity = params => {
   return instance.post(`${preUrlPath}/admin/wp/mer/member/updateDepositDetailActivity`, params).then(res => res.data);
+};
+
+export const updateConsumeActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateConsumeActivity`, params).then(res => res.data);
+};
+
+export const queryConsumeDetailList = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryConsumeDetailList`, params).then(res => res.data);
+};
+
+export const updateConsumeDetailList = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateConsumeDetailList`, params).then(res => res.data);
 };

@@ -28,7 +28,6 @@
         </el-form-item>
         <el-form-item style="float:right">
           <el-button type="primary" @click="getUsers" round>查询</el-button>
-          <el-button type="success" @click="addExpense" plain>添加消费有礼</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -36,27 +35,16 @@
     <!--列表-->
     <div v-loading="listLoading">
       <el-table :data="users" border highlight-current-row style="width: 100%;">
-        <el-table-column prop="id" label="编号"></el-table-column>
-        <el-table-column prop="name" label="活动名称"></el-table-column>
-        <el-table-column label="活动时间" :formatter="create_time"></el-table-column>
-        <el-table-column prop="status" label="活动状态" :formatter="formatterStatus">
-        </el-table-column>
-        <el-table-column prop="status" label="状态更改">
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.status"
-              active-value="Y"
-              inactive-value="N"
-              @change="switchChange(scope.row)">
-            </el-switch>
-          </template>
-        </el-table-column>
+        <el-table-column prop="name" label="规则名称"></el-table-column>
+        <el-table-column prop="amount" label="消费面额"></el-table-column>
+        <el-table-column prop="balance" label="赠送金额"></el-table-column>
+        <el-table-column prop="bonus" label="赠送积分"></el-table-column>
+        <el-table-column prop="coupon_card_id" label="赠送券"></el-table-column>
         <el-table-column align="center" label="操作" width="240">
           <template slot-scope="scope">
-            <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">修改活动</el-button>
-            <el-button size="mini" type="warning" @click="handleEdits(scope.$index, scope.row)">活动规则</el-button>
+            <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">修改规则</el-button>
           </template>
-        </el-table-column>s
+        </el-table-column>
       </el-table>
     </div>
 
@@ -72,6 +60,48 @@
         style="text-align:center;background:#fff;padding:15px;"
       ></el-pagination>
     </el-row>
+    <el-dialog title="编辑规则" :visible.sync="activityDialogFormVisible" width="420px">
+      <el-form :model="activityForm" label-position="left" label-width="120px">
+        <el-form-item label="充值面额">
+          <el-input-number
+            v-model="activityForm.amount"
+            :precision="2"
+            :step="0.00"
+            :controls="false"
+          ></el-input-number>
+        </el-form-item>
+        <el-form-item label="优惠券">
+          <el-select v-model="activityForm.coupon_card_id" placeholder="请选择">
+            <el-option
+              v-for="item in optionsCoupons"
+              :key="item.id"
+              :label="item.title"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="赠送金额">
+          <el-input-number
+            v-model="activityForm.balance"
+            :precision="2"
+            :step="0.00"
+            :controls="false"
+          ></el-input-number>
+        </el-form-item>
+        <el-form-item label="赠送积分">
+          <el-input-number
+            v-model="activityForm.bonus"
+            :precision="0"
+            :step="0"
+            :controls="false"
+          ></el-input-number>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="activityDialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submiltForm">确 定</el-button>
+      </div>
+    </el-dialog>
   </section>
 </template>
 
@@ -79,10 +109,12 @@
 import * as util from "../../../util/util.js";
 //
 import {
-  queryConsumeActivity,
+  queryConsumeDetailList,
   sendVerCode,
   checkVerCode,
-  updateConsumeStatus
+  updateReceiveCardAcStatus,
+  queryCouponWithOutWDGifi,
+  updateConsumeDetailList
 } from "../../../api/shop";
 export default {
   data() {
@@ -124,50 +156,62 @@ export default {
       users: [],
       total: 0,
       page: 1,
-      listLoading: false
+      listLoading: false,
+      optionsCoupons: "",
+      activityDialogFormVisible: false,
+      activityForm: {
+        id: 0,
+        amount: 0,
+        coupon_card_id: "",
+        bonus: 0,
+        balance: 0
+      }
     };
   },
   methods: {
     //时间转化
     create_time: function(row, column) {
-      return util.formatDate.format(
-        new Date(row.create_time),
-        "yyyy/MM/dd hh:mm:ss"
+      let begin_time = util.formatDate.format(
+        new Date(row.begin_time),
+        "yyyy/MM/dd"
       );
+      let end_time = util.formatDate.format(
+        new Date(row.end_time),
+        "yyyy/MM/dd"
+      );
+      return `${begin_time} 至 ${end_time}`;
     },
     formatterStatus: function(row) {
       return row.status === "Y"
-        ? "进行中"
+        ? "启用"
         : row.status === "N"
-        ? "已结束"
+        ? "未启用"
         : "未知";
     },
-    handleEdits(index,row){
-      this.$router.push({
-        path: "/index3/tab23-v",
-        query: {id: row.id}
-      });
-    },
-    handleEdit(index, row){
-      this.$router.push({
-        path: "/index3/tab17-v",
-        query: {id: row.id}
-      });
-    },
     switchChange(row) {
-      console.log(row);
       let para = {
         id: row.id,
         status: row.status
-      }
-      updateConsumeStatus(para).then(res => {
-        this.getUsers()
+      };
+      updateReceiveCardAcStatus(para).then(res => {
+        this.getUsers();
+      });
+    },
+    submiltForm() {
+      let para = util.deepcopy(this.activityForm)
+      updateConsumeDetailList(para).then(res => {
+        
       })
     },
-    addExpense() {
-      this.$router.push({
-        path: "/index3/tab17-v"
-      });
+    handleEdit(index, row) {
+      this.activityDialogFormVisible = true;
+      this.$nextTick(() => {
+        this.activityForm.id = row.id
+        this.activityForm.amount = row.amount
+        this.activityForm.coupon_card_id = row.coupon_card_id
+        this.activityForm.bonus = row.bonus
+        this.activityForm.balance = row.balance
+      })
     },
     handleCurrentChange(val) {
       this.page = val;
@@ -184,6 +228,7 @@ export default {
         startTime: this.filters.startTime,
         endTime: this.filters.endTime
       };
+      para.id = this.$route.query.id;
       para.startTime =
         !para.startTime || para.startTime == ""
           ? ""
@@ -207,15 +252,18 @@ export default {
               )
             ); //开始时间
       this.listLoading = true;
-      queryConsumeActivity(para).then(res => {
+      queryConsumeDetailList(para).then(res => {
         this.total = res.data.total;
-        this.users = res.data.consumeActivitys;
+        this.users = res.data.consumeDetailList;
         this.listLoading = false;
       });
     }
   },
   mounted() {
     this.getUsers();
+    queryCouponWithOutWDGifi().then(res => {
+      this.optionsCoupons = res.data.couponList;
+    });
   }
 };
 </script>
