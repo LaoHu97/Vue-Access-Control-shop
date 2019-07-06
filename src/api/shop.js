@@ -518,3 +518,35 @@ export const selectMemberCard = params => {
 export const selectConsumeByPrimaryKey = params => {
   return instance.post(`${preUrlPath}/admin/wp/mer/member/selectConsumeByPrimaryKey`, params).then(res => res.data);
 };
+
+export const selectReceiveCardAcPk = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/selectReceiveCardAcPk`, params).then(res => res.data);
+};
+
+export const updateReceiveCardActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateReceiveCardActivity`, params).then(res => res.data);
+};
+
+export const updateReceiveCardAcStatus = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateReceiveCardAcStatus`, params).then(res => res.data);
+};
+
+export const updateDepositStatusNew = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateDepositStatus`, params).then(res => res.data);
+};
+
+export const selectDepositByPk = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/selectDepositByPk`, params).then(res => res.data);
+};
+
+export const updateDepositActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateDepositActivity`, params).then(res => res.data);
+};
+
+export const queryDepositDetailList = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryDepositDetailList`, params).then(res => res.data);
+};
+
+export const updateDepositDetailActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateDepositDetailActivity`, params).then(res => res.data);
+};

@@ -53,7 +53,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('expenseForm')">立即创建</el-button>
+          <el-button type="primary" @click="onSubmit('expenseForm')">{{$route.query.id ? '确认修改' : '立即创建'}}</el-button>
           <el-button>取消</el-button>
         </el-form-item>
       </el-form>
@@ -68,12 +68,13 @@ import {
   queryConsumeActivity,
   queryCouponWithOutWDGifi,
   addReceiveCardActivity,
-  selectMemberCard
+  selectMemberCard,
+  selectReceiveCardAcPk,
+  updateReceiveCardActivity
 } from "../../../api/shop";
 export default {
   data() {
     return {
-      value1: "",
       expenseForm: {
         name: "",
         dateTimes: "",
@@ -114,15 +115,29 @@ export default {
           para.end_time = para.dateTimes[1];
           para.type = '1'
           delete para.dateTimes;
-          addReceiveCardActivity(para).then(res => {
-            this.$message({
-              message: res.message,
-              type: "success"
+          if (this.$route.query.id) {
+            para.id = this.$route.query.id
+            updateReceiveCardActivity(para).then(res => {
+              this.$message({
+                message: res.message,
+                type: "success"
+              });
+              this.$router.push({
+                path: "/index3/tab20-v"
+              });
             });
-            this.$router.push({
-              path: "/index3/tab20-v"
+          }else{
+            delete para.id
+            addReceiveCardActivity(para).then(res => {
+              this.$message({
+                message: res.message,
+                type: "success"
+              });
+              this.$router.push({
+                path: "/index3/tab20-v"
+              });
             });
-          });
+          }
         } else {
           console.log("error submit!!");
           return false;
@@ -155,11 +170,23 @@ export default {
         this.optionsStore = [];
       }
     },
+    getEditDele(id){
+      selectReceiveCardAcPk({id: parseInt(this.$route.query.id)}).then(res => {
+        this.expenseForm.name = res.data.activityInfo.rule_name
+        this.expenseForm.dateTimes = new Array(res.data.activityInfo.begin_time, res.data.activityInfo.end_time)
+        this.expenseForm.wx_card_id = res.data.activityInfo.wx_card_id
+        this.expenseForm.wd_coupon_card_id = res.data.activityInfo.wd_coupon_card_id
+      })
+    }
   },
-  mounted() {
+  async mounted() {
     queryCouponWithOutWDGifi().then(res => {
       this.optionsCoupons = res.data.couponList;
     });
+    if (this.$route.query.id) {
+      await this.clickStore()
+      this.getEditDele()
+    }
   }
 };
 </script>

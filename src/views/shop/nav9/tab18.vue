@@ -40,6 +40,22 @@
         <el-table-column prop="name" label="活动名称"></el-table-column>
         <el-table-column label="活动时间" :formatter="create_time"></el-table-column>
         <el-table-column prop="status" label="活动状态" :formatter="formatterStatus"></el-table-column>
+        <el-table-column prop="status" label="状态更改">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.status"
+              active-value="Y"
+              inactive-value="N"
+              @change="switchChange(scope.row)">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="操作" width="240">
+          <template slot-scope="scope">
+            <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">修改活动</el-button>
+            <el-button size="mini" type="warning" @click="handleEdits(scope.$index, scope.row)">活动规则</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
@@ -64,7 +80,8 @@ import * as util from "../../../util/util.js";
 import {
   queryDepositActivity,
   sendVerCode,
-  checkVerCode
+  checkVerCode,
+  updateDepositStatusNew
 } from "../../../api/shop";
 export default {
   data() {
@@ -125,6 +142,27 @@ export default {
     formatterStatus: function(row) {
       return row.status === "Y" ? "启用" : row.status === "N" ? "未启用" : "未知";
     },
+    switchChange(row) {
+      let para = {
+        id: row.id,
+        status: row.status
+      }
+      updateDepositStatusNew(para).then(res => {
+        this.getUsers()
+      })
+    },
+    handleEdits(index,row){
+      this.$router.push({
+        path: "/index3/tab22-v",
+        query: {id: row.id}
+      });
+    },
+    handleEdit(index,row){
+      this.$router.push({
+        path: "/index3/tab19-v",
+        query: {id: row.id}
+      });
+    },
     addExpense() {
       this.$router.push({
         path: "/index3/tab19-v"
@@ -170,7 +208,7 @@ export default {
       this.listLoading = true;
       queryDepositActivity(para).then(res => {
         this.total = res.data.total;
-        this.users = res.data.memCardList;
+        this.users = res.data.depositActivitys;
         this.listLoading = false;
       });
     }
