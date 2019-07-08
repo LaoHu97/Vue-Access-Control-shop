@@ -560,5 +560,9 @@ export const queryConsumeDetailList = params => {
 };
 
 export const updateConsumeDetailList = params => {
-  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateConsumeDetailList`, params).then(res => res.data);
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateConsumeDetailActivity`, params).then(res => res.data);
+};
+
+export const addConsumeDetailActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/addConsumeDetailActivity`, params).then(res => res.data);
 };

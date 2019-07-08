@@ -3,31 +3,9 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item label="日期时间">
-          <el-date-picker
-            v-model="filters.startTime"
-            class="fixed_search_input_datetime"
-            type="datetime"
-            placeholder="选择开始日期"
-            :picker-options="pickerOptions1"
-            :clearable="false"
-            :editable="false"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item>至</el-form-item>
-        <el-form-item>
-          <el-date-picker
-            v-model="filters.endTime"
-            class="fixed_search_input_datetime"
-            type="datetime"
-            placeholder="选择结束日期"
-            :picker-options="pickerOptions2"
-            :clearable="false"
-            :editable="false"
-          ></el-date-picker>
-        </el-form-item>
         <el-form-item style="float:right">
           <el-button type="primary" @click="getUsers" round>查询</el-button>
+          <el-button type="primary" @click="addguize" round>新增规则</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -37,10 +15,8 @@
       <el-table :data="users" border highlight-current-row style="width: 100%;">
         <el-table-column prop="name" label="规则名称"></el-table-column>
         <el-table-column prop="amount" label="消费面额"></el-table-column>
-        <el-table-column prop="balance" label="赠送金额"></el-table-column>
-        <el-table-column prop="bonus" label="赠送积分"></el-table-column>
-        <el-table-column prop="coupon_card_id" label="赠送券"></el-table-column>
-        <el-table-column align="center" label="操作" width="240">
+        <el-table-column prop="coupon_name" label="赠送券"></el-table-column>
+        <el-table-column align="center" label="操作" width="140">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">修改规则</el-button>
           </template>
@@ -62,7 +38,10 @@
     </el-row>
     <el-dialog title="编辑规则" :visible.sync="activityDialogFormVisible" width="420px">
       <el-form :model="activityForm" label-position="left" label-width="120px">
-        <el-form-item label="充值面额">
+        <el-form-item label="规则名称">
+          <el-input v-model="activityForm.name" placeholder="请输入内容"></el-input>
+        </el-form-item>
+        <el-form-item label="充值面额(￥)">
           <el-input-number
             v-model="activityForm.amount"
             :precision="2"
@@ -76,25 +55,9 @@
               v-for="item in optionsCoupons"
               :key="item.id"
               :label="item.title"
-              :value="item.id"
+              :value="item.card_id"
             ></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="赠送金额">
-          <el-input-number
-            v-model="activityForm.balance"
-            :precision="2"
-            :step="0.00"
-            :controls="false"
-          ></el-input-number>
-        </el-form-item>
-        <el-form-item label="赠送积分">
-          <el-input-number
-            v-model="activityForm.bonus"
-            :precision="0"
-            :step="0"
-            :controls="false"
-          ></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -114,7 +77,8 @@ import {
   checkVerCode,
   updateReceiveCardAcStatus,
   queryCouponWithOutWDGifi,
-  updateConsumeDetailList
+  updateConsumeDetailList,
+  addConsumeDetailActivity
 } from "../../../api/shop";
 export default {
   data() {
@@ -160,11 +124,9 @@ export default {
       optionsCoupons: "",
       activityDialogFormVisible: false,
       activityForm: {
-        id: 0,
+        name: '',
         amount: 0,
-        coupon_card_id: "",
-        bonus: 0,
-        balance: 0
+        coupon_card_id: ""
       }
     };
   },
@@ -199,18 +161,34 @@ export default {
     },
     submiltForm() {
       let para = util.deepcopy(this.activityForm)
-      updateConsumeDetailList(para).then(res => {
-        
-      })
+      if (!para.id) {
+        para.id = parseInt(this.$route.query.id)
+        addConsumeDetailActivity(para).then(res => {
+          this.activityDialogFormVisible = false
+          this.getUsers()
+        })
+      }else{
+        updateConsumeDetailList(para).then(res => {
+          this.activityDialogFormVisible = false
+          this.getUsers()
+        })
+      }
+    },
+    addguize() {
+      this.activityDialogFormVisible = true;
+      this.activityForm = {
+        name: '',
+        amount: 0,
+        coupon_card_id: ""
+      }
     },
     handleEdit(index, row) {
       this.activityDialogFormVisible = true;
       this.$nextTick(() => {
         this.activityForm.id = row.id
+        this.activityForm.name = row.name
         this.activityForm.amount = row.amount
         this.activityForm.coupon_card_id = row.coupon_card_id
-        this.activityForm.bonus = row.bonus
-        this.activityForm.balance = row.balance
       })
     },
     handleCurrentChange(val) {

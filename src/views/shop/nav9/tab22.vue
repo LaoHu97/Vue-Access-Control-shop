@@ -39,7 +39,7 @@
         <el-table-column prop="amount" label="充值面额"></el-table-column>
         <el-table-column prop="balance" label="赠送金额"></el-table-column>
         <el-table-column prop="bonus" label="赠送积分"></el-table-column>
-        <el-table-column prop="coupon_card_id" label="赠送券"></el-table-column>
+        <el-table-column prop="coupon_name" label="赠送券"></el-table-column>
         <el-table-column align="center" label="操作" width="240">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">修改规则</el-button>
@@ -76,7 +76,7 @@
               v-for="item in optionsCoupons"
               :key="item.id"
               :label="item.title"
-              :value="item.id"
+              :value="item.card_id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -200,7 +200,8 @@ export default {
     submiltForm() {
       let para = util.deepcopy(this.activityForm)
       updateDepositDetailActivity(para).then(res => {
-        
+        this.activityDialogFormVisible = true
+        this.getUsers()
       })
     },
     handleEdit(index, row) {

@@ -251,8 +251,7 @@ export default {
       };
       queryCouponListNew(para).then(res => {
         this.couponSearchLoading = false;
-        let { status, data } = res;
-        this.optionsCoupon = data.resutData.CouponList;
+        this.optionsCoupon = res.data.CouponList;
       });
     },
     remoteCoupon(query) {
@@ -265,8 +264,7 @@ export default {
             pagNum: 1
           };
           queryCouponListNew(para).then(res => {
-            let { status, data } = res;
-            this.optionsCoupon = data.resutData.CouponList;
+            this.optionsCoupon = res.data.CouponList;
           });
         }, 200);
       } else {
