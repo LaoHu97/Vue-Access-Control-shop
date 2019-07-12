@@ -11,9 +11,24 @@
       <el-form-item label="卡券标题" prop="title">
         <el-input v-model="meterForm.title"></el-input>
       </el-form-item>
-      <el-form-item label="是否分享" prop="can_share">
+      <el-form-item label="是否分享" prop="can_share" v-if="$route.query.card_type == '6'">
         <el-radio v-model="meterForm.can_share" label="1">分享</el-radio>
         <el-radio v-model="meterForm.can_share" label="2">不分享</el-radio>
+      </el-form-item>
+      <el-form-item label="次卡图片" prop="logo_url">
+        <el-upload
+          class="avatar-uploader"
+          :action="uploadAgentImage"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+        >
+          <img v-if="meterForm.logo_url" :src="meterForm.logo_url" class="avatar" />
+          <i v-else class="el-icon-plus mini-avatar-uploader"></i>
+        </el-upload>
+      </el-form-item>
+      <el-form-item label="初始次数" prop="initialTotal" v-if="$route.query.card_type == '6' || $route.query.card_type == 'FREQUENCY'">
+        <el-input v-model.number="meterForm.initialTotal"></el-input>
       </el-form-item>
       <el-form-item label="劵数量" prop="quantity">
         <el-input v-model.number="meterForm.quantity"></el-input>
@@ -122,7 +137,7 @@
           </div>
         </template>
       </el-form-item>
-      <div v-if="$route.query.card_type == '6'">
+      <div v-if="$route.query.card_type == '6' || $route.query.card_type == 'FREQUENCY'">
         <el-form-item label="一天核销次数" prop="numDay">
           <el-input v-model="meterForm.numDay"></el-input>
         </el-form-item>
@@ -130,7 +145,7 @@
           <el-input v-model="meterForm.numWriteOff"></el-input>
         </el-form-item>
       </div>
-      <div v-if="$route.query.card_type == '7'">
+      <div v-if="$route.query.card_type == '7' || $route.query.card_type == 'WDGIFT_COUPON'">
         <el-form-item
           v-for="(items, index) in meterForm.coupons"
           :label="'优惠券' + (index + 1)"
@@ -165,7 +180,9 @@ import * as util from "../../util/util.js";
 import {
   addWdFrequencyCard,
   addWdGiftCoupon,
-  queryCouponWithOutWDGifi
+  queryCouponWithOutWDGifi,
+  uploadAgentImage,
+  queryCouponDetails
 } from "../../api/shop";
 export default {
   data() {
@@ -179,6 +196,7 @@ export default {
       }
     };
     return {
+      uploadAgentImage: uploadAgentImage,
       meterForm: {
         title: "",
         can_share: "1",
@@ -199,7 +217,9 @@ export default {
           }
         ],
         begin_hour_minute: "",
-        end_hour_minute: ""
+        end_hour_minute: "",
+        initialTotal: "",
+        logo_url: ""
       },
       optionsCoupons: [],
 
@@ -219,6 +239,12 @@ export default {
         can_share: [
           { required: true, message: "请选择是否分享", trigger: "change" }
         ],
+        initialTotal: [
+          { required: true, message: "请输入初始次数", trigger: "blur" }
+        ],
+        logo_url: [
+          { required: true, message: "请上传次卡图片", trigger: "change" }
+        ],
         quantity: [
           { required: true, message: "请输入劵数量" },
           { type: "number", message: "劵数量必须为数字值" }
@@ -227,7 +253,9 @@ export default {
           { required: true, message: "请输入限领数量" },
           { type: "number", message: "限领数量必须为数字值" }
         ],
-        date_info: [{ required: true, message: '请选择有效期', trigger: 'change' }],
+        date_info: [
+          { required: true, message: "请选择有效期", trigger: "change" }
+        ],
         timelimit: [
           { required: true, message: "请输入活动名称", trigger: "blur" }
         ],
@@ -241,6 +269,46 @@ export default {
     };
   },
   methods: {
+    returnDisplay(){
+      let para={
+        card_id:String(JSON.parse(sessionStorage.getItem('id'))),
+        channel_type: String(JSON.parse(sessionStorage.getItem('channel_type')))
+      }
+      queryCouponDetails(para).then((res)=>{
+        this.meterForm.title = res.data.memCard.title
+        this.meterForm.can_share = res.data.memCard.can_share
+        this.meterForm.quantity = res.data.memCard.quantity
+        this.meterForm.get_limit = res.data.memCard.get_limit
+        this.meterForm.initialTotal = res.data.memCard.initialTotal
+        this.meterForm.logo_url = res.data.memCard.avatarUrl
+        let dataInfo = JSON.parse(res.data.memCard.rolu_info)
+        console.log(dataInfo);
+        this.meterForm.date_info = dataInfo.dateInfo.date_info
+        if (dataInfo.dateInfo.date_info === '2') {
+          this.meterForm.fixed_term = dataInfo.dateInfo.fixed_term
+          this.meterForm.fixed_begin_term = dataInfo.dateInfo.fixed_begin_term
+        }else if(dataInfo.dateInfo.date_info === '1'){
+          this.meterForm.beginTime = dataInfo.dateInfo.beginTime
+          this.meterForm.endTime = dataInfo.dateInfo.endTime
+        }
+
+        
+
+        this.meterForm.timelimit = dataInfo.timeLimit.time_limit
+        this.meterForm.numDay = res.data.memCard.numDay
+        this.meterForm.numWriteOff = res.data.memCard.numWriteOff
+        this.meterForm.week = dataInfo.timeLimit.weekList
+        // this.meterForm.coupons: [
+        //   {
+        //     value: ""
+        //   }
+        // ],
+        this.meterForm.begin_hour_minute = dataInfo.timeLimit.begin_hour_minute
+        this.meterForm.end_hour_minute = dataInfo.timeLimit.end_hour_minute
+        // this.meterForm.initialTotal: "",
+        // this.meterForm.logo_url: ""
+      })
+    },
     removeDomain(item) {
       var index = this.meterForm.coupons.indexOf(item);
       console.log(index);
@@ -273,6 +341,23 @@ export default {
         this.end_hour_minute_1 = "";
       }
     },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
+    handleAvatarSuccess(res, file) {
+      if (res.status === 200) {
+        this.meterForm.logo_url = res.data.locationPath;
+      }
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -293,8 +378,8 @@ export default {
               : this.$route.query.card_type == "7"
               ? "WDGIFT_COUPON"
               : "weizhi";
-          console.log(para);
-          if (this.$route.query.card_type === "6") {
+          console.log(this.$route.query.card_type);
+          if (this.$route.query.card_type == "6") {
             addWdFrequencyCard(para).then(res => {
               this.$message({
                 message: res.message,
@@ -323,7 +408,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this);
+    this.returnDisplay();
     queryCouponWithOutWDGifi().then(res => {
       this.optionsCoupons = res.data.couponList;
     });

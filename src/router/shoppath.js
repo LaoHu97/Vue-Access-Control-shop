@@ -536,6 +536,26 @@ export default [{
         code: '20180316114906_58'
       },
       component: (resolve) => require(['../views/shop/nav9/tab23.vue'], resolve)
+    }, {
+      path: 'tab24-v',
+      name: '会员分享记录-v',
+      meta: {
+        title: '会员分享记录-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab24.vue'], resolve)
+    }, {
+      path: 'tab25-v',
+      name: '购买会员卡管理-v',
+      meta: {
+        title: '购买会员卡管理-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab25.vue'], resolve)
     }]
   }, {
     path: '/index3',
@@ -649,16 +669,166 @@ export default [{
       component: (resolve) => require(['../views/shop/nav8/miniprogram6.vue'], resolve)
     }, {
       path: 'miniprogram7',
-      name: '商品列表',
+      name: '团购商品列表',
       meta: {
-        title: '商品列表',
+        title: '团购商品列表',
         icon: 'table',
         noCache: true,
         code: '20180316115233_28'
       },
       component: (resolve) => require(['../views/shop/nav8/miniprogram7.vue'], resolve)
+    }, {
+      path: 'miniprogram8',
+      name: '团购订单列表',
+      meta: {
+        title: '团购订单列表',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav8/miniprogram8.vue'], resolve)
+    }, {
+      path: 'miniprogram9',
+      name: '拼团商品列表',
+      meta: {
+        title: '拼团商品列表',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav8/miniprogram9.vue'], resolve)
+    }, {
+      path: 'miniprogram10',
+      name: '拼团订单列表',
+      meta: {
+        title: '拼团订单列表',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav8/miniprogram10.vue'], resolve)
     }]
-  },{
+  }, {
+    path: '/index4',
+    name: '小程序管理2',
+    meta: {
+      icon: 'icon-xiaochengxu'
+    },
+    component: Abstract,
+    children: [{
+      path: 'miniprogram2-v',
+      name: '轮播图列表-v',
+      meta: {
+        title: '轮播图列表-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram2.vue'], resolve)
+    }, {
+      path: 'miniprogram1-v',
+      name: '导航列表-v',
+      meta: {
+        title: '导航列表-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram1.vue'], resolve)
+    }, {
+      path: 'miniprogram4-v',
+      name: '资讯列表-v',
+      meta: {
+        title: '资讯列表-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram4.vue'], resolve)
+    }, {
+      path: 'miniprogram3-v',
+      name: '新增资讯-v',
+      meta: {
+        title: '新增资讯-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28',
+        hidden: true
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram3.vue'], resolve)
+    }, {
+      path: 'miniprogram5-v',
+      name: '资讯修改-v',
+      meta: {
+        title: '资讯修改-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28',
+        hidden: true
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram5.vue'], resolve)
+    }, {
+      path: 'miniprogram6-v',
+      name: '评价列表-v',
+      meta: {
+        title: '评价列表-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram6.vue'], resolve)
+    }, {
+      path: 'miniprogram7-v',
+      name: '团购商品列表-v',
+      meta: {
+        title: '团购商品列表-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram7.vue'], resolve)
+    }, {
+      path: 'miniprogram8-v',
+      name: '团购订单列表-v',
+      meta: {
+        title: '团购订单列表-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram8.vue'], resolve)
+    }, {
+      path: 'miniprogram9-v',
+      name: '拼团商品列表-v',
+      meta: {
+        title: '拼团商品列表-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram9.vue'], resolve)
+    }, {
+      path: 'miniprogram10-v',
+      name: '拼团订单列表-v',
+      meta: {
+        title: '拼团订单列表-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram10.vue'], resolve)
+    }, {
+      path: 'miniprogram11-v',
+      name: '爆款活动-v',
+      meta: {
+        title: '爆款活动-v',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115233_28'
+      },
+      component: (resolve) => require(['../views/shop/nav10/miniprogram11.vue'], resolve)
+    }]
+  }, {
     path: '/bill1',
     name: '对账单下载',
     meta: {

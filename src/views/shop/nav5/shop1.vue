@@ -133,7 +133,7 @@
         </el-form-item>
 				<el-form-item label="选择优惠券：">
 					<el-select v-model="addForm.card_id" placeholder="请选择优惠券" :multiple="false" filterable remote :remote-method="remoteCard" :loading="loading" clearable @visible-change="clickCard">
-						<el-option v-for="item in optionsCard" :key="item.wxcard_id" :value="item.wxcard_id" :label="item.title">
+						<el-option v-for="item in optionsCard" :key="item.card_id" :value="item.card_id" :label="item.title">
 						</el-option>
 					</el-select>
 				</el-form-item>
@@ -183,11 +183,11 @@
 <script>
 	import * as util from '../../../util/util.js'
 	//
-	import { insertProduct, queryProductList, updateStatus, updateProduct, getCouponByInPro, uploadimg} from '../../../api/shop';
+	import { insertProduct, queryProductListNew, updateStatus, updateProduct, getCouponByInPro, uploadimg, uploadAgentImage, queryCouponListNew, insertProductNew } from '../../../api/shop';
 	export default {
 		data() {
 			return {
-        uploadImage:uploadimg,//上传图片变量
+        uploadImage:uploadAgentImage,//上传图片变量
         uploaddata:{
           mid:''
         },
@@ -297,12 +297,12 @@
       },
 			//商户远程搜索
 			clickCard:function () {
-				getCouponByInPro({title:''}).then((res) => {
+				queryCouponListNew({title:''}).then((res) => {
 					let {
 						status,
 						data
 					} = res
-					this.optionsCard = data.CouponList
+					this.optionsCard = data.couponList
 				})
 			},
 			remoteCard(query) {
@@ -310,14 +310,14 @@
 					this.loading = true;
 					setTimeout(() => {
 						this.loading = false;
-						getCouponByInPro({
+						queryCouponListNew({
 							title: query
 						}).then((res) => {
 							let {
 								status,
 								data
 							} = res
-							this.optionsCard = data.CouponList
+							this.optionsCard = data.couponList
 						})
 					}, 200);
 				} else {
@@ -326,13 +326,13 @@
 			},
       //上传缩略图
       small_urlSuccess(res, file) {
-        this.addForm.small_url = res.data.locationUrl;
-        this.editForm.small_url = res.data.locationUrl;
+        this.addForm.small_url = res.data.locationPath;
+        this.editForm.small_url = res.data.locationPath;
       },
       //上传详情图
       pic_urlSuccess(res, file) {
-        this.addForm.pic_url = res.data.locationUrl;
-        this.editForm.pic_url = res.data.locationUrl;
+        this.addForm.pic_url = res.data.locationPath;
+        this.editForm.pic_url = res.data.locationPath;
       },
       //图片限制
       beforeAvatarUpload(file) {
@@ -363,7 +363,7 @@
             id: row.id,
             status: row.status == true ? "Y" : row.status == false ? "N" : "未知"
           }
-          updateStatus(para).then((res) => {
+          insertProductNew(para).then((res) => {
             let {
               status
             } = res
@@ -401,9 +401,9 @@
 				};
 				this.listLoading = true;
 				//
-				queryProductList(para).then((res) => {
+				queryProductListNew(para).then((res) => {
 					this.total = res.data.total;
-					this.users = res.data.productList;
+					this.users = res.data.dataInfo;
 					this.listLoading = false;
           var sta;
           for (var i = 0; i < this.users.length; i++) {
@@ -444,7 +444,7 @@
                 desc:String(this.editForm.depict),
                 rule:String(this.editForm.rule)
               }
-							updateProduct(para).then((res) => {
+							insertProductNew(para).then((res) => {
                 let {status,message}=res;
                 if (status==200) {
                   this.$notify({
@@ -474,7 +474,7 @@
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.addLoading = true;
 							let para = Object.assign({}, this.addForm);
-							insertProduct(para).then((res) => {
+							insertProductNew(para).then((res) => {
                 let {status,message}=res;
                 if (status==200) {
                   this.$notify({

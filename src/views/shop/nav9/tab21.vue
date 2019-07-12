@@ -12,7 +12,7 @@
         <el-form-item label="选择会员卡" prop="wx_card_id">
           <el-select
             v-model="expenseForm.wx_card_id"
-            placeholder="门店名称"
+            placeholder="选择会员卡"
             :multiple="false"
             filterable
             remote

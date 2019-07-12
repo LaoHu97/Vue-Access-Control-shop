@@ -566,3 +566,99 @@ export const updateConsumeDetailList = params => {
 export const addConsumeDetailActivity = params => {
   return instance.post(`${preUrlPath}/admin/wp/mer/member/addConsumeDetailActivity`, params).then(res => res.data);
 };
+
+export const updateMallProductStatus = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/updateMallProductStatus`, params).then(res => res.data);
+};
+
+export const queryProductOrderList = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/queryProductOrderList`, params).then(res => res.data);
+};
+
+export const queryActivityProduct = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/queryActivityProduct`, params).then(res => res.data);
+};
+
+export const modifyActivityStatus = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/modifyActivityStatus`, params).then(res => res.data);
+};
+
+export const queryMiniProductNameList = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/queryMiniProductNameList`, params).then(res => res.data);
+};
+
+export const insertOrSave = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/insertOrSave`, params).then(res => res.data);
+};
+
+export const queryWssembleOrderList = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/queryWssembleOrderList`, params).then(res => res.data);
+};
+
+export const queryOrderDetail2019 = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/queryOrderDetail`, params).then(res => res.data);
+};
+
+export const queryInvitationRecord = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/queryInvitationRecord`, params).then(res => res.data);
+};
+
+export const queryWdCardGoodsList = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryWdCardGoodsList`, params).then(res => res.data);
+};
+
+export const selectReceiveCardAcList = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/selectReceiveCardAcList`, params).then(res => res.data);
+};
+
+export const addWdCardGoods = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/addWdCardGoods`, params).then(res => res.data);
+};
+
+export const updateWdCardGoods = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateWdCardGoods`, params).then(res => res.data);
+};
+
+export const queryProductListNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/shopmall/queryProductList`, params).then(res => res.data);
+};
+
+export const insertProductNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/shopmall/insertProduct`, params).then(res => res.data);
+};
+
+export const shopMallOrderList = params => {
+  return instance.post(`${preUrlPath}/admin/mer/shopmall/shopMallOrderList`, params).then(res => res.data);
+};
+
+export const addWdMiniInfoNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/addWdMiniInfo`, params).then(res => res.data);
+};
+
+export const queryWdMiniInfoNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/queryWdMiniInfo`, params).then(res => res.data);
+};
+
+export const updateMiniInfoNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/updateMiniInfo`, params).then(res => res.data);
+};
+
+export const deleteWdMiniInfoNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/deleteWdMiniInfo`, params).then(res => res.data);
+};
+
+export const queryWellProduce = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/queryWellProduce`, params).then(res => res.data);
+};
+
+export const insertWellProduce = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/insertWellProduce`, params).then(res => res.data);
+};
+
+export const deleteWellProduce = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/deleteWellProduce`, params).then(res => res.data);
+};
+
+export const updateWellProduce = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/updateWellProduce`, params).then(res => res.data);
+};

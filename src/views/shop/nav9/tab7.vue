@@ -231,9 +231,16 @@
 				var channel_type=row.channel_type;
 				sessionStorage.setItem('id', JSON.stringify(id));
 				sessionStorage.setItem('channel_type', JSON.stringify(channel_type));
-				this.$router.push({
-					path: '/index3/tab7-modify-v',
-				});
+				if (row.card_type === 'WDGIFT_COUPON' || row.card_type === 'FREQUENCY') {
+					this.$router.push({
+						path: '/index3/tab12-v',
+						query: {card_type: row.card_type}
+					});
+				}else{
+					this.$router.push({
+						path: '/index3/tab7-modify-v',
+					});
+				}
 			},
 			//卡券状态转换
 			status:function (row,column) {

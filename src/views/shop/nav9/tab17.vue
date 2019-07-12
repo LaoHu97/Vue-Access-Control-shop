@@ -95,17 +95,11 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let para = util.deepcopy(this.expenseForm);
-          para.activityRule.map((data, index) => {
-            data.name = "消费规则" + (index + 1);
-            data.amount = data.amount.toString();
-            return;
-          });
           para.begin_time = para.dateTimes[0];
           para.end_time = para.dateTimes[1];
           delete para.dateTimes;
           if (this.$route.query.id) {
             para.id = this.$route.query.id;
-            delete para.activityRule;
             updateConsumeActivity(para).then(res => {
               this.$message({
                 message: res.message,

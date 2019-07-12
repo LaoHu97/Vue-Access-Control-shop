@@ -271,7 +271,7 @@ export default {
         this.goodsForm.small_url = row.small_url
         let pic_url = []
         JSON.parse(row.pic_url).map(data => {
-          pic_url.push({name: data, url: data})
+          pic_url.push({name: data, url: data, response:{data: {locationPath: data}}})
         })
         this.goodsForm.pic_url = pic_url
         this.goodsForm.o_price = row.o_price
@@ -293,7 +293,7 @@ export default {
       })
     },
     imgTopRemove(file, fileList) {
-      let removeImg = file.name || file.response.data.locationPath;
+      let removeImg = file.response.data.locationPath;
       let previewImg = this.goodsForm.pic_url;
       let newArray = [];
       previewImg.map((data, index) => {
@@ -403,8 +403,6 @@ export default {
       if (this.goodsForm.id) {
         delete this.goodsForm.id
       }
-      console.log(this.goodsForm.id);
-      
     },
     handleDelete(index, row) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {

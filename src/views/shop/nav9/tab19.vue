@@ -8,7 +8,26 @@
         :rules="expenseFormRules"
         label-width="120px"
         label-position="left"
-      >
+      >  <el-form-item label="选择会员卡" prop="wx_card_id">
+          <el-select
+            v-model="expenseForm.wx_card_id"
+            placeholder="选择会员卡"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteStore"
+            :loading="searchLoading"
+            clearable
+            @focus="clickStore"
+          >
+            <el-option
+              v-for="item in optionsStore"
+              :key="item.id"
+              :value="item.wxcard_id"
+              :label="item.title"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="活动名称" prop="name">
           <el-input v-model="expenseForm.name" placeholder="活动名称"></el-input>
         </el-form-item>
@@ -67,7 +86,7 @@
                   v-for="item in optionsCoupons"
                   :key="item.id"
                   :label="item.title"
-                  :value="item.id"
+                  :value="item.card_id"
                 ></el-option>
               </el-select>金额
               <el-input-number v-model="item.bonus" style="width:80px" :precision="2" :step="0.00" :controls="false"></el-input-number>积分
@@ -93,13 +112,15 @@ import {
   addDepositActivity,
   selectStoreListNew,
   selectDepositByPk,
-  updateDepositActivity
+  updateDepositActivity,
+  selectMemberCard
 } from "../../../api/shop";
 export default {
   data() {
     return {
       value1: "",
       expenseForm: {
+        wx_card_id: "",
         name: "",
         dateTimes: "",
         apply_sid: "",
@@ -156,6 +177,9 @@ export default {
         ],
         apply_sid: [
           { required: true, message: "请选择门店", trigger: "change" }
+        ],
+        wx_card_id: [
+          { required: true, message: "请选择门店", trigger: "change" }
         ]
       },
       optionsCoupons: [],
@@ -207,12 +231,12 @@ export default {
     },
     clickStore: function() {
       this.searchLoading = true;
-      selectStoreListNew({
-        sname: ""
+      selectMemberCard({
+        title: ""
       }).then(res => {
         this.searchLoading = false;
         let { status, data } = res;
-        this.optionsStore = data.storeList;
+        this.optionsStore = data.memCardList;
       });
     },
     remoteStore(query) {
@@ -220,11 +244,11 @@ export default {
         this.searchLoading = true;
         setTimeout(() => {
           this.searchLoading = false;
-          selectStoreListNew({
-            sname: query
+          selectMemberCard({
+            title: query
           }).then(res => {
             let { status, data } = res;
-            this.optionsStore = data.storeList;
+            this.optionsStore = data.memCardList;
           });
         }, 200);
       } else {

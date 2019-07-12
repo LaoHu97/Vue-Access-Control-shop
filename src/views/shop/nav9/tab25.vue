@@ -8,7 +8,7 @@
         </el-form-item>
         <el-form-item style="float:right">
           <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
-          <el-button type="success" v-on:click="addGoods">新增商品</el-button>
+          <el-button type="success" v-on:click="addGoods">新增会员卡</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -41,7 +41,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog :title="goodsForm.id ? '修改商品' : '新增商品'" :visible.sync="dialogAddGoodsFormVisible" width="600px">
+    <el-dialog :title="goodsForm.id ? '修改会员卡' : '新增会员卡'" :visible.sync="dialogAddGoodsFormVisible" @close="handleClose('goodsForm')" width="600px">
       <el-form
         :model="goodsForm"
         :rules="goodsFormRules"
@@ -49,27 +49,7 @@
         label-position="left"
         label-width="120px"
       >
-        <el-form-item label="所属门店" prop="sid">
-          <el-select
-            v-model="goodsForm.sid"
-            placeholder="门店名称"
-            :multiple="false"
-            filterable
-            remote
-            :remote-method="remoteStore"
-            :loading="searchLoading"
-            clearable
-            @focus="clickStore"
-          >
-            <el-option
-              v-for="item in optionsStore"
-              :key="item.id"
-              :value="item.id"
-              :label="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="商品名称" prop="card_id">
+        <el-form-item label="选择会员卡" prop="card_id">
           <el-select
             v-model="goodsForm.card_id"
             :multiple="false"
@@ -79,16 +59,20 @@
             :loading="couponSearchLoading"
             clearable
             @focus="clickCoupon"
+            @change="selectChange"
           >
             <el-option
               v-for="item in optionsCoupon"
-              :key="item.card_id"
-              :value="item.card_id"
+              :key="item.id"
+              :value="item.wxcard_id"
               :label="item.title"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="缩略图" prop="small_url">
+        <el-form-item label="商品名称" prop="product_name">
+          <el-input v-model="goodsForm.product_name" placeholder="商品名称"></el-input>
+        </el-form-item>
+        <el-form-item label="会员卡缩略图" prop="small_url">
           <el-upload
             class="avatar-uploader"
             :action="uploadAgentImage"
@@ -100,20 +84,14 @@
             <i v-else class="el-icon-plus mini-avatar-uploader"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="原图" prop="pic_url">
-          <el-upload
-            class="upload_view"
-            :action="uploadAgentImage"
-            list-type="picture-card"
-            :file-list="goodsForm.pic_url"
-            :on-success="uploadTopImgSuccess"
-            :before-upload="beforeAvatarUpload"
-            :on-remove="imgTopRemove"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
+        <el-form-item label="会员卡类型" prop="is_buy">
+          <el-radio v-model="goodsForm.is_buy" label="N">免费卡</el-radio>
+          <el-radio v-model="goodsForm.is_buy" label="Y">付费卡</el-radio>
         </el-form-item>
-        <el-form-item label="原价" prop="o_price">
+        <el-form-item label="购买说明" prop="depict">
+          <el-input v-model="goodsForm.depict" placeholder="购买说明"></el-input>
+        </el-form-item>
+        <el-form-item label="原价" prop="o_price" v-if="goodsForm.is_buy === 'Y'">
           <el-input-number
             :controls="false"
             :min="0"
@@ -122,7 +100,7 @@
             label="原价"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="现价" prop="n_price">
+        <el-form-item label="现价" prop="n_price" v-if="goodsForm.is_buy === 'Y'">
           <el-input-number
             :controls="false"
             :min="0"
@@ -131,7 +109,7 @@
             label="现价"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="会员价" prop="v_price">
+        <el-form-item label="会员价" prop="v_price" v-if="goodsForm.is_buy === 'Y'">
           <el-input-number
             :controls="false"
             :min="0"
@@ -143,21 +121,15 @@
         <el-form-item label="库存" prop="stock">
           <el-input v-model="goodsForm.stock" placeholder="库存"></el-input>
         </el-form-item>
-        <el-form-item label="显示销售量" prop="base_count">
-          <el-input v-model="goodsForm.base_count" placeholder="显示销售量"></el-input>
-        </el-form-item>
-        <el-form-item label="日期时间" prop="dateTimes">
-          <el-date-picker
-            v-model="goodsForm.dateTimes"
-            type="datetimerange"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="timestamp"
-            :default-time="['00:00:00', '00:00:00']"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="商品描述" prop="depict">
-          <el-input v-model="goodsForm.depict" placeholder="商品描述"></el-input>
+        <el-form-item label="开卡有礼规则" prop="pay_rule_id" v-if="goodsForm.is_buy === 'Y'">
+          <el-select v-model="goodsForm.pay_rule_id" placeholder="请选择">
+            <el-option
+              v-for="item in optionsPayRule"
+              :key="item.id"
+              :label="item.rule_name"
+              :value="item.id">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -183,12 +155,12 @@
 <script>
 import * as util from "../../../util/util.js";
 import {
-  queryMiniProductList,
-  selectStoreListNew,
-  updateProductNew,
+  queryWdCardGoodsList,
   uploadAgentImage,
-  queryCouponListNew,
-  updateMallProductStatus
+  selectReceiveCardAcList,
+  selectMemberCard,
+  addWdCardGoods,
+  updateWdCardGoods
 } from "../../../api/shop";
 export default {
   data() {
@@ -205,51 +177,34 @@ export default {
 
       dialogAddGoodsFormVisible: false,
       goodsForm: {
-        sid: "",
         card_id: "",
+        product_name: "",
         small_url: "",
-        pic_url: [],
         o_price: "",
         n_price: "",
         v_price: "",
         stock: "",
-        base_count: "",
-        dateTimes: "",
-        depict: ""
+        is_buy: "Y",
+        depict: "",
+        pay_rule_id: ""
       },
-      searchLoading: false,
-      optionsStore: [],
       optionsCoupon: [],
+      optionsPayRule: [],
       couponSearchLoading: false,
       goodsFormRules: {
-        sid: [{ required: true, message: "请选择门店", trigger: "change" }],
         card_id: [{ required: true, message: "请选择卡券", trigger: "change" }],
+        product_name: [{ required: true, message: "请输入商品名称", trigger: "blur" }],
         small_url: [
           { required: true, message: "请上传图片", trigger: "change" }
         ],
-        pic_url: [
-          {
-            type: "array",
-            required: true,
-            message: "请上传图片",
-            trigger: "change"
-          }
+        is_buy: [
+          { required: true, message: '请选择', trigger: 'change' }
         ],
+        depict: [{ required: true, message: "请输入", trigger: "blur" }],
         o_price: [{ required: true, message: "请输入原价", trigger: "blur" }],
         n_price: [{ required: true, message: "请输入现价", trigger: "blur" }],
         v_price: [{ required: true, message: "请输入会员价", trigger: "blur" }],
-        stock: [{ required: true, message: "请输入库存", trigger: "blur" }],
-        base_count: [
-          { required: true, message: "请输入显示销量", trigger: "blur" }
-        ],
-        dateTimes: [
-          {
-            type: "array",
-            required: true,
-            message: "请选择日期时间",
-            trigger: "change"
-          }
-        ]
+        stock: [{ required: true, message: "请输入库存", trigger: "blur" }]
       }
     };
   },
@@ -264,24 +219,30 @@ export default {
       this.dialogAddGoodsFormVisible = true
       this.$nextTick(() => {
         this.goodsForm.id = row.id
-        this.goodsForm.sid = row.sid
-        this.optionsStore = [{id: row.sid, value: row.store_name}]
         this.goodsForm.card_id = row.card_id
-        this.optionsCoupon = [{card_id: row.card_id, title: row.product_name}]
+        this.clickCoupon()
+        this.goodsForm.product_name = row.product_name
         this.goodsForm.small_url = row.small_url
-        let pic_url = []
-        JSON.parse(row.pic_url).map(data => {
-          pic_url.push({name: data, url: data})
-        })
-        this.goodsForm.pic_url = pic_url
         this.goodsForm.o_price = row.o_price
         this.goodsForm.n_price = row.n_price
         this.goodsForm.v_price = row.v_price
         this.goodsForm.stock = row.stock
-        this.goodsForm.base_count = row.base_count
-        this.goodsForm.dateTimes = new Array(row.start_time, row.end_time)
         this.goodsForm.depict = row.depict
+        this.goodsForm.pay_rule_id = row.payRuleId
+        this.selectChange(row.card_id)
+        this.goodsForm.is_buy = row.isBuy
       })
+    },
+    selectChange(e){
+      let para = {
+        wx_card_id: e
+      }
+      selectReceiveCardAcList(para).then(res => {
+        this.optionsPayRule = res.data.receiveActivity
+      })
+    },
+    handleClose(formName){
+      this.$refs[formName].resetFields();
     },
     switchChange(e){
       let para = {
@@ -291,23 +252,6 @@ export default {
       updateMallProductStatus(para).then(res => {
         this.getUsers()
       })
-    },
-    imgTopRemove(file, fileList) {
-      let removeImg = file.name || file.response.data.locationPath;
-      let previewImg = this.goodsForm.pic_url;
-      let newArray = [];
-      previewImg.map((data, index) => {
-        if (data !== removeImg && data.name !== removeImg) {
-          newArray.push(data);
-        }
-        return;
-      });
-      this.goodsForm.pic_url = newArray;
-    },
-    uploadTopImgSuccess(res, file) {
-      if (res.status === 200) {
-        this.goodsForm.pic_url.push(res.data.locationPath);
-      }
     },
     handleAvatarSuccess(res, file) {
       if (res.status === 200) {
@@ -333,10 +277,17 @@ export default {
           if (!para.id) {
             delete para.id
           }
-          updateProductNew(para).then(res => {
-            this.dialogAddGoodsFormVisible = false;
-            this.getUsers()
-          });
+          if (para.id) {
+            updateWdCardGoods(para).then(res => {
+              this.dialogAddGoodsFormVisible = false;
+              this.getUsers()
+            });
+          }else{
+            addWdCardGoods(para).then(res => {
+              this.dialogAddGoodsFormVisible = false;
+              this.getUsers()
+            });
+          }
         } else {
           console.log("error submit!!");
           return false;
@@ -347,12 +298,11 @@ export default {
     clickCoupon: function() {
       this.couponSearchLoading = true;
       let para = {
-        title: "",
-        pagNum: 1
+        title: ""
       };
-      queryCouponListNew(para).then(res => {
+      selectMemberCard(para).then(res => {
         this.couponSearchLoading = false;
-        this.optionsCoupon = res.data.couponList;
+        this.optionsCoupon = res.data.memCardList;
       });
     },
     remoteCoupon(query) {
@@ -361,41 +311,14 @@ export default {
         setTimeout(() => {
           this.couponSearchLoading = false;
           let para = {
-            title: query,
-            pagNum: 1
+            title: query
           };
-          queryCouponListNew(para).then(res => {
-            this.optionsCoupon = res.data.couponList;
+          selectMemberCard(para).then(res => {
+            this.optionsCoupon = res.data.memCardList;
           });
         }, 200);
       } else {
         this.optionsCoupon = [];
-      }
-    },
-    clickStore: function() {
-      this.searchLoading = true;
-      selectStoreListNew({
-        sname: ""
-      }).then(res => {
-        this.searchLoading = false;
-        let { status, data } = res;
-        this.optionsStore = data.storeList;
-      });
-    },
-    remoteStore(query) {
-      if (query !== "") {
-        this.searchLoading = true;
-        setTimeout(() => {
-          this.searchLoading = false;
-          selectStoreListNew({
-            sname: query
-          }).then(res => {
-            let { status, data } = res;
-            this.optionsStore = data.storeList;
-          });
-        }, 200);
-      } else {
-        this.optionsStore = [];
       }
     },
     addGoods() {
@@ -403,8 +326,6 @@ export default {
       if (this.goodsForm.id) {
         delete this.goodsForm.id
       }
-      console.log(this.goodsForm.id);
-      
     },
     handleDelete(index, row) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -447,9 +368,9 @@ export default {
         pageNum: this.pageNum
       };
       this.listLoading = true;
-      queryMiniProductList(para).then(res => {
+      queryWdCardGoodsList(para).then(res => {
         this.listLoading = false;
-        this.users = res.data.queryMiniProductList;
+        this.users = res.data.wCardGoodsList;
         this.total = res.data.total;
       });
     }
