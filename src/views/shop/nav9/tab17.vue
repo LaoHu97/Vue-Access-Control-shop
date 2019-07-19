@@ -44,7 +44,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('expenseForm')">立即创建</el-button>
-          <el-button>取消</el-button>
+          <el-button @click="$router.go(-1)">取消</el-button>
         </el-form-item>
       </el-form>
     </div>

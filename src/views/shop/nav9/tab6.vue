@@ -185,7 +185,7 @@ export default {
       return util.number_format(row.account_balance, 2, ".", ",")
     },
     reason_idformatter(row, column){
-      return row.reason_id === 'CZ' ? '充值' : row.reason_id === 'XF' ? '消费' : row.reason_id === 'REFUND' ? '退款' : row.reason_id === 'TG' ? '团购' : row.reason_id === 'PT' ? '拼团' : '未知'
+      return row.reason_id === 'CZ' ? '充值' : row.reason_id === 'XF' ? '消费' : row.reason_id === 'REFUND' ? '退款' : row.reason_id === 'TG' ? '团购' : row.reason_id === 'PT' ? '拼团' : row.reason_id === 'CZZS' ? '充值赠送' : '未知'
     },
     codeClick() {
       sendVerCode({

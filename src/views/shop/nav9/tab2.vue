@@ -50,10 +50,8 @@
 				};
 				this.listLoading = true;
 				queryStoreListNew(para).then((res) => {
-					console.log(res);
-					
-					this.total = res.data.resutData.totalCount;
-					this.users = res.data.resutData.storeList
+					this.total = res.data.total
+					this.users = res.data.storeList
 					this.listLoading = false;
 				});
 			},
@@ -62,6 +60,16 @@
 				synStoreListNew().then((res)=>{
 					let {status,message}=res;
 					if (status==200) {
+						this.page = 1
+						let para = {
+							pageNum: this.page,
+						};
+						this.listLoading = true;
+						queryStoreListNew(para).then((res) => {
+							this.total = res.data.total;
+							this.users = res.data.storeList
+							this.listLoading = false;
+						});
 						this.$notify({
 							title: '成功',
 							message: message,
@@ -74,16 +82,6 @@
 						});
 					}
 				})
-				this.page = 1
-				let para = {
-					pageNum: this.page,
-				};
-				this.listLoading = true;
-				queryStoreListNew(para).then((res) => {
-					this.total = res.data.totalCount;
-					this.users = res.data.storeList
-					this.listLoading = false;
-				});
 			},
 		},
 		mounted() {

@@ -39,7 +39,7 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             value-format="timestamp"
-            :default-time="['00:00:00', '00:00:00']"
+            :default-time="['00:00:00', '23:59:59']"
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="优惠券" prop="wd_coupon_card_id">
@@ -54,7 +54,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('expenseForm')">{{$route.query.id ? '确认修改' : '立即创建'}}</el-button>
-          <el-button>取消</el-button>
+          <el-button @click="$router.go(-1)">取消</el-button>
         </el-form-item>
       </el-form>
     </div>

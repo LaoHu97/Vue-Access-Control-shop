@@ -32,10 +32,10 @@
         </el-table-column>
         <el-table-column prop="actual_balance" label="余额（元）" sortable="custom" min-width="130" :formatter="format_actual_balance">
         </el-table-column>
-        <el-table-column align="center" label="操作" width="480">
+        <el-table-column align="center" label="操作" width="400">
           <template slot-scope="scope">
-            <el-button size="mini" type="info" @click="makeupEdit(scope.$index, scope.row)">线下消费补录</el-button>
-            <el-button size="mini" type="warning" @click="resetPassword(scope.$index, scope.row)">会员卡支付密码重置</el-button>
+            <!-- <el-button size="mini" type="info" @click="makeupEdit(scope.$index, scope.row)">线下消费补录</el-button> -->
+            <!-- <el-button size="mini" type="warning" @click="resetPassword(scope.$index, scope.row)">会员卡支付密码重置</el-button> -->
             <el-button size="mini" type="success" @click="handleEdit(scope.$index, scope.row)">会员余额记录</el-button>
             <el-button size="mini" type="success" @click="handleJiLog(scope.$index, scope.row)">会员积分记录</el-button>
             <el-button size="mini" type="primary" @click="handleRecharge(scope.$index, scope.row)">充值</el-button>

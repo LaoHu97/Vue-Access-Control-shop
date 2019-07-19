@@ -16,8 +16,30 @@
 			</el-form>
 		</el-row>
     <el-dialog title="卡券核销" :visible.sync="dialogVisible" :close-on-click-modal="false">
-      <el-input v-model="cardinput" placeholder="请输入卡券号" class="nav4_tab5_input"><el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button></el-input>
-      <el-row class="cardinput" :gutter="50" v-if="displayCard">
+			<el-form label-position="left">
+        <el-form-item label="所属门店">
+          <el-select
+            v-model="sid"
+            placeholder="门店名称"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteStore"
+            :loading="searchLoading"
+            clearable
+            @focus="clickStore"
+          >
+            <el-option
+              v-for="item in optionsStore"
+              :key="item.id"
+              :value="item.id"
+              :label="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+				<el-input v-model="cardinput" placeholder="请输入卡券号" class="nav4_tab5_input"><el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button></el-input>
+			</el-form>
+			<el-row class="cardinput" :gutter="50" v-if="displayCard">
         <el-col :span="8"><img src="http://s.404.cn/tpl/static/card/images/new/demo_card.png" alt="示例" width="100%"></el-col>
         <el-col :span="16">
           <el-steps :space="120" direction="vertical" :active="1">
@@ -58,17 +80,13 @@
 		<!--列表-->
 		<div v-loading="listLoading">
 			<el-table :data="users" highlight-current-row style="width: 100%;" border>
-				<el-table-column prop="code" label="卡券号" min-width="120">
-				</el-table-column>
 				<el-table-column prop="title" label="卡券名称" min-width="140">
 				</el-table-column>
-				<el-table-column prop="store_name" label="门店" min-width="190">
+				<el-table-column prop="code" label="卡券号" min-width="120">
 				</el-table-column>
 				<el-table-column prop="consume_source" label="核销方式" :formatter="consume_source" min-width="120">
 				</el-table-column>
 				<el-table-column prop="status" label="核销状态" :formatter="statusformatter" min-width="120">
-				</el-table-column>
-				<el-table-column prop="update_time" label="时间" :formatter="update_time" min-width="160">
 				</el-table-column>
 			</el-table>
 		</div>
@@ -84,7 +102,7 @@
 <script>
 	import * as util from '../../../util/util.js'
 	//
-	import { queryCodeNew, consumeCodeNew, queryConsumeListNew } from '../../../api/shop';
+	import { queryCodeNew, consumeCodeNew, queryConsumeListNew, selectStoreListNew } from '../../../api/shop';
 	export default {
 		data() {
 			return {
@@ -109,7 +127,11 @@
 				startTime:'',
 				endTime:'',
 				code:'',
-				description:''
+				description:'',
+
+				optionsStore: [],
+				sid: '',
+				searchLoading: false
 			}
 		},
 		methods: {
@@ -139,6 +161,12 @@
 				this.moreClick=true;
 			},
 			searchClick(){
+				if (!this.sid) {
+					return this.$message({
+						message: '请先选择门店',
+						type: 'warning'
+					});
+				}
 				let para={
 					code:this.cardinput
 				}
@@ -150,8 +178,13 @@
 						this.logoUrl=res.data.resultMap.logoUrl;
 						this.status=res.data.resultMap.status;
 						this.title=res.data.resultMap.title;
-						this.startTime=util.formatDate.format(new Date(res.data.resultMap.startTime*1000), 'yyyy-MM-dd');
-						this.endTime=util.formatDate.format(new Date(res.data.resultMap.endTime*1000), 'yyyy-MM-dd');;
+						if (res.data.resultMap.code.length === 12) {
+							this.startTime=util.formatDate.format(new Date(res.data.resultMap.startTime*1000), 'yyyy-MM-dd');
+							this.endTime=util.formatDate.format(new Date(res.data.resultMap.endTime*1000), 'yyyy-MM-dd');;
+						}else{
+							this.startTime=util.formatDate.format(new Date(res.data.resultMap.startTime), 'yyyy-MM-dd');
+							this.endTime=util.formatDate.format(new Date(res.data.resultMap.endTime), 'yyyy-MM-dd');;
+						}
 						this.code=res.data.resultMap.code;
 						this.description=res.data.resultMap.description;
 					}else {
@@ -159,10 +192,37 @@
 					}
 				})
 			},
+			clickStore: function() {
+				this.searchLoading = true;
+				selectStoreListNew({
+					title: ""
+				}).then(res => {
+					this.searchLoading = false;
+					let { status, data } = res;
+					this.optionsStore = data.storeList;
+				});
+			},
+			remoteStore(query) {
+				if (query !== "") {
+					this.searchLoading = true;
+					setTimeout(() => {
+						this.searchLoading = false;
+						selectStoreListNew({
+							title: query
+						}).then(res => {
+							let { status, data } = res;
+							this.optionsStore = data.storeList;
+						});
+					}, 200);
+				} else {
+					this.optionsStore = [];
+				}
+			},
 			submitClick(){
 				let para={
 					id:this.id,
 					code:this.cardinput,
+					sid: this.sid
 				}
 				consumeCodeNew(para).then((res)=>{
 					let {status,message}=res;

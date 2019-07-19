@@ -311,7 +311,7 @@
             <span
               class="title_xiaofei"
               style="border-top-left-radius: 0px;border-bottom-left-radius: 0px;border-top-right-radius: 4px;border-bottom-right-radius: 4px;"
-            >元</span>
+            >分</span>
           </div>
         </el-form-item>
         <el-form-item label="抵扣条件" v-if="this.form_01.supply_bonus">
@@ -326,7 +326,7 @@
             <span
               class="title_xiaofei"
               style="border-top-left-radius: 0px;border-bottom-left-radius: 0px;width:105px;"
-            >元可用，单笔上限</span>
+            >分可用，单笔上限</span>
             <input class="title_inpu" v-model="form_01.max_reduce_bonus" placeholder="如：10" style>
             <span
               class="title_xiaofei"

@@ -15,6 +15,12 @@
       <el-form-item label="会员卡号">
         <el-input v-model="filters.card_no" class="fixed_search_input" placeholder="会员卡号"></el-input>
       </el-form-item>
+      <el-form-item label="类型">
+        <el-select v-model="filters.openidType" placeholder="请选择">
+          <el-option label="公众号" value="MP"></el-option>
+          <el-option label="小程序" value="MINI"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item style="float:right">
         <el-button type="primary" @click="getUsers" round>查询</el-button>
       </el-form-item>
@@ -77,10 +83,9 @@ export default {
       },
       filters: {
         card_no: '',
-        status: '',
         startTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate()),
         endTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate(), 23, 59, 59),
-        reason_id: ''
+        openidType: ''
       },
 
       users: [],
@@ -95,7 +100,7 @@ export default {
       return util.formatDate.format(new Date(row.creat_time), 'yyyy/MM/dd hh:mm:ss');
     },
     openid_type: function (row, column) {
-      return row.openid_type === '1' ? '小程序' : row.openid_type === '2' ? '公众号' : '未知'
+      return row.openid_type === 'MINI' ? '小程序' : row.openid_type === 'MP' ? '公众号' : '未知'
     },
     handleCurrentChange(val) {
       this.page = val;
@@ -110,10 +115,9 @@ export default {
       let para = {
         pagNum: this.page,
         card_no: this.filters.card_no,
-        status: this.filters.status,
         startTime: this.filters.startTime,
         endTime: this.filters.endTime,
-        reason_id: this.filters.reason_id
+        openidType: this.filters.openidType
       };
       para.startTime = (!para.startTime || para.startTime == '') ? '' : String(Date.parse(util.formatDate.format(new Date(para.startTime), 'yyyy/MM/dd hh:mm:ss'))); //开始时间
       para.endTime = (!para.endTime || para.endTime == '') ? '' : String(Date.parse(util.formatDate.format(new Date(para.endTime), 'yyyy/MM/dd hh:mm:ss'))); //开始时间

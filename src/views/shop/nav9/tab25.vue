@@ -21,14 +21,13 @@
         <el-table-column prop="n_price" label="现价(￥)"></el-table-column>
         <el-table-column prop="o_price" label="原价(￥)"></el-table-column>
         <el-table-column prop="v_price" label="会员价(￥)"></el-table-column>
+        <el-table-column prop="status" label="商品状态" :formatter="formatterStatus"></el-table-column>
         <el-table-column label="状态">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
                 active-value="Y"
                 inactive-value="N"
-                active-text="上架"
-                inactive-text="下架"
                 @change="switchChange(scope.row)">
               </el-switch>
             </template>
@@ -160,7 +159,8 @@ import {
   selectReceiveCardAcList,
   selectMemberCard,
   addWdCardGoods,
-  updateWdCardGoods
+  updateWdCardGoods,
+  updateReceiveCardAcStatus
 } from "../../../api/shop";
 export default {
   data() {
@@ -215,6 +215,9 @@ export default {
         "yyyy-MM-dd hh:mm:ss"
       );
     },
+    formatterStatus: function(row) {
+      return row.status === "Y" ? "启用" : row.status === "N" ? "未启用" : "未知";
+    },
     handleEditor(index, row) {
       this.dialogAddGoodsFormVisible = true
       this.$nextTick(() => {
@@ -249,7 +252,7 @@ export default {
         id: e.id,
         status: e.status
       }
-      updateMallProductStatus(para).then(res => {
+      updateWdCardGoods(para).then(res => {
         this.getUsers()
       })
     },

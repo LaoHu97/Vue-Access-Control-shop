@@ -93,7 +93,7 @@ export default {
       return util.formatDate.format(new Date(row.use_time), 'yyyy/MM/dd hh:mm:ss');
     },
     formatterStatus: function(row) {
-      return row.status === '1' ? '成功' : row.status === '2' ? '失败' : '未知'
+      return row.status === '2' ? '成功' : row.status === '1' ? '失败' : '未知'
     },
     handleCurrentChange(val) {
       this.page = val;

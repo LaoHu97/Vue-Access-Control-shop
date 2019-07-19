@@ -15,13 +15,13 @@
             :multiple="false"
             filterable
             remote
-            :remote-method="remoteStore"
+            :remote-method="remoteCard"
             :loading="searchLoading"
             clearable
-            @focus="clickStore"
+            @focus="clickCard"
           >
             <el-option
-              v-for="item in optionsStore"
+              v-for="item in optionsCard"
               :key="item.id"
               :value="item.wxcard_id"
               :label="item.title"
@@ -64,7 +64,7 @@
         <div v-if="!$route.query.id">
           <el-form-item
             v-for="(item, index) in expenseForm.activityRule"
-            :label="'投放规则' + (index + 1)"
+            :label="'充值规则' + (index + 1)"
             :key="item.key"
             :prop="'activityRule.' + index + '.amount'"
             :rules="{
@@ -96,7 +96,7 @@
         </div>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('expenseForm')">立即创建</el-button>
-          <el-button>取消</el-button>
+          <el-button @click="$router.go(-1)">取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -184,7 +184,8 @@ export default {
       },
       optionsCoupons: [],
       searchLoading: false,
-      optionsStore: []
+      optionsStore: [],
+      optionsCard: []
     };
   },
   methods: {
@@ -193,7 +194,7 @@ export default {
         if (valid) {
           let para = util.deepcopy(this.expenseForm);
           para.activityRule.map((data, index) => {
-            data.name = "消费规则" + (index + 1);
+            data.name = "充值规则" + (index + 1);
             data.amount = data.amount.toString();
             return;
           });
@@ -229,17 +230,17 @@ export default {
         }
       });
     },
-    clickStore: function() {
+    clickCard: function() {
       this.searchLoading = true;
       selectMemberCard({
         title: ""
       }).then(res => {
         this.searchLoading = false;
         let { status, data } = res;
-        this.optionsStore = data.memCardList;
+        this.optionsCard = data.memCardList;
       });
     },
-    remoteStore(query) {
+    remoteCard(query) {
       if (query !== "") {
         this.searchLoading = true;
         setTimeout(() => {
@@ -248,7 +249,33 @@ export default {
             title: query
           }).then(res => {
             let { status, data } = res;
-            this.optionsStore = data.memCardList;
+            this.optionsCard = data.memCardList;
+          });
+        }, 200);
+      } else {
+        this.optionsCard = [];
+      }
+    },
+    clickStore: function() {
+      this.searchLoading = true;
+      selectStoreListNew({
+        title: ""
+      }).then(res => {
+        this.searchLoading = false;
+        let { status, data } = res;
+        this.optionsStore = data.storeList;
+      });
+    },
+    remoteStore(query) {
+      if (query !== "") {
+        this.searchLoading = true;
+        setTimeout(() => {
+          this.searchLoading = false;
+          selectStoreListNew({
+            title: query
+          }).then(res => {
+            let { status, data } = res;
+            this.optionsStore = data.storeList;
           });
         }, 200);
       } else {
@@ -257,12 +284,14 @@ export default {
     },
     getEditDele(id) {
       selectDepositByPk({ id: parseInt(this.$route.query.id) }).then(res => {
+        this.expenseForm.wx_card_id = res.data.depositActivity.wx_card_id;
         this.expenseForm.name = res.data.depositActivity.name;
         this.expenseForm.dateTimes = new Array(
           res.data.depositActivity.begin_time,
           res.data.depositActivity.end_time
         );
         this.expenseForm.apply_sid = res.data.depositActivity.apply_sid;
+        this.clickCard()
       });
     }
   },

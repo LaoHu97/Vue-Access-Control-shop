@@ -662,3 +662,23 @@ export const deleteWellProduce = params => {
 export const updateWellProduce = params => {
   return instance.post(`${preUrlPath}/admin/mer/mall/updateWellProduce`, params).then(res => res.data);
 };
+
+export const updateWdFrequencyCard = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateWdFrequencyCard`, params).then(res => res.data);
+};
+
+export const updateWdGiftCoupon = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateWdGiftCoupon`, params).then(res => res.data);
+};
+
+export const queryWdGiftCouponDetail = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryWdGiftCouponDetail`, params).then(res => res.data);
+};
+
+export const addWdGiftCouponDetail = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/addWdGiftCouponDetail`, params).then(res => res.data);
+};
+
+export const updateWdGiftCouponDetail = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateWdGiftCouponDetail`, params).then(res => res.data);
+};

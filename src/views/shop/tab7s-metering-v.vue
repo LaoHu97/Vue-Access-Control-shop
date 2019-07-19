@@ -11,11 +11,35 @@
       <el-form-item label="卡券标题" prop="title">
         <el-input v-model="meterForm.title"></el-input>
       </el-form-item>
-      <el-form-item label="是否分享" prop="can_share" v-if="$route.query.card_type == '6'">
+      <el-form-item label="所属门店" prop="use_all_locations" v-if="$route.query.card_type == 'FREQUENCY'">
+        <el-radio v-model="meterForm.use_all_locations" label="Y">全部门店</el-radio>
+        <el-radio v-model="meterForm.use_all_locations" label="N">部分门店</el-radio>
+      </el-form-item>
+      <el-form-item label="选择门店" prop="store_id" v-if="$route.query.card_type == 'FREQUENCY' && meterForm.use_all_locations === 'N'">
+          <el-select
+            v-model="meterForm.store_id"
+            placeholder="门店名称"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteStore"
+            :loading="searchLoading"
+            clearable
+            @focus="clickStore"
+          >
+            <el-option
+              v-for="item in optionsStore"
+              :key="item.id"
+              :value="item.id"
+              :label="item.value"
+            ></el-option>
+          </el-select>
+      </el-form-item>
+      <el-form-item label="是否分享" prop="can_share" v-if="$route.query.card_type == 'FREQUENCY'">
         <el-radio v-model="meterForm.can_share" label="1">分享</el-radio>
         <el-radio v-model="meterForm.can_share" label="2">不分享</el-radio>
       </el-form-item>
-      <el-form-item label="次卡图片" prop="logo_url">
+      <el-form-item label="卡券图片" prop="logo_url">
         <el-upload
           class="avatar-uploader"
           :action="uploadAgentImage"
@@ -145,7 +169,7 @@
           <el-input v-model="meterForm.numWriteOff"></el-input>
         </el-form-item>
       </div>
-      <div v-if="$route.query.card_type == '7' || $route.query.card_type == 'WDGIFT_COUPON'">
+      <!-- <div v-if="$route.query.card_type == '7' || $route.query.card_type == 'WDGIFT_COUPON'">
         <el-form-item
           v-for="(items, index) in meterForm.coupons"
           :label="'优惠券' + (index + 1)"
@@ -168,7 +192,7 @@
         <el-form-item>
           <el-button @click="addDomain">新增优惠券</el-button>
         </el-form-item>
-      </div>
+      </div> -->
       <el-form-item>
         <el-button type="primary" @click="submitForm('meterForm')">立即创建</el-button>
       </el-form-item>
@@ -182,7 +206,10 @@ import {
   addWdGiftCoupon,
   queryCouponWithOutWDGifi,
   uploadAgentImage,
-  queryCouponDetails
+  queryCouponDetails,
+  updateWdFrequencyCard,
+  updateWdGiftCoupon,
+  selectStoreListNew
 } from "../../api/shop";
 export default {
   data() {
@@ -198,6 +225,8 @@ export default {
     return {
       uploadAgentImage: uploadAgentImage,
       meterForm: {
+        use_all_locations: 'Y',
+        store_id: '',
         title: "",
         can_share: "1",
         quantity: "",
@@ -211,17 +240,14 @@ export default {
         numDay: "",
         numWriteOff: "",
         week: [],
-        coupons: [
-          {
-            value: ""
-          }
-        ],
         begin_hour_minute: "",
         end_hour_minute: "",
         initialTotal: "",
         logo_url: ""
       },
       optionsCoupons: [],
+      searchLoading: false,
+      optionsStore: [],
 
       pickerOptions: {
         disabledDate(time) {
@@ -232,6 +258,12 @@ export default {
       hour_minute: false,
 
       meterFormRules: {
+        use_all_locations: [
+          { required: true, message: "请选择所属门店", trigger: "change" }
+        ],
+        store_id: [
+          { required: true, message: "请选择所属门店", trigger: "change" }
+        ],
         title: [
           { required: true, message: "请输入卡券标题", trigger: "blur" },
           { min: 2, max: 10, message: "长度在 2 到 10 个字符", trigger: "blur" }
@@ -275,12 +307,14 @@ export default {
         channel_type: String(JSON.parse(sessionStorage.getItem('channel_type')))
       }
       queryCouponDetails(para).then((res)=>{
+        this.meterForm.use_all_locations = res.data.memCard.use_all_locations
+        this.meterForm.store_id = res.data.memCard.store_id
         this.meterForm.title = res.data.memCard.title
         this.meterForm.can_share = res.data.memCard.can_share
         this.meterForm.quantity = res.data.memCard.quantity
         this.meterForm.get_limit = res.data.memCard.get_limit
         this.meterForm.initialTotal = res.data.memCard.initialTotal
-        this.meterForm.logo_url = res.data.memCard.avatarUrl
+        this.meterForm.logo_url = res.data.memCard.logo_url
         let dataInfo = JSON.parse(res.data.memCard.rolu_info)
         console.log(dataInfo);
         this.meterForm.date_info = dataInfo.dateInfo.date_info
@@ -298,30 +332,9 @@ export default {
         this.meterForm.numDay = res.data.memCard.numDay
         this.meterForm.numWriteOff = res.data.memCard.numWriteOff
         this.meterForm.week = dataInfo.timeLimit.weekList
-        // this.meterForm.coupons: [
-        //   {
-        //     value: ""
-        //   }
-        // ],
         this.meterForm.begin_hour_minute = dataInfo.timeLimit.begin_hour_minute
         this.meterForm.end_hour_minute = dataInfo.timeLimit.end_hour_minute
-        // this.meterForm.initialTotal: "",
-        // this.meterForm.logo_url: ""
       })
-    },
-    removeDomain(item) {
-      var index = this.meterForm.coupons.indexOf(item);
-      console.log(index);
-
-      if (index !== 0) {
-        this.meterForm.coupons.splice(index, 1);
-      }
-    },
-    addDomain() {
-      this.meterForm.coupons.push({
-        value: "",
-        key: Date.now()
-      });
     },
     addTime() {
       if (this.one_begin_hour_minute) {
@@ -339,6 +352,32 @@ export default {
         this.one_begin_hour_minute = false;
         this.begin_hour_minute_1 = "";
         this.end_hour_minute_1 = "";
+      }
+    },
+    clickStore: function() {
+      this.searchLoading = true;
+      selectStoreListNew({
+        title: ""
+      }).then(res => {
+        this.searchLoading = false;
+        let { status, data } = res;
+        this.optionsStore = data.storeList;
+      });
+    },
+    remoteStore(query) {
+      if (query !== "") {
+        this.searchLoading = true;
+        setTimeout(() => {
+          this.searchLoading = false;
+          selectStoreListNew({
+            title: query
+          }).then(res => {
+            let { status, data } = res;
+            this.optionsStore = data.storeList;
+          });
+        }, 200);
+      } else {
+        this.optionsStore = [];
       }
     },
     beforeAvatarUpload(file) {
@@ -362,43 +401,54 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let para = util.deepcopy(this.meterForm);
-          para.card_type =
-            this.$route.query.card_type == "1"
-              ? "GROUPON"
-              : this.$route.query.card_type == "2"
-              ? "CASH"
-              : this.$route.query.card_type == "3"
-              ? "DISCOUNT"
-              : this.$route.query.card_type == "4"
-              ? "GIFT"
-              : this.$route.query.card_type == "5"
-              ? "GENERAL_COUPON"
-              : this.$route.query.card_type == "6"
-              ? "FREQUENCY"
-              : this.$route.query.card_type == "7"
-              ? "WDGIFT_COUPON"
-              : "weizhi";
+          para.card_type = this.$route.query.card_type
           console.log(this.$route.query.card_type);
-          if (this.$route.query.card_type == "6") {
-            addWdFrequencyCard(para).then(res => {
-              this.$message({
-                message: res.message,
-                type: "success"
+          if (this.$route.query.card_type == "FREQUENCY") {
+            if (this.$route.query.card_id) {
+              para.card_id = this.$route.query.card_id
+              updateWdFrequencyCard(para).then(res => {
+                this.$message({
+                  message: res.message,
+                  type: "success"
+                });
+                this.$router.push({
+                  path: "/index3/tab7-v"
+                });
               });
-              this.$router.push({
-                path: "/index3/tab7-v"
+            }else{
+              addWdFrequencyCard(para).then(res => {
+                this.$message({
+                  message: res.message,
+                  type: "success"
+                });
+                this.$router.push({
+                  path: "/index3/tab7-v"
+                });
               });
-            });
+            }
           } else {
-            addWdGiftCoupon(para).then(res => {
-              this.$message({
-                message: res.message,
-                type: "success"
+            if (this.$route.query.card_id) {
+              para.card_id = this.$route.query.card_id
+              updateWdGiftCoupon(para).then(res => {
+                this.$message({
+                  message: res.message,
+                  type: "success"
+                });
+                this.$router.push({
+                  path: "/index3/tab7-v"
+                });
               });
-              this.$router.push({
-                path: "/index3/tab7-v"
+            }else{
+              addWdGiftCoupon(para).then(res => {
+                this.$message({
+                  message: res.message,
+                  type: "success"
+                });
+                this.$router.push({
+                  path: "/index3/tab7-v"
+                });
               });
-            });
+            }
           }
         } else {
           console.log("error submit!!");
@@ -408,7 +458,9 @@ export default {
     }
   },
   mounted() {
-    this.returnDisplay();
+    if (this.$route.query.card_id) {
+      this.returnDisplay();
+    }
     queryCouponWithOutWDGifi().then(res => {
       this.optionsCoupons = res.data.couponList;
     });

@@ -44,6 +44,7 @@
       :title="goodsForm.id ? '修改活动' : '新增活动'"
       :visible.sync="dialogAddGoodsFormVisible"
       width="600px"
+      @close="onChangeClose('goodsForm')"
     >
       <el-form
         :model="goodsForm"
@@ -52,7 +53,7 @@
         label-position="left"
         label-width="120px"
       >
-        <el-form-item label="选择商品" prop="sid">
+        <el-form-item label="选择商品" prop="productId">
           <el-select
             v-model="goodsForm.productId"
             placeholder="选择商品"
@@ -270,6 +271,9 @@ export default {
       } else {
         this.optionsStore = [];
       }
+    },
+    onChangeClose(formName) {
+      this.$refs[formName].resetFields()
     },
     addGoods() {
       this.dialogAddGoodsFormVisible = true;

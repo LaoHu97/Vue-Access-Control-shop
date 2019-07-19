@@ -258,7 +258,7 @@
             break;
           case 3 : this.$emit('login', {path: '/index2/page1', menu: '2'});
             break;
-          case 4 : this.$emit('login', {path: '/index3/tab4', menu: '3'});
+          case 4 : this.$emit('login', {path: '/index3/tab4-v', menu: '3'});
             break;
           default: this.$router.push({ path: "/notonline" });
             break;

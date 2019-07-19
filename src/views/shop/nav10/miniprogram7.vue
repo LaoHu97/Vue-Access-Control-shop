@@ -41,7 +41,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog :title="goodsForm.id ? '修改商品' : '新增商品'" :visible.sync="dialogAddGoodsFormVisible" width="600px">
+    <el-dialog :title="goodsForm.id ? '修改商品' : '新增商品'" :visible.sync="dialogAddGoodsFormVisible" @close="onChangeClose('goodsForm')" width="600px">
       <el-form
         :model="goodsForm"
         :rules="goodsFormRules"
@@ -259,6 +259,9 @@ export default {
         new Date(row.creatTime),
         "yyyy-MM-dd hh:mm:ss"
       );
+    },
+    onChangeClose(formName) {
+      this.$refs[formName].resetFields()
     },
     handleEditor(index, row) {
       this.dialogAddGoodsFormVisible = true

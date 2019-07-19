@@ -78,36 +78,26 @@
             <el-button size="small" type="primary" style="float:right;margin-left:15px;">点击上传</el-button>
           </el-upload>
         </el-form-item>
+				<el-form-item label="选择优惠券：" prop="card_id">
+					<el-select v-model="editForm.card_id" placeholder="请选择优惠券" :multiple="false" filterable remote :remote-method="remoteCard" :loading="loading" clearable @visible-change="clickCard">
+						<el-option v-for="item in optionsCard" :key="item.card_id" :value="item.card_id" :label="item.title">
+						</el-option>
+					</el-select>
+				</el-form-item>
         <el-form-item label="商品原价：" prop="oprice">
-          <el-input v-model="editForm.oprice" auto-complete="off" style="width:50%;"></el-input>
+          <el-input v-model="editForm.oprice" style="width:50%;"></el-input>
         </el-form-item>
         <el-form-item label="商品现价：" prop="nprice">
-          <el-input v-model="editForm.nprice" auto-complete="off" style="width:50%;"></el-input>
+          <el-input v-model="editForm.nprice" style="width:50%;"></el-input>
         </el-form-item>
         <el-form-item label="商品库存：" prop="stock">
-          <el-input v-model="editForm.stock" auto-complete="off" style="width:50%;"></el-input>
+          <el-input v-model="editForm.stock" style="width:50%;"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="开始时间：" prop="start_time">
-          <el-date-picker
-            v-model="editForm.start_time"
-            type="date"
-            :editable="false"
-            placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="结束时间：" prop="end_time">
-          <el-date-picker
-            v-model="editForm.end_time"
-            type="date"
-            :editable="false"
-            placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item> -->
         <el-form-item label="描述：" prop="desc">
-          <el-input type="textarea" :rows="2" v-model="editForm.depict" auto-complete="off"></el-input>
+          <el-input type="textarea" :rows="2" v-model="editForm.depict"></el-input>
         </el-form-item>
         <el-form-item label="规则：" prop="rule">
-          <el-input type="textarea" :rows="2" v-model="editForm.rule" auto-complete="off"></el-input>
+          <el-input type="textarea" :rows="2" v-model="editForm.rule"></el-input>
         </el-form-item>
       </el-form>
 			<div slot="footer" class="dialog-footer">
@@ -117,59 +107,45 @@
 		</el-dialog>
 
 		<!--新增界面-->
-		<el-dialog title="新增商品" :visible.sync="addFormVisible" :close-on-click-modal="false" width="600px">
+		<el-dialog title="新增商品" :visible.sync="addFormVisible" :close-on-click-modal="false" @close="dialogClose('addForm')" width="600px">
 			<el-form :model="addForm" label-width="120px" :rules="addFormRules" ref="addForm">
         <el-form-item label="商品缩略图：" prop="small_url">
           <el-upload class="avatar-uploader" :action="uploadImage" :data="uploaddata" :show-file-list="false" :on-success="small_urlSuccess" :before-upload="beforeAvatarUpload">
-            <img :src="addForm.small_url" style="width:50px;height:50px;float:left">
+            <i class="el-icon-plus" style="width:50px;height:50px;float:left;line-height: 50px" v-if="!addForm.small_url"></i>
+            <img :src="addForm.small_url" style="width:50px;height:50px;float:left" v-else>
             <el-button size="small" type="primary" style="float:right;margin-left:15px;">点击上传</el-button>
           </el-upload>
         </el-form-item>
         <el-form-item label="商品详情图：" prop="pic_url">
           <el-upload class="avatar-uploader" :action="uploadImage" :data="uploaddata" :show-file-list="false" :on-success="pic_urlSuccess" :before-upload="beforeAvatarUpload">
-            <img :src="addForm.pic_url" style="width:50px;height:50px;float:left">
+            <i class="el-icon-plus" style="width:50px;height:50px;float:left;line-height: 50px" v-if="!addForm.pic_url"></i>
+            <img :src="addForm.pic_url" style="width:50px;height:50px;float:left" v-else>
             <el-button size="small" type="primary" style="float:right;margin-left:15px;">点击上传</el-button>
           </el-upload>
         </el-form-item>
-				<el-form-item label="选择优惠券：">
+				<el-form-item label="选择优惠券：" prop="card_id">
 					<el-select v-model="addForm.card_id" placeholder="请选择优惠券" :multiple="false" filterable remote :remote-method="remoteCard" :loading="loading" clearable @visible-change="clickCard">
 						<el-option v-for="item in optionsCard" :key="item.card_id" :value="item.card_id" :label="item.title">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="商品名称：" prop="name">
-					<el-input v-model="addForm.name" auto-complete="off" style="width:50%;"></el-input>
+					<el-input v-model="addForm.name" style="width:50%;"></el-input>
 				</el-form-item>
         <el-form-item label="商品原价：" prop="oprice">
-          <el-input v-model="addForm.oprice" auto-complete="off" style="width:50%;"></el-input>
+          <el-input v-model="addForm.oprice" style="width:50%;"></el-input>
         </el-form-item>
         <el-form-item label="商品现价：" prop="nprice">
-          <el-input v-model="addForm.nprice" auto-complete="off" style="width:50%;"></el-input>
+          <el-input v-model="addForm.nprice" style="width:50%;"></el-input>
         </el-form-item>
         <el-form-item label="商品库存：" prop="stock">
-          <el-input v-model="addForm.stock" auto-complete="off" style="width:50%;"></el-input>
+          <el-input v-model="addForm.stock" style="width:50%;"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="开始时间：" prop="start_time">
-          <el-date-picker
-            v-model="addForm.start_time"
-            type="date"
-            :editable="false"
-            placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="结束时间：" prop="end_time">
-          <el-date-picker
-            v-model="addForm.end_time"
-            type="date"
-            :editable="false"
-            placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item> -->
         <el-form-item label="描述：" prop="desc">
-          <el-input type="textarea" :rows="2" v-model="addForm.desc" auto-complete="off"></el-input>
+          <el-input type="textarea" :rows="2" v-model="addForm.desc"></el-input>
         </el-form-item>
         <el-form-item label="规则：" prop="rule">
-          <el-input type="textarea" :rows="2" v-model="addForm.rule" auto-complete="off"></el-input>
+          <el-input type="textarea" :rows="2" v-model="addForm.rule"></el-input>
         </el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -229,7 +205,8 @@
           start_time:'',
           end_time:'',
           depict:'',
-          rule:''
+          rule:'',
+          card_id: ''
 				},
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
@@ -294,6 +271,9 @@
       },
       format_nprice(row, column) {
         return util.number_format(row.nprice, 2, ".", ",")
+      },
+      dialogClose(fromName){
+        this.$refs[fromName].resetFields()
       },
 			//商户远程搜索
 			clickCard:function () {
@@ -420,6 +400,7 @@
 			handleEdit: function (index, row) {
 				this.editFormVisible = true;
 				this.editForm = Object.assign({}, row);
+        this.clickCard()
 			},
 			//显示新增界面
 			handleAdd: function () {
