@@ -41,7 +41,7 @@
         <el-form-item label="规则名称">
           <el-input v-model="activityForm.name" placeholder="请输入内容"></el-input>
         </el-form-item>
-        <el-form-item label="充值面额(￥)">
+        <el-form-item label="消费面额(￥)">
           <el-input-number
             v-model="activityForm.amount"
             :precision="2"
@@ -166,11 +166,19 @@ export default {
         addConsumeDetailActivity(para).then(res => {
           this.activityDialogFormVisible = false
           this.getUsers()
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          });
         })
       }else{
         updateConsumeDetailList(para).then(res => {
           this.activityDialogFormVisible = false
           this.getUsers()
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          });
         })
       }
     },
@@ -239,7 +247,7 @@ export default {
   },
   mounted() {
     this.getUsers();
-    queryCouponWithOutWDGifi().then(res => {
+    queryCouponWithOutWDGifi({sid: this.$route.query.sid}).then(res => {
       this.optionsCoupons = res.data.couponList;
     });
   }

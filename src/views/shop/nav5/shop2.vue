@@ -90,8 +90,9 @@
 			//获取用户列表
 			getList() {
 				let para = {
-					pagNum: this.page,
-					status: this.filters.status
+					pageNum: this.page,
+					status: this.filters.status,
+					pageSize: 20
 				};
 				this.listLoading = true;
 				shopMallOrderList(para).then((res) => {

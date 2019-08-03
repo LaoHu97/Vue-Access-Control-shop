@@ -12,8 +12,8 @@
         <el-date-picker v-model="filters.endTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false" :editable='false'>
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="会员卡号">
-        <el-input v-model="filters.card_no" class="fixed_search_input" placeholder="会员卡号"></el-input>
+      <el-form-item label="计次卡号">
+        <el-input v-model="filters.card_no" class="fixed_search_input" placeholder="计次卡号"></el-input>
       </el-form-item>
       <el-form-item label="类型">
         <el-select v-model="filters.openidType" placeholder="请选择">
@@ -34,7 +34,7 @@
     </el-table-column>
     <el-table-column prop="name" label="所属人" min-width="120">
     </el-table-column>
-    <el-table-column prop="code" label="卡号" min-width="120">
+    <el-table-column prop="code" label="计次卡号" min-width="120">
     </el-table-column>
     <el-table-column prop="creat_time" label="领取时间" :formatter="creat_stamp" min-width="160">
     </el-table-column>
@@ -43,8 +43,6 @@
     <el-table-column prop="can_use_total" label="初始次数">
     </el-table-column>
     <el-table-column prop="surplus_total" label="剩余次数">
-    </el-table-column>
-    <el-table-column prop="mem_name" label="所属会员">
     </el-table-column>
   </el-table>
   </div>

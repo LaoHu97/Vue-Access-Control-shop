@@ -9,8 +9,6 @@
             class="fixed_search_input_datetime"
             type="datetime"
             placeholder="选择开始日期"
-            :picker-options="pickerOptions1"
-            :clearable="false"
             :editable="false"
           ></el-date-picker>
         </el-form-item>
@@ -21,8 +19,6 @@
             class="fixed_search_input_datetime"
             type="datetime"
             placeholder="选择结束日期"
-            :picker-options="pickerOptions2"
-            :clearable="false"
             :editable="false"
           ></el-date-picker>
         </el-form-item>
@@ -88,37 +84,9 @@ export default {
   data() {
     var myDate = new Date();
     return {
-      //时间控制
-      pickerOptions1: {
-        disabledDate(time) {
-          return (
-            time.getTime() > Date.now() ||
-            time.getTime() < Date.now() - 3600 * 1000 * 24 * 90
-          );
-        }
-      },
-      pickerOptions2: {
-        disabledDate(time) {
-          return (
-            time.getTime() > Date.now() ||
-            time.getTime() < Date.now() - 3600 * 1000 * 24 * 90
-          );
-        }
-      },
       filters: {
-        startTime: new Date(
-          myDate.getFullYear(),
-          myDate.getMonth(),
-          myDate.getDate()
-        ),
-        endTime: new Date(
-          myDate.getFullYear(),
-          myDate.getMonth(),
-          myDate.getDate(),
-          23,
-          59,
-          59
-        )
+        startTime: '',
+        endTime: ''
       },
 
       users: [],
@@ -150,7 +118,7 @@ export default {
     handleEdits(index,row){
       this.$router.push({
         path: "/index3/tab23-v",
-        query: {id: row.id}
+        query: {id: row.id, sid: row.apply_sid}
       });
     },
     handleEdit(index, row){

@@ -155,7 +155,7 @@
         <el-form-item label="会员卡标题" prop="title" style="width:300px;">
           <el-input v-model="form_01.title" placeholder="请输入会员卡标题" :maxlength="9"></el-input>
         </el-form-item>
-        <el-form-item label="折扣率" prop="discount" style="width:600px;">
+        <!-- <el-form-item label="折扣率" prop="discount" style="width:600px;">
           <el-input
             v-model="form_01.discount"
             placeholder="0~100之间的整数"
@@ -170,7 +170,7 @@
           <template>
             <el-checkbox v-model="form_01.supply_old_bind"></el-checkbox>
           </template>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="是否支持支付即会员" label-width="150px">
           <template>
             <el-checkbox v-model="form_01.payment_is_mem"></el-checkbox>
@@ -253,11 +253,11 @@
             </el-input>
           </template>
         </el-form-item>
-        <el-form-item label="是否支持等级">
+        <!-- <el-form-item label="是否支持等级">
           <template>
             <el-checkbox v-model="form_01.isLevel"></el-checkbox>
           </template>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="等级URL" style="width:500px;" v-if="this.form_01.isLevel">
           <template>
             <el-input placeholder="请输入内容" v-model="form_01.name_url3">

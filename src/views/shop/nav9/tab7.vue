@@ -38,7 +38,7 @@
         <el-table-column prop="quantity" label="库存"></el-table-column>
         <el-table-column prop="get_limit" label="限领次数"></el-table-column>
         <el-table-column prop="status" label="状态" min-width="90" :formatter="status"></el-table-column>
-        <el-table-column label="操作" width="290">
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button type="warning" size="mini" @click="editCard(scope.$index, scope.row)">修改</el-button>
             <el-button
@@ -51,11 +51,11 @@
               {{scope.row.status == 2 ? '已上传': '上传'}}
             </el-button>
             <el-button type="info" size="mini" @click="editQ(scope.$index, scope.row)" v-else >券规则</el-button>
-            <el-button
+            <!-- <el-button
               type="success"
               size="mini"
               @click="deliveryCode(scope.$index, scope.row)"
-            >投放二维码</el-button>
+            >投放二维码</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -183,9 +183,29 @@ export default {
           label: "兑换券"
         },
         {
+          value: "CASH",
+          label: "代金券"
+        },
+        {
+          value: "DISCOUNT",
+          label: "折扣券"
+        },
+        {
+          value: "GROUPON",
+          label: "团购券"
+        },
+        {
           value: "GENERAL_COUPON",
           label: "优惠券"
-        }
+        },
+        {
+          value: "FREQUENCY",
+          label: "计次卡"
+        },
+        {
+          value: "WDGIFT_COUPON",
+          label: "礼包券"
+        },
       ],
       users: [],
       total: 0,

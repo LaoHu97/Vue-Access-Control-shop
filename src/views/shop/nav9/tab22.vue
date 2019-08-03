@@ -266,7 +266,7 @@ export default {
   },
   mounted() {
     this.getUsers();
-    queryCouponWithOutWDGifi().then(res => {
+    queryCouponWithOutWDGifi({sid: this.$route.query.sid}).then(res => {
       this.optionsCoupons = res.data.couponList;
     });
   }

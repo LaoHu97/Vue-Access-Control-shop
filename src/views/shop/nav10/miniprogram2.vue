@@ -22,7 +22,7 @@
         <el-table-column align="center" label="操作" width="165">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <!-- <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>

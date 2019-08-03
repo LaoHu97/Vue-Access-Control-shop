@@ -24,6 +24,7 @@
         </el-form-item>
         <el-form-item label="所属门店" prop="apply_sid">
           <el-select
+            :disabled="$route.query.id"
             v-model="expenseForm.apply_sid"
             placeholder="门店名称"
             :multiple="false"
@@ -177,9 +178,9 @@ export default {
     }
   },
   async mounted() {
-    queryCouponWithOutWDGifi().then(res => {
-      this.optionsCoupons = res.data.couponList;
-    });
+    // queryCouponWithOutWDGifi().then(res => {
+    //   this.optionsCoupons = res.data.couponList;
+    // });
     if (this.$route.query.id) {
       await this.clickStore();
       this.getEditDele();

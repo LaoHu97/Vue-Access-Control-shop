@@ -155,9 +155,9 @@
         <el-form-item label="会员卡标题" prop="title" style="width:300px;">
           <el-input v-model="form_01.title" placeholder="请输入会员卡标题" :maxlength="9"></el-input>
         </el-form-item>
-        <el-form-item label="折扣率" prop="discount" style="width:300px;">
+        <!-- <el-form-item label="折扣率" prop="discount" style="width:300px;">
           <el-input v-model="form_01.discount" placeholder="0~100之间的整数" :maxlength="3"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item label="是否开通老会员绑定" label-width="150px">
         <template>
           <el-checkbox v-model="form_01.supply_old_bind"></el-checkbox>
@@ -317,7 +317,11 @@
         label-position="left"
         style="padding:0 0 0 55px;width:700px;float:left;background-color:#F9FAFC;border: 1px solid #e7e7eb"
         v-show="formDate2"
-      >
+      > 
+        <h3>领券设置</h3>
+        <el-form-item label="领券限制" prop="get_limit" style="width:300px;">
+          <el-input v-model="form_02.get_limit" placeholder="每个用户领券上限，默认为1"></el-input>
+        </el-form-item>
         <h3>销劵设置</h3>
         <h4>二维码 ： 包含卡券信息的二维码，扫描后可进行销券</h4>
         <el-form-item label="操作提示" prop="notice" style="width:300px;">
@@ -768,6 +772,7 @@ export default {
       begin_time: "2017-02-03",
       end_time: "",
       form_02: {
+        get_limit: "",
         notice: ""
       },
       form_03: {
@@ -822,7 +827,12 @@ export default {
             message: "请输入操作提示",
             trigger: "blur"
           }
-        ]
+        ],
+        get_limit: [{
+          required: true,
+          message: '请输入领劵限制',
+          trigger: 'blur'
+        }]
       },
       form_03Rules: {
         prerogative: [
@@ -935,6 +945,7 @@ export default {
           this.form_01.least_money_to_use_bonus =
             data.memCard.least_money_to_use_bonus;
           this.form_01.max_reduce_bonus = data.memCard.max_reduce_bonus;
+          this.form_02.get_limit=data.memCard.get_limit;
           this.form_02.notice = data.memCard.notice;
           this.form_03.prerogative = data.memCard.prerogative;
           this.form_03.description = data.memCard.description;
@@ -1048,7 +1059,7 @@ export default {
                 max_cost: this.form_01.max_cost, //单次消费送会员卡的金额上限
                 supply_balance: this.form_01.supply_balance, //是否支持储存
 
-                get_limit: "",
+                get_limit: this.form_02.get_limit,
                 date_info: "",
                 beginTime: "",
                 endTime: "",

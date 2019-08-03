@@ -4,7 +4,7 @@
     <el-row>
       <el-form :inline="true" :model="filters">
         <el-form-item label="商品名称">
-          <el-input v-model="filters.name" placeholder="商品名称"></el-input>
+          <el-input v-model="filters.productName" placeholder="商品名称"></el-input>
         </el-form-item>
         <el-form-item style="float:right">
           <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
@@ -60,6 +60,7 @@
             :loading="searchLoading"
             clearable
             @focus="clickStore"
+            @change="storeChange"
           >
             <el-option
               v-for="item in optionsStore"
@@ -188,15 +189,15 @@ import {
   updateProductNew,
   uploadAgentImage,
   queryCouponListNew,
-  updateMallProductStatus
+  updateMallProductStatus,
+  queryCouponWithOutWDGifi
 } from "../../../api/shop";
 export default {
   data() {
     return {
       uploadAgentImage: uploadAgentImage,
       filters: {
-        appid: "",
-        title: ""
+        productName: ''
       },
       listLoading: false,
       users: [],
@@ -259,6 +260,9 @@ export default {
         new Date(row.creatTime),
         "yyyy-MM-dd hh:mm:ss"
       );
+    },
+    storeChange(e){
+      this.goodsForm.card_id = ''
     },
     onChangeClose(formName) {
       this.$refs[formName].resetFields()
@@ -333,9 +337,25 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let para = util.deepcopy(this.goodsForm);
+          let previewArray = [];
+          para.pic_url.map(data => {
+						let val = ''
+            if (data.name) {
+              val = data.name;
+            } else {
+              val = data;
+            }
+            previewArray.push(val);
+            return;
+          });
+          para.pic_url = previewArray;
           if (!para.id) {
             delete para.id
           }
+          console.log(para);
+          para.n_price = para.n_price * 100
+          para.o_price = para.o_price * 100
+          para.v_price = para.v_price * 100
           updateProductNew(para).then(res => {
             this.dialogAddGoodsFormVisible = false;
             this.getUsers()
@@ -351,9 +371,9 @@ export default {
       this.couponSearchLoading = true;
       let para = {
         title: "",
-        pagNum: 1
+        sid: this.goodsForm.sid
       };
-      queryCouponListNew(para).then(res => {
+      queryCouponWithOutWDGifi(para).then(res => {
         this.couponSearchLoading = false;
         this.optionsCoupon = res.data.couponList;
       });
@@ -365,9 +385,9 @@ export default {
           this.couponSearchLoading = false;
           let para = {
             title: query,
-            pagNum: 1
+            sid: this.goodsForm.sid
           };
-          queryCouponListNew(para).then(res => {
+          queryCouponWithOutWDGifi(para).then(res => {
             this.optionsCoupon = res.data.couponList;
           });
         }, 200);
@@ -378,7 +398,8 @@ export default {
     clickStore: function() {
       this.searchLoading = true;
       selectStoreListNew({
-        sname: ""
+        sname: "",
+        use_all_locations: 'N'
       }).then(res => {
         this.searchLoading = false;
         let { status, data } = res;
@@ -391,7 +412,8 @@ export default {
         setTimeout(() => {
           this.searchLoading = false;
           selectStoreListNew({
-            sname: query
+            sname: query,
+            use_all_locations: 'N'
           }).then(res => {
             let { status, data } = res;
             this.optionsStore = data.storeList;
@@ -445,12 +467,19 @@ export default {
     },
     gerList() {
       let para = {
+        productName: this.filters.productName,
         pageNum: this.pageNum
       };
       this.listLoading = true;
       queryMiniProductList(para).then(res => {
         this.listLoading = false;
-        this.users = res.data.queryMiniProductList;
+        this.users = res.data.queryMiniProductList
+        this.users.map(data => {
+          data.n_price = data.n_price / 100
+          data.o_price = data.o_price / 100
+          data.v_price = data.v_price / 100
+          return
+        });
         this.total = res.data.total;
       });
     }

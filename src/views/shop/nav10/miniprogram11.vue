@@ -224,7 +224,7 @@ export default {
     gerList() {
       let para = {
         pageNum: this.pageNum,
-        pageSize: 10,
+        pageSize: 20,
         title: this.filters.title
       };
       this.listLoading = true;

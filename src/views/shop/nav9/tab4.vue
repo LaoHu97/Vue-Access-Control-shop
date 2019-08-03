@@ -12,39 +12,101 @@
         <el-form-item style="float:right">
           <el-button type="primary" @click="getUsers" round>查询</el-button>
           <el-button type="primary" v-on:click="cogradientCard" round>同步会员卡</el-button>
+          <el-upload
+            class="upload_class"
+            :action="uploadExcel"
+            :show-file-list="false"
+            :on-success="uploadExcelSuccess"
+            :before-upload="uploadExcelUpload"
+          >
+            <el-button size="small" type="primary">批量绑定老会员</el-button>
+          </el-upload>
         </el-form-item>
       </el-form>
     </el-row>
     <!--列表-->
     <template v-loading="listLoading">
       <el-table :data="users" border highlight-current-row @sort-change="sortChange">
-        <el-table-column prop="card_no" label="会员卡号" min-width="120">
-        </el-table-column>
-        <el-table-column prop="wx_name" label="微信昵称" min-width="120">
-        </el-table-column>
-        <el-table-column prop="name" label="持卡人" min-width="120">
-        </el-table-column>
-        <el-table-column prop="phone" label="手机号" min-width="120">
-        </el-table-column>
-        <el-table-column prop="creat_time" label="领卡时间" :formatter="creat_time" min-width="95">
-        </el-table-column>
-        <el-table-column prop="account_bouns" label="积分" sortable="custom" min-width="120">
-        </el-table-column>
-        <el-table-column prop="actual_balance" label="余额（元）" sortable="custom" min-width="130" :formatter="format_actual_balance">
-        </el-table-column>
-        <el-table-column align="center" label="操作" width="400">
+        <el-table-column prop="card_no" label="会员卡号" min-width="120"></el-table-column>
+        <el-table-column prop="wx_name" label="微信昵称" min-width="120"></el-table-column>
+        <el-table-column prop="name" label="持卡人" min-width="120"></el-table-column>
+        <el-table-column prop="phone" label="手机号" min-width="120"></el-table-column>
+        <el-table-column prop="creat_time" label="领卡时间" :formatter="creat_time" min-width="95"></el-table-column>
+        <el-table-column prop="account_bouns" label="积分" sortable="custom" min-width="120"></el-table-column>
+        <el-table-column
+          prop="actual_balance"
+          label="余额（元）"
+          sortable="custom"
+          min-width="130"
+          :formatter="format_actual_balance"
+        ></el-table-column>
+        <el-table-column align="center" label="操作" width="640">
           <template slot-scope="scope">
             <!-- <el-button size="mini" type="info" @click="makeupEdit(scope.$index, scope.row)">线下消费补录</el-button> -->
-            <!-- <el-button size="mini" type="warning" @click="resetPassword(scope.$index, scope.row)">会员卡支付密码重置</el-button> -->
-            <el-button size="mini" type="success" @click="handleEdit(scope.$index, scope.row)">会员余额记录</el-button>
-            <el-button size="mini" type="success" @click="handleJiLog(scope.$index, scope.row)">会员积分记录</el-button>
-            <el-button size="mini" type="primary" @click="handleRecharge(scope.$index, scope.row)">充值</el-button>
+            <el-button
+              size="mini"
+              type="warning"
+              @click="resetPassword(scope.$index, scope.row)"
+            >会员支付密码重置</el-button>
+            <el-button
+              size="mini"
+              type="success"
+              @click="handleEdit(scope.$index, scope.row)"
+            >会员余额记录</el-button>
+            <el-button
+              size="mini"
+              type="success"
+              @click="handleJiLog(scope.$index, scope.row)"
+            >会员积分记录</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleRecharge(scope.$index, scope.row)"
+            >充值余额</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleIntegralRecharge(scope.$index, scope.row)"
+            >充值积分</el-button>
           </template>
         </el-table-column>
       </el-table>
     </template>
-    <el-dialog title="会员充值" :visible.sync="dialogRechargeVisible" width="30%">
-      <el-form ref="formRecharge" status-icon :rules="rulesFormRecharge" :model="formRecharge" label-width="100px">
+    <el-dialog title="会员积分充值" :visible.sync="dialogIntegralRechargeVisible" width="30%">
+      <el-form
+        ref="formIntegralRecharge"
+        status-icon
+        :rules="rulesFormIntegralRecharge"
+        :model="formIntegralRecharge"
+        label-width="100px"
+      >
+        <el-form-item label="微信昵称：" class="table_recharge">
+          <span>{{formIntegralRecharge.wx_name}}</span>
+        </el-form-item>
+        <el-form-item label="会员卡号：" class="table_recharge">
+          <span>{{formIntegralRecharge.card_barcode}}</span>
+        </el-form-item>
+        <el-form-item label="充值积分：" prop="bouns" class="table_recharge">
+          <el-input v-model="formIntegralRecharge.bouns" clearable></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogIntegralRechargeVisible = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="submitIntegralRecharge('formIntegralRecharge')"
+          :loading="IntegralrechargeLoading"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="会员余额充值" :visible.sync="dialogRechargeVisible" width="30%">
+      <el-form
+        ref="formRecharge"
+        status-icon
+        :rules="rulesFormRecharge"
+        :model="formRecharge"
+        label-width="100px"
+      >
         <el-form-item label="微信昵称：" class="table_recharge">
           <span>{{formRecharge.wx_name}}</span>
         </el-form-item>
@@ -57,28 +119,66 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogRechargeVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitRecharge('formRecharge')" :loading="rechargeLoading">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="submitRecharge('formRecharge')"
+          :loading="rechargeLoading"
+        >确 定</el-button>
       </span>
     </el-dialog>
     <!--工具条-->
     <el-row>
-      <el-pagination layout="prev, pager, next" :current-page="page" @current-change="handleCurrentChange" :page-size="20" :total="total" background style="text-align:center;background:#fff;padding:15px;">
-      </el-pagination>
+      <el-pagination
+        layout="prev, pager, next"
+        :current-page="page"
+        @current-change="handleCurrentChange"
+        :page-size="20"
+        :total="total"
+        background
+        style="text-align:center;background:#fff;padding:15px;"
+      ></el-pagination>
     </el-row>
     <!--新增界面-->
-    <el-dialog title="线下消费补录" :visible.sync="addFormVisible" :close-on-click-modal="false" width="600px">
+    <el-dialog
+      title="线下消费补录"
+      :visible.sync="addFormVisible"
+      :close-on-click-modal="false"
+      width="600px"
+    >
       <el-form :model="addForm" label-width="100px" :rules="addFormRules" ref="addForm">
         <el-form-item label="选择门店" prop="store">
-          <el-select v-model="addForm.store" placeholder="请选择门店名称" :multiple="false" filterable remote :remote-method="remoteShop"
-            :loading="loading" clearable @visible-change="clickShop">
+          <el-select
+            v-model="addForm.store"
+            placeholder="请选择门店名称"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteShop"
+            :loading="loading"
+            clearable
+            @visible-change="clickShop"
+          >
             <el-option v-for="item in options" :key="item.id" :value="item.id" :label="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="选择款台" prop="emp">
-          <el-select v-model="addForm.emp" placeholder="请选择款台" :multiple="false" filterable remote :remote-method="remoteEditEmp" :loading="loadingEmp"
-            clearable @visible-change="clickEditEmp">
-            <el-option v-for="item in optionEditEmp" :key="item.eid" :value="item.eid" :label="item.value">
-            </el-option>
+          <el-select
+            v-model="addForm.emp"
+            placeholder="请选择款台"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteEditEmp"
+            :loading="loadingEmp"
+            clearable
+            @visible-change="clickEditEmp"
+          >
+            <el-option
+              v-for="item in optionEditEmp"
+              :key="item.eid"
+              :value="item.eid"
+              :label="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="消费金额" prop="amount">
@@ -98,13 +198,17 @@ import * as util from "../../../util/util.js";
 import CryptoJS from "crypto-js";
 import {
   queryMemberListNew,
-  resetMemPwd,
+  resetMemPwdNew,
   sysMemberInsert,
   selectStoreList,
   selectEmpsBySid,
   lookupUser,
   inputMemTrans,
-  memberAccountDeposit
+  memberAccountDeposit,
+  sysMemberInsertNew,
+  addBalanceByPc,
+  addBonusByPc,
+  uploadExcel
 } from "../../../api/shop";
 export default {
   data() {
@@ -120,6 +224,7 @@ export default {
       }
     };
     return {
+      uploadExcel: uploadExcel,
       filters: {
         name: "",
         card_no: ""
@@ -174,13 +279,20 @@ export default {
       rulesFormRecharge: {
         amount: [{ validator: validateAmount, trigger: "blur" }]
       },
-      rechargeLoading: false
+      rechargeLoading: false,
+
+      dialogIntegralRechargeVisible: false,
+      formIntegralRecharge: {},
+      rulesFormIntegralRecharge: {
+        bouns: [{ validator: validateAmount, trigger: "blur" }]
+      },
+      IntegralrechargeLoading: false
     };
   },
-  created () {
-    let mid = JSON.parse(sessionStorage.getItem('mid'))
+  created() {
+    let mid = JSON.parse(sessionStorage.getItem("mid"));
     if (mid !== 870) {
-      this.ifRecharge = false
+      this.ifRecharge = false;
     }
   },
   methods: {
@@ -188,29 +300,86 @@ export default {
     format_actual_balance(row, column) {
       return util.number_format(row.actual_balance, 2, ".", ",");
     },
+    uploadExcelSuccess(res, file) {
+      if (res.status === 200) {
+        this.$message({
+          message: res.message || '上传成功',
+          type: 'success'
+        });
+      }else{
+        this.$message.error(res.message || '上传错误');
+      }
+    },
+    uploadExcelUpload(file) {
+      console.log(file);
+      
+      // const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 10;
+
+      // if (!isJPG) {
+      //   this.$message.error("上传头像图片只能是 JPG 格式!");
+      // }
+      if (!isLt2M) {
+        this.$message.error("上传文件大小不能超过 10MB!");
+      }
+      return isLt2M;
+    },
+    handleIntegralRecharge(index, row) {
+      this.dialogIntegralRechargeVisible = true;
+      this.formIntegralRecharge.wx_name = row.wx_name;
+      this.formIntegralRecharge.card_barcode = row.card_barcode;
+      this.formIntegralRecharge.memberId = row.card_barcode;
+    },
+    submitIntegralRecharge(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let para = {
+            sid: "",
+            bouns: this.formIntegralRecharge.bouns,
+            code: this.formIntegralRecharge.memberId.toString()
+          };
+          this.IntegralrechargeLoading = true;
+          addBonusByPc(para).then(res => {
+            this.IntegralrechargeLoading = false;
+            if (res.status === 200) {
+              this.dialogIntegralRechargeVisible = false;
+              this.$message({
+                message: "恭喜你，充值成功",
+                type: "success"
+              });
+              this.getUsers();
+              this.$refs[formName].resetFields();
+            }
+          });
+        } else {
+          return false;
+        }
+      });
+    },
     handleRecharge(index, row) {
       this.dialogRechargeVisible = true;
       this.formRecharge.wx_name = row.wx_name;
       this.formRecharge.card_barcode = row.card_barcode;
-      this.formRecharge.memberId = row.id;
+      this.formRecharge.memberId = row.card_barcode;
     },
     submitRecharge(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let para = {
+            sid: "",
             amount: this.formRecharge.amount,
-            memberId: this.formRecharge.memberId.toString()
+            code: this.formRecharge.memberId.toString()
           };
           this.rechargeLoading = true;
-          memberAccountDeposit(para).then(res => {
+          addBalanceByPc(para).then(res => {
             this.rechargeLoading = false;
             if (res.status === 200) {
-              this.dialogRechargeVisible = false
+              this.dialogRechargeVisible = false;
               this.$message({
-                message: '恭喜你，充值成功',
-                type: 'success'
+                message: "恭喜你，充值成功",
+                type: "success"
               });
-              this.getUsers()
+              this.getUsers();
               this.$refs[formName].resetFields();
             }
           });
@@ -319,7 +488,7 @@ export default {
         cancelButtonText: "取消"
       })
         .then(({ value }) => {
-          sysMemberInsert({
+          sysMemberInsertNew({
             code: value
           }).then(res => {
             let { status, message } = res;
@@ -364,7 +533,7 @@ export default {
             ).toString(CryptoJS.enc.Hex),
             id: row.id
           };
-          resetMemPwd(para).then(res => {
+          resetMemPwdNew(para).then(res => {
             let { status, message } = res;
             if (status == 200) {
               this.$message({
@@ -445,4 +614,8 @@ export default {
   margin-bottom: 0;
   width: 50%;
 }
+.upload_class {
+  display: inline-block;
+}
 </style>
+

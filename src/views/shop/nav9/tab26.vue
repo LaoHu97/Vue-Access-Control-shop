@@ -224,7 +224,7 @@ export default {
   },
   mounted() {
     this.getUsers();
-    queryCouponWithOutWDGifi().then(res => {
+    queryCouponWithOutWDGifi({isWDGifiCoupon: 'Y'}).then(res => {
       this.optionsCoupons = res.data.couponList;
     });
   }

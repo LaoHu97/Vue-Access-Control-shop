@@ -98,9 +98,9 @@
       </el-form-item>
       <el-form-item label="可用时段" prop="resource">
         <template>
-          <el-radio class="radio" v-model="meterForm.timelimit" label="0">全部时段</el-radio>
-          <el-radio class="radio" v-model="meterForm.timelimit" label="1">部分时段</el-radio>
-          <div v-if="meterForm.timelimit === '1'">
+          <el-radio class="radio" v-model="meterForm.time_limit" label="0">全部时段</el-radio>
+          <el-radio class="radio" v-model="meterForm.time_limit" label="1">部分时段</el-radio>
+          <div v-if="meterForm.time_limit === '1'">
             <p>日期：</p>
             <el-checkbox-group v-model="meterForm.week">
               <el-checkbox label="MONDAY">周一</el-checkbox>
@@ -112,7 +112,7 @@
               <el-checkbox label="SUNDAY">周日</el-checkbox>
             </el-checkbox-group>
           </div>
-          <div v-if="meterForm.timelimit === '1'">
+          <div v-if="meterForm.time_limit === '1'">
             <p>时间：</p>
             <div style="margin-bottom: 5px" v-if="hour_minute">
               <el-time-select
@@ -236,7 +236,7 @@ export default {
         date_info: "1",
         beginTime: "",
         endTime: "",
-        timelimit: "0",
+        time_limit: "0",
         numDay: "",
         numWriteOff: "",
         week: [],
@@ -288,7 +288,7 @@ export default {
         date_info: [
           { required: true, message: "请选择有效期", trigger: "change" }
         ],
-        timelimit: [
+        time_limit: [
           { required: true, message: "请输入活动名称", trigger: "blur" }
         ],
         numDay: [
@@ -328,7 +328,7 @@ export default {
 
         
 
-        this.meterForm.timelimit = dataInfo.timeLimit.time_limit
+        this.meterForm.time_limit = dataInfo.timeLimit.time_limit
         this.meterForm.numDay = res.data.memCard.numDay
         this.meterForm.numWriteOff = res.data.memCard.numWriteOff
         this.meterForm.week = dataInfo.timeLimit.weekList
@@ -357,7 +357,8 @@ export default {
     clickStore: function() {
       this.searchLoading = true;
       selectStoreListNew({
-        title: ""
+        title: "",
+        use_all_locations: 'N'
       }).then(res => {
         this.searchLoading = false;
         let { status, data } = res;
@@ -370,7 +371,8 @@ export default {
         setTimeout(() => {
           this.searchLoading = false;
           selectStoreListNew({
-            title: query
+            title: query,
+            use_all_locations: 'N'
           }).then(res => {
             let { status, data } = res;
             this.optionsStore = data.storeList;
@@ -461,9 +463,9 @@ export default {
     if (this.$route.query.card_id) {
       this.returnDisplay();
     }
-    queryCouponWithOutWDGifi().then(res => {
-      this.optionsCoupons = res.data.couponList;
-    });
+    // queryCouponWithOutWDGifi().then(res => {
+    //   this.optionsCoupons = res.data.couponList;
+    // });
   }
 };
 </script>

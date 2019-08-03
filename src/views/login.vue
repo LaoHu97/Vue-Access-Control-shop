@@ -100,7 +100,7 @@
     mounted() {
       if (process.env.NODE_ENV === 'development') {
         // 干一些测试时不可告人的事情
-        this.user.account = 'test'
+        this.user.account = '1001322'
         this.user.checkPass = '123456'
       }
       let para = {

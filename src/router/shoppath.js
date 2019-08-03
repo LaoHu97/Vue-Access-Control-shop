@@ -442,9 +442,9 @@ export default [{
       component: (resolve) => require(['../views/shop/nav9/tab13.vue'], resolve)
     }, {
       path: 'tab14-v',
-      name: '计次卡领取记录-v',
+      name: '计次卡领取-v',
       meta: {
-        title: '计次卡领取记录-v',
+        title: '计次卡领取-v',
         icon: 'table',
         noCache: true,
         code: '20180316114906_58'
@@ -452,9 +452,9 @@ export default [{
       component: (resolve) => require(['../views/shop/nav9/tab14.vue'], resolve)
     }, {
       path: 'tab15-v',
-      name: '计次卡核销记录-v',
+      name: '计次卡核销-v',
       meta: {
-        title: '计次卡核销记录-v',
+        title: '计次卡核销-v',
         icon: 'table',
         noCache: true,
         code: '20180316114906_58'
@@ -576,6 +576,17 @@ export default [{
         code: '20180316114906_58'
       },
       component: (resolve) => require(['../views/shop/nav9/tab26.vue'], resolve)
+    }, {
+      path: 'tab27-v',
+      name: '会员卡等级-v',
+      meta: {
+        title: '会员卡等级-v',
+        icon: 'table',
+        noCache: true,
+        hidden: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab27.vue'], resolve)
     }]
   }, 
   // {

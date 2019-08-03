@@ -270,30 +270,33 @@
       </el-form-item>
     </el-form>
     <!-- 表单04 -->
-    <el-form ref="form_04" :model="form_04" label-width="100px" @submit.prevent="onSubmit" label-position="left" style="padding:0 0 0 55px;width:700px;float:left;background-color:#F9FAFC;border: 1px solid #e7e7eb" v-show="formDate4">
+    <el-form ref="form_04" :model="form_04" :rules="form_04Rules" label-width="100px" @submit.prevent="onSubmit" label-position="left" style="padding:0 0 0 55px;width:700px;float:left;background-color:#F9FAFC;border: 1px solid #e7e7eb" v-show="formDate4">
       <h3>适用门店</h3>
-      <p style="color:#ff6d6d">注：不选门店默认所有门店</p>
-      <template>
-        <el-table
-          ref="multipleTable"
-          :data="form_04.tableData"
-          border
-          tooltip-effect="dark"
-          style="width: 90%"
-          @selection-change="handleSelectionChange">
-          <el-table-column
-            type="selection"
-            width="55">
-          </el-table-column>
-      <el-table-column prop="storeName" label="门店名称" width="180">
-      </el-table-column>
-      <el-table-column prop="address" label="门店地址" show-overflow-tooltip>
-      </el-table-column>
-      </el-table>
-      </template>
+      <el-form-item label="所属门店" prop="use_all_locations">
+        <el-radio v-model="form_04.use_all_locations" label="Y">全部门店</el-radio>
+        <el-radio v-model="form_04.use_all_locations" label="N">部分门店</el-radio>
+      </el-form-item>
+      <el-form-item label="选择门店" prop="store_id" v-if="form_04.use_all_locations === 'N'">
+          <el-select
+            v-model="form_04.store_id"
+            placeholder="门店名称"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteStore"
+            :loading="searchLoading"
+            clearable
+            @focus="clickStore"
+          >
+            <el-option
+              v-for="item in optionsStore"
+              :key="item.id"
+              :value="item.id"
+              :label="item.value"
+            ></el-option>
+          </el-select>
+      </el-form-item>
       <el-button type="primary" @click="Form5" style="margin-top:3px;">下一步</el-button>
-      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;padding-right:70px;">
-      </el-pagination>
     </el-form>
     <!-- 表单05 -->
     <el-form ref="form_05" :model="form_05" label-width="100px" @submit.prevent="onSubmit" label-position="left" style="padding:0 0 0 55px;width:700px;float:left;background-color:#F9FAFC;border: 1px solid #e7e7eb" v-show="formDate5">
@@ -338,7 +341,8 @@ import {
   insertMenCard,
   queryStoreListNew,
   addCoupon,
-  uploadImgNew
+  uploadImgNew,
+  selectStoreListNew
 } from '../../api/shop';
 export default {
   data() {
@@ -352,6 +356,8 @@ export default {
       }
     };
     return {
+      optionsStore: [],
+      searchLoading: false,
       card_type_placeholder: '',
       card_type_label: '',
       card_type_label01: '起用金额',
@@ -462,7 +468,8 @@ export default {
         business_service: []
       },
       form_04: {
-        tableData: [],
+        use_all_locations: 'Y',
+        store_id: ''
       },
       form_05: {
         customCell_name: '',
@@ -478,9 +485,7 @@ export default {
       //表单1
       imageUrl: '',
       imageUrls: '',
-      page: 1,
-      total: 0,
-      multipleSelection: [],
+
       submitLoading: false,
       form_01Rules: {
         brand_name: [{
@@ -536,6 +541,14 @@ export default {
           validator: validate_service_phone,
           trigger: 'blur'
         },]
+      },
+      form_04Rules: {
+        use_all_locations: [
+          { required: true, message: "请选择所属门店", trigger: "change" }
+        ],
+        store_id: [
+          { required: true, message: "请选择所属门店", trigger: "change" }
+        ]
       }
     }
   },
@@ -602,13 +615,6 @@ export default {
       this.formDate1 = false;
       this.formDate3 = false;
       this.formDate4 = true;
-      let para = {
-        pageNum: this.page,
-      }
-      queryStoreListNew(para).then((res) => {
-        this.total = res.data.totalCount;
-        this.form_04.tableData = res.data.storeList;
-      })
     },
     Form5: function() {
       this.formDate2 = false;
@@ -616,6 +622,34 @@ export default {
       this.formDate3 = false;
       this.formDate4 = false;
       this.formDate5 = true;
+    },
+    clickStore: function() {
+      this.searchLoading = true;
+      selectStoreListNew({
+        title: "",
+        use_all_locations: 'N'
+      }).then(res => {
+        this.searchLoading = false;
+        let { status, data } = res;
+        this.optionsStore = data.storeList;
+      });
+    },
+    remoteStore(query) {
+      if (query !== "") {
+        this.searchLoading = true;
+        setTimeout(() => {
+          this.searchLoading = false;
+          selectStoreListNew({
+            title: query,
+            use_all_locations: 'N'
+          }).then(res => {
+            let { status, data } = res;
+            this.optionsStore = data.storeList;
+          });
+        }, 200);
+      } else {
+        this.optionsStore = [];
+      }
     },
     //上传logo
     handleAvatarSuccess(res, file) {
@@ -639,10 +673,6 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       return isLt2M;
-    },
-    handleCurrentChange(val) {
-      this.page = val;
-      this.Form4();
     },
     submitForm: function() {
       this.$refs.form_01.validate((valid) => {
@@ -688,7 +718,8 @@ export default {
                 description: this.form_03.description, //使用须知
                 service_phone: this.form_03.service_phone, //客服电话
                 //表单04
-                location_id_list: this.multipleSelection,
+                use_all_locations: this.form_04.use_all_locations,
+                store_id: this.form_04.store_id,
                 //表单05
                 customCell_name: this.form_05.customCell_name, //入口名称
                 customCell_tips: this.form_05.customCell_tips, //引导语
@@ -773,10 +804,7 @@ export default {
           });
         });
       });
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
+    }
   },
   mounted() {
     this.uploaddata.mid = sessionStorage.getItem('mid')

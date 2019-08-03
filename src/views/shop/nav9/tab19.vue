@@ -43,6 +43,7 @@
         </el-form-item>
         <el-form-item label="所属门店" prop="apply_sid">
           <el-select
+            :disabled="$route.query.id"
             v-model="expenseForm.apply_sid"
             placeholder="门店名称"
             :multiple="false"
@@ -52,6 +53,7 @@
             :loading="searchLoading"
             clearable
             @focus="clickStore"
+            @change="changeStore"
           >
             <el-option
               v-for="item in optionsStore"
@@ -61,7 +63,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <div v-if="!$route.query.id">
+        <div v-if="!$route.query.id && expenseForm.apply_sid !== ''">
           <el-form-item
             v-for="(item, index) in expenseForm.activityRule"
             :label="'充值规则' + (index + 1)"
@@ -90,7 +92,7 @@
                 ></el-option>
               </el-select>金额
               <el-input-number v-model="item.bonus" style="width:80px" :precision="2" :step="0.00" :controls="false"></el-input-number>积分
-              <el-input-number v-model="item.balance" style="width:80px" :precision="1" :step="0.00" :controls="false"></el-input-number>
+              <el-input-number v-model="item.balance" style="width:80px" :precision="0" :step="0.00" :controls="false"></el-input-number>
             </div>
           </el-form-item>
         </div>
@@ -256,6 +258,16 @@ export default {
         this.optionsCard = [];
       }
     },
+    changeStore(e) {
+      this.expenseForm.activityRule.map(data => {
+        return data.coupon_card_id = ''
+      })
+      if (e !== '') {
+        queryCouponWithOutWDGifi({sid: this.expenseForm.apply_sid}).then(res => {
+          this.optionsCoupons = res.data.couponList;
+        });
+      }
+    },
     clickStore: function() {
       this.searchLoading = true;
       selectStoreListNew({
@@ -296,9 +308,6 @@ export default {
     }
   },
   async mounted() {
-    queryCouponWithOutWDGifi().then(res => {
-      this.optionsCoupons = res.data.couponList;
-    });
     if (this.$route.query.id) {
       await this.clickStore();
       this.getEditDele();

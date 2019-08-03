@@ -217,7 +217,7 @@ export default {
         this.goodsForm.share_info = row.share_info
         this.goodsForm.limitNum = row.limitNum
         this.goodsForm.share_title = row.share_title
-        this.goodsForm.wssemblePrice = row.wssemblePrice
+        this.goodsForm.wssemblePrice = row.wssemblePrice / 100
         this.optionsStore = [{ id: row.productId, product_name: row.productName }];
         this.goodsForm.dateTimes = new Array(row.startTime, row.endTime);
       });
@@ -235,6 +235,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let para = util.deepcopy(this.goodsForm);
+          para.wssemblePrice = para.wssemblePrice * 100
           if (!para.id) {
             delete para.id;
           }
@@ -320,7 +321,8 @@ export default {
     gerList() {
       let para = {
         pageNum: this.pageNum,
-        pageSize: 10
+        keyWords: this.filters.keyWords,
+        pageSize: 20
       };
       this.listLoading = true;
       queryActivityProduct(para).then(res => {

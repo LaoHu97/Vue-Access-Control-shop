@@ -204,7 +204,7 @@ export default {
     gerList() {
       let para = util.deepcopy(this.filters);
       para.pageNum = this.page;
-      para.pageSize = 10;
+      para.pageSize = 20;
       this.listLoading = true;
       queryWssembleOrderList(para).then(res => {
         this.total = res.data.total;

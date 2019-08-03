@@ -64,12 +64,6 @@
 				<i style="width:100%;height:1px;display:block;background-color:#bfcbd9"></i>
 				<div class="cardResult-center" v-if="displaycardResult">
 					<p>使用须知：<span style="font-weight:normal">{{description}}</span></p>
-					<!-- <p style="margin-bottom:0;float:left;">适用门店：</p>
-					<el-table :data="gridData" style="margin-top:15px;">
-				    <el-table-column property="date" label="日期"></el-table-column>
-				    <el-table-column property="name" label="姓名"></el-table-column>
-				    <el-table-column property="address" label="地址"></el-table-column>
-				  </el-table> -->
 				</div>
 				<span slot="footer" style="margin-left:45%">
 			    <el-button type="primary" @click="submitClick">确定销券</el-button>
@@ -168,7 +162,9 @@
 					});
 				}
 				let para={
-					code:this.cardinput
+					code:this.cardinput,
+					sid: this.sid,
+					sign: 'WX'
 				}
 				queryCodeNew(para).then((res)=>{
 					let {status,message}=res;
@@ -195,7 +191,8 @@
 			clickStore: function() {
 				this.searchLoading = true;
 				selectStoreListNew({
-					title: ""
+					title: "",
+					use_all_locations: 'N'
 				}).then(res => {
 					this.searchLoading = false;
 					let { status, data } = res;
@@ -208,7 +205,8 @@
 					setTimeout(() => {
 						this.searchLoading = false;
 						selectStoreListNew({
-							title: query
+							title: query,
+							use_all_locations: 'N'
 						}).then(res => {
 							let { status, data } = res;
 							this.optionsStore = data.storeList;
@@ -222,7 +220,8 @@
 				let para={
 					id:this.id,
 					code:this.cardinput,
-					sid: this.sid
+					sid: this.sid,
+					sign: 'WX'
 				}
 				consumeCodeNew(para).then((res)=>{
 					let {status,message}=res;

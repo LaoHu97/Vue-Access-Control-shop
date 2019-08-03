@@ -30,8 +30,6 @@
       <el-table border :data="users" highlight-current-row style="width: 100%;">
         <el-table-column prop="name" label="商品名称" min-width="180">
         </el-table-column>
-        <el-table-column prop="oprice" label="商品原价" min-width="120" :formatter="format_oprice">
-        </el-table-column>
         <el-table-column prop="nprice" label="商品现价" min-width="120" :formatter="format_nprice">
         </el-table-column>
         <el-table-column prop="stock" label="库存" min-width="120">
@@ -63,9 +61,6 @@
 		<!--编辑界面-->
 		<el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false" width="600px">
 			<el-form :model="editForm" label-width="120px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="商户名称：" prop="name">
-          <el-input v-model="editForm.name" auto-complete="off" style="width:200px;"></el-input>
-        </el-form-item>
         <el-form-item label="商品缩略图：" prop="small_url">
           <el-upload class="avatar-uploader" :action="uploadImage" :data="uploaddata" :show-file-list="false" :on-success="small_urlSuccess" :before-upload="beforeAvatarUpload">
             <img :src="editForm.small_url" style="width:50px;height:50px;float:left">
@@ -84,16 +79,28 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-        <el-form-item label="商品原价：" prop="oprice">
-          <el-input v-model="editForm.oprice" style="width:50%;"></el-input>
+        <el-form-item label="商品名称：" prop="name">
+          <el-input v-model="editForm.name" auto-complete="off" style="width:200px;"></el-input>
         </el-form-item>
-        <el-form-item label="商品现价：" prop="nprice">
-          <el-input v-model="editForm.nprice" style="width:50%;"></el-input>
+        <el-form-item label="兑换积分：" prop="nprice">
+          <el-input-number
+            :controls="false"
+            :min="0"
+            :precision="0"
+            v-model="editForm.nprice"
+            label="兑换积分："
+          ></el-input-number>
         </el-form-item>
         <el-form-item label="商品库存：" prop="stock">
-          <el-input v-model="editForm.stock" style="width:50%;"></el-input>
+          <el-input-number
+            :controls="false"
+            :min="0"
+            :precision="0"
+            v-model="editForm.stock"
+            label="商品库存："
+          ></el-input-number>
         </el-form-item>
-        <el-form-item label="描述：" prop="desc">
+        <el-form-item label="描述：" prop="depict">
           <el-input type="textarea" :rows="2" v-model="editForm.depict"></el-input>
         </el-form-item>
         <el-form-item label="规则：" prop="rule">
@@ -132,14 +139,23 @@
 				<el-form-item label="商品名称：" prop="name">
 					<el-input v-model="addForm.name" style="width:50%;"></el-input>
 				</el-form-item>
-        <el-form-item label="商品原价：" prop="oprice">
-          <el-input v-model="addForm.oprice" style="width:50%;"></el-input>
-        </el-form-item>
-        <el-form-item label="商品现价：" prop="nprice">
-          <el-input v-model="addForm.nprice" style="width:50%;"></el-input>
+        <el-form-item label="兑换积分：" prop="nprice">
+          <el-input-number
+            :controls="false"
+            :min="0"
+            :precision="0"
+            v-model="addForm.nprice"
+            label="兑换积分："
+          ></el-input-number>
         </el-form-item>
         <el-form-item label="商品库存：" prop="stock">
-          <el-input v-model="addForm.stock" style="width:50%;"></el-input>
+          <el-input-number
+            :controls="false"
+            :min="0"
+            :precision="0"
+            v-model="addForm.stock"
+            label="商品库存："
+          ></el-input-number>
         </el-form-item>
         <el-form-item label="描述：" prop="desc">
           <el-input type="textarea" :rows="2" v-model="addForm.desc"></el-input>
@@ -186,9 +202,36 @@
 				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
 				editFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
+					name: [{
+						required: true,
+						message: '请输入商品名称',
+						trigger: 'blur'
+					}, ],
+					nprice: [{
+						required: true,
+						message: '请输入商品现价',
+						trigger: 'blur'
+					}, ],
+					vprice: [{
+						required: true,
+						message: '请输入商品会员价',
+						trigger: 'blur'
+					}, ],
+					stock: [{
+						required: true,
+						message: '请输入商品库存',
+						trigger: 'blur'
+					}, ],
+					depict: [{
+						required: true,
+						message: '请输入商品描述',
+						trigger: 'blur'
+					}, ],
+					rule: [{
+						required: true,
+						message: '请输入兑换规则',
+						trigger: 'blur'
+					}, ],
 				},
 				//编辑界面数据
 				loading: false,
@@ -198,7 +241,6 @@
           small_url: '',
           pic_url: '',
 					card:'',
-          oprice: '',
           nprice: '',
 					vprice:'0.00',
           stock:'',
@@ -206,7 +248,8 @@
           end_time:'',
           depict:'',
           rule:'',
-          card_id: ''
+          card_id: '',
+          desc: ''
 				},
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
@@ -214,11 +257,6 @@
 					name: [{
 						required: true,
 						message: '请输入商品名称',
-						trigger: 'blur'
-					}, ],
-					oprice: [{
-						required: true,
-						message: '请输入商品原价',
 						trigger: 'blur'
 					}, ],
 					nprice: [{
@@ -253,7 +291,6 @@
           small_url: '',
 					pic_url: '',
 					card_id:'',
-					oprice: '',
 					nprice: '',
 					vprice:'0.00',
           stock:'',
@@ -377,7 +414,8 @@
 				let para = {
 					pagNum: this.page,
 					name: this.filters.name,
-          status:this.filters.status
+          status:this.filters.status,
+          pageSize: 20
 				};
 				this.listLoading = true;
 				//
@@ -417,13 +455,13 @@
                 name: String(this.editForm.name),
                 small_url: String(this.editForm.small_url),
                 pic_url: String(this.editForm.pic_url),
-                oprice: String(this.editForm.oprice),
                 nprice: String(this.editForm.nprice),
                 stock:String(this.editForm.stock),
                 start_time:'',
                 end_time:'',
                 desc:String(this.editForm.depict),
-                rule:String(this.editForm.rule)
+                rule:String(this.editForm.rule),
+                card_id: this.editForm.card_id
               }
 							insertProductNew(para).then((res) => {
                 let {status,message}=res;
@@ -443,7 +481,9 @@
                   });
                 }
 								this.editLoading = false;
-							});
+							}).catch(() => {
+                this.editLoading = false;
+              });
 						});
 					}
 				});

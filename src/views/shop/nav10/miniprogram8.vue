@@ -7,8 +7,8 @@
           <el-date-picker
             v-model="filters.startTime"
             placeholder="选择开始日期"
-            :picker-options="pickerOptions1"
             :clearable="false"
+            value-format="timestamp"
             :editable="false"
           ></el-date-picker>
         </el-form-item>
@@ -16,8 +16,8 @@
           <el-date-picker
             v-model="filters.endTime"
             placeholder="选择结束日期"
-            :picker-options="pickerOptions2"
             :clearable="false"
+            value-format="timestamp"
             :editable="false"
           ></el-date-picker>
         </el-form-item>
@@ -71,23 +71,6 @@ import { queryProductOrderList } from "../../../api/shop";
 export default {
   data() {
     return {
-      //时间控制
-      pickerOptions1: {
-        disabledDate(time) {
-          return (
-            time.getTime() > Date.now() ||
-            time.getTime() < Date.now() - 3600 * 1000 * 24 * 90
-          );
-        }
-      },
-      pickerOptions2: {
-        disabledDate(time) {
-          return (
-            time.getTime() > Date.now() ||
-            time.getTime() < Date.now() - 3600 * 1000 * 24 * 90
-          );
-        }
-      },
       filters: {
         startTime: '',
         endTime: '',
@@ -109,7 +92,7 @@ export default {
       );
     },
     pay_wayFormatter: function(row, column) {
-      return row.pay_way === 'WX' ? '微信' : row.pay_way === 'vip' ? '支付宝' : '未知'
+      return row.pay_way === 'WX' ? '微信' : row.pay_way === 'vip' ? '会员支付' : '未知'
     },
     handleCurrentChange(val) {
       this.page = val;
@@ -124,6 +107,8 @@ export default {
     gerList() {
       let para = util.deepcopy(this.filters)
       para.pageNum = this.page
+      para.startTime = para.startTime.toString()
+      para.endTime = para.endTime.toString()
       this.listLoading = true;
       queryProductOrderList(para).then(res => {
         this.total = res.data.total;

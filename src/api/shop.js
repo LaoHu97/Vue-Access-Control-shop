@@ -682,3 +682,37 @@ export const addWdGiftCouponDetail = params => {
 export const updateWdGiftCouponDetail = params => {
   return instance.post(`${preUrlPath}/admin/wp/mer/member/updateWdGiftCouponDetail`, params).then(res => res.data);
 };
+
+export const resetMemPwdNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/resetMemPwd`, params).then(res => res.data);
+};
+
+export const queryWdCardLevel = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/queryWdCardLevel`, params).then(res => res.data);
+};
+
+export const insertWdCardLevel = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/insertWdCardLevel`, params).then(res => res.data);
+};
+
+export const updateWdCardLevel = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/updateWdCardLevel`, params).then(res => res.data);
+};
+
+export const deleteWdCardLevelByPK = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/deleteWdCardLevelByPK`, params).then(res => res.data);
+};
+
+export const sysMemberInsertNew = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/sysMemberInsert`, params).then(res => res.data);
+};
+
+export const addBalanceByPc = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/addBalanceByPc`, params).then(res => res.data);
+};
+
+export const addBonusByPc = params => {
+  return instance.post(`${preUrlPath}/admin/mer/member/addBonusByPc`, params).then(res => res.data);
+};
+
+export const uploadExcel = `${preUrlPath}/admin/mer/member/uploadExcel`

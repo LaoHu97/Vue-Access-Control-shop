@@ -39,12 +39,13 @@
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="vipDataClick(scope.$index, scope.row)">会员日</el-dropdown-item>
+                <!-- <el-dropdown-item @click.native="vipDataClick(scope.$index, scope.row)">会员日</el-dropdown-item> -->
                 <el-dropdown-item @click.native="modifyClick(scope.$index, scope.row)">修改</el-dropdown-item>
-                <el-dropdown-item @click.native="rechargeClick(scope.$index, scope.row)">充值设置</el-dropdown-item>
-                <el-dropdown-item @click.native="deliveryCode(scope.$index, scope.row)">投放二维码</el-dropdown-item>
+                <!-- <el-dropdown-item @click.native="rechargeClick(scope.$index, scope.row)">充值设置</el-dropdown-item> -->
+                <!-- <el-dropdown-item @click.native="deliveryCode(scope.$index, scope.row)">投放二维码</el-dropdown-item> -->
                 <el-dropdown-item v-if="scope.row.status!=2" @click.native="uploadWinxin(scope.$index, scope.row)">上传微信</el-dropdown-item>
                 <el-dropdown-item v-else :disabled="true">已上传</el-dropdown-item>
+                <el-dropdown-item @click.native="levelClick(scope.$index, scope.row)">等级设置</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </template>
@@ -296,6 +297,12 @@
       }
     },
     methods: {
+      levelClick(index, row) {
+        this.$router.push({
+          path: '/index3/tab27-v',
+          query: {id: row.wxcard_id}
+        });
+      },
       clickCode: function () {
         window.location.href = this.editVipCode.vipCode
       },

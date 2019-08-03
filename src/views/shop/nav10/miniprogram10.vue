@@ -7,7 +7,7 @@
           <el-date-picker
             v-model="filters.startTime"
             placeholder="选择开始日期"
-            :picker-options="pickerOptions1"
+            value-format="timestamp"
             :clearable="false"
             :editable="false"
           ></el-date-picker>
@@ -16,7 +16,7 @@
           <el-date-picker
             v-model="filters.endTime"
             placeholder="选择结束日期"
-            :picker-options="pickerOptions2"
+            value-format="timestamp"
             :clearable="false"
             :editable="false"
           ></el-date-picker>
@@ -100,23 +100,6 @@ import {
 export default {
   data() {
     return {
-      //时间控制
-      pickerOptions1: {
-        disabledDate(time) {
-          return (
-            time.getTime() > Date.now() ||
-            time.getTime() < Date.now() - 3600 * 1000 * 24 * 90
-          );
-        }
-      },
-      pickerOptions2: {
-        disabledDate(time) {
-          return (
-            time.getTime() > Date.now() ||
-            time.getTime() < Date.now() - 3600 * 1000 * 24 * 90
-          );
-        }
-      },
       filters: {
         startTime: "",
         endTime: "",
@@ -203,8 +186,10 @@ export default {
     },
     gerList() {
       let para = util.deepcopy(this.filters);
+      para.startTime = para.startTime.toString()
+      para.endTime = para.endTime.toString()
       para.pageNum = this.page;
-      para.pageSize = 10;
+      para.pageSize = 20;
       this.listLoading = true;
       queryWssembleOrderList(para).then(res => {
         this.total = res.data.total;
