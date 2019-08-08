@@ -180,7 +180,7 @@ export default {
     }
   },
   async mounted() {
-    queryCouponWithOutWDGifi({sid: ''}).then(res => {
+    queryCouponWithOutWDGifi({sid: 0}).then(res => {
       this.optionsCoupons = res.data.couponList;
     });
     if (this.$route.query.id) {

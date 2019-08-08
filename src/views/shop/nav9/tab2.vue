@@ -64,6 +64,8 @@ export default {
       synStoreListNew().then(res => {
         let { status, message } = res;
         if (status == 200) {
+          this.page = 1;
+          this.getUsers();
           this.$notify({
             title: "成功",
             message: message,

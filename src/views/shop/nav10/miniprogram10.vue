@@ -44,7 +44,7 @@
       <el-table :data="users" border highlight-current-row>
         <el-table-column prop="productName" label="商品名称"></el-table-column>
         <el-table-column prop="wssembleOrderid" label="订单号"></el-table-column>
-        <el-table-column prop="pay_way" label="支付方式" :formatter="pay_wayFormatter"></el-table-column>
+        <!-- <el-table-column prop="pay_way" label="支付方式" :formatter="pay_wayFormatter"></el-table-column> -->
         <el-table-column prop="amount" label="交易金额"></el-table-column>
         <el-table-column prop="creatTime" label="创建时间" :formatter="creatTimeFormatter"></el-table-column>
         <el-table-column label="操作">

@@ -45,7 +45,7 @@
                 <!-- <el-dropdown-item @click.native="deliveryCode(scope.$index, scope.row)">投放二维码</el-dropdown-item> -->
                 <el-dropdown-item v-if="scope.row.status!=2" @click.native="uploadWinxin(scope.$index, scope.row)">上传微信</el-dropdown-item>
                 <el-dropdown-item v-else :disabled="true">已上传</el-dropdown-item>
-                <el-dropdown-item @click.native="levelClick(scope.$index, scope.row)">等级设置</el-dropdown-item>
+                <el-dropdown-item :disabled="!scope.row.wxcard_id" @click.native="levelClick(scope.$index, scope.row)">等级设置</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </template>

@@ -716,3 +716,7 @@ export const addBonusByPc = params => {
 };
 
 export const uploadExcel = `${preUrlPath}/admin/mer/member/uploadExcel`
+
+export const updateOrderAppraise = params => {
+  return instance.post(`${preUrlPath}/admin/mer/mall/updateOrderAppraise`, params).then(res => res.data);
+};

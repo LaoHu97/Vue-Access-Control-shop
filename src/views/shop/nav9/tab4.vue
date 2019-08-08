@@ -303,16 +303,16 @@ export default {
     uploadExcelSuccess(res, file) {
       if (res.status === 200) {
         this.$message({
-          message: res.message || '上传成功',
-          type: 'success'
+          message: res.message || "上传成功",
+          type: "success"
         });
-      }else{
-        this.$message.error(res.message || '上传错误');
+      } else {
+        this.$message.error(res.message || "上传错误");
       }
     },
     uploadExcelUpload(file) {
       console.log(file);
-      
+
       // const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 10;
 
@@ -335,21 +335,21 @@ export default {
         if (valid) {
           let para = {
             sid: "",
-            bouns: this.formIntegralRecharge.bouns,
+            bouns: parseInt(this.formIntegralRecharge.bouns),
             code: this.formIntegralRecharge.memberId.toString()
           };
           this.IntegralrechargeLoading = true;
           addBonusByPc(para).then(res => {
             this.IntegralrechargeLoading = false;
-            if (res.status === 200) {
-              this.dialogIntegralRechargeVisible = false;
-              this.$message({
-                message: "恭喜你，充值成功",
-                type: "success"
-              });
-              this.getUsers();
-              this.$refs[formName].resetFields();
-            }
+            this.dialogIntegralRechargeVisible = false;
+            this.$message({
+              message: "恭喜你，充值成功",
+              type: "success"
+            });
+            this.getUsers();
+            this.$refs[formName].resetFields();
+          }).catch(() => {
+            this.IntegralrechargeLoading = false;
           });
         } else {
           return false;

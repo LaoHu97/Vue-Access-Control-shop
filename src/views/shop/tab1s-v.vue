@@ -1180,7 +1180,9 @@ export default {
                   });
                 }
                 this.submitLoading = false;
-              });
+              }).catch(()=> {
+                this.submitLoading = false;
+              })
             } else {
               this.$message({
                 message: "信息填写不完整，请检查！！！",

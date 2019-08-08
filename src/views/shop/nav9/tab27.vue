@@ -197,6 +197,7 @@ export default {
         if (valid) {
           let para = util.deepcopy(this.levelForm);
           para.card_id = this.$route.query.id;
+          para.discount = para.discount.toString()
           if (para.id) {
             updateWdCardLevel(para).then(res => {
               this.levelDialogFormVisible = false;

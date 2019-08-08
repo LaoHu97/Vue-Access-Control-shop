@@ -16,8 +16,18 @@
     <div v-loading="listLoading">
       <el-table :data="users" border style="width: 100%">
         <el-table-column prop="reserve1" label="微信昵称" width="160"></el-table-column>
-        <el-table-column prop="gmt_create" label="创建时间" width="160" :formatter="formatter_time"></el-table-column>
         <el-table-column prop="content" label="评价内容" min-width="180"></el-table-column>
+        <el-table-column align="center" label="是否显示" width="160">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.isShow"
+              :active-value="1"
+              :inactive-value="0"
+              @change="switchOnchange(scope.row)"
+            ></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="gmt_create" label="创建时间" width="160" :formatter="formatter_time"></el-table-column>
         <el-table-column align="center" label="操作" width="160">
           <template slot-scope="scope">
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -42,7 +52,7 @@
 
 <script>
 import * as util from "../../../util/util.js";
-import { showOrderAppraise } from "../../../api/shop";
+import { showOrderAppraise, updateOrderAppraise } from "../../../api/shop";
 export default {
   data() {
     return {
@@ -63,18 +73,33 @@ export default {
         "yyyy-MM-dd hh:mm:ss"
       );
     },
-
+    switchOnchange(row) {
+      let para = {
+        id: row.id,
+        isShow: row.isShow
+      };
+      updateOrderAppraise(para).then(res => {
+        if (res.status === 200) {
+          this.getUsers();
+          this.$message({
+            message: res.message,
+            type: "success"
+          });
+        }
+      });
+    },
     handleDelete(index, row) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该评论, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
           let para = {
-            id: row.id
+            id: row.id,
+            status: 0
           };
-          deleteWdMiniMenu(para).then(res => {
+          updateOrderAppraise(para).then(res => {
             if (res.status === 200) {
               this.getUsers();
               this.$message({
@@ -119,5 +144,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

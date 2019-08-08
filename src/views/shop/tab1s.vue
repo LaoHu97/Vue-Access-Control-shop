@@ -889,6 +889,8 @@ export default {
                   });
                 }
                 this.submitLoading = false;
+              }).catch(() => {
+                this.submitLoading = false;
               })
             }else {
               this.$message({
