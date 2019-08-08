@@ -10,7 +10,7 @@ const target = process.env.npm_lifecycle_event
     var configObj = {
       NODE_ENV: '"production"',
       API_ROOT: '""',
-      API_DOWNLOAD: '"http://download.weupay.com"'
+      API_DOWNLOAD: '"https://download.wandingkeji.cn"'
     }
   }
   module.exports = configObj
