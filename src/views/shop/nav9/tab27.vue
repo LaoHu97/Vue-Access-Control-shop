@@ -18,7 +18,7 @@
         <el-table-column align="center" label="操作" width="180">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="editLevel(scope.$index, scope.row)">修改</el-button>
-            <el-button size="mini" type="danger" @click="removeLevel(scope.$index, scope.row)">删除</el-button>
+            <!-- <el-button size="mini" type="danger" @click="removeLevel(scope.$index, scope.row)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>

@@ -246,55 +246,15 @@ export default [{
     },
     component: Abstract,
     children: [{
-      path: 'tab2-v',
-      name: '微信门店-v',
-      meta: {
-        title: '微信门店-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316112031_51'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab2.vue'], resolve)
-    }, {
-      path: 'tab1-v',
-      name: '微信会员卡-v',
-      meta: {
-        title: '微信会员卡-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114730_38'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab1.vue'], resolve)
-    }, {
       path: 'tab4-v',
-      name: '会员信息-v',
+      name: '会员信息',
       meta: {
-        title: '会员信息-v',
+        title: '会员信息',
         icon: 'table',
         noCache: true,
         code: '20180316114844_54'
       },
       component: (resolve) => require(['../views/shop/nav9/tab4.vue'], resolve)
-    }, {
-      path: 'tab7-v',
-      name: '卡券管理-v',
-      meta: {
-        title: '卡券管理-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180308145701_36'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab7.vue'], resolve)
-    }, {
-      path: 'tab5-v',
-      name: '卡券核销-v',
-      meta: {
-        title: '卡券核销-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114852_92'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab5.vue'], resolve)
     }, 
     // {
     //   path: 'tab3-v',
@@ -309,9 +269,9 @@ export default [{
     // }, 
     {
       path: 'tab6-v',
-      name: '会员余额记录-v',
+      name: '会员余额记录',
       meta: {
-        title: '会员余额记录-v',
+        title: '会员余额记录',
         icon: 'table',
         noCache: true,
         code: '20180316114906_58'
@@ -340,29 +300,7 @@ export default [{
     //   },
     //   component: (resolve) => require(['../views/shop/nav9/tab9.vue'], resolve)
     // }, 
-    {
-      path: 'tab1s-v',
-      name: '新增会员卡-v',
-      meta: {
-        title: '新增会员卡-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316115424_52',
-        hidden: true
-      },
-      component: (resolve) => require(['../views/shop/tab1s-v.vue'], resolve)
-    }, {
-      path: 'tab7s-v',
-      name: '新增券-v',
-      meta: {
-        title: '新增券-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316115406_91',
-        hidden: true
-      },
-      component: (resolve) => require(['../views/shop/tab7s-v.vue'], resolve)
-    }, 
+
     // {
     //   path: 'tab3s-v',
     //   name: '添加公司账户-v',
@@ -376,28 +314,6 @@ export default [{
     //   component: (resolve) => require(['../views/shop/nav9/tab3s.vue'], resolve)
     // }, 
     {
-      path: 'tab1-modify-v',
-      name: '修改会员卡-v',
-      meta: {
-        title: '修改会员卡-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316142852_80',
-        hidden: true
-      },
-      component: (resolve) => require(['../views/shop/tab1-modify-v.vue'], resolve)
-    }, {
-      path: 'tab7-modify-v',
-      name: '修改券-v',
-      meta: {
-        title: '修改券-v',
-        icon: 'table',
-        noCache: true,
-        code: '',
-        hidden: true
-      },
-      component: (resolve) => require(['../views/shop/tab7-modify-v.vue'], resolve)
-    }, {
       path: 'tab11-v',
       name: '充值设置-v',
       meta: {
@@ -410,9 +326,9 @@ export default [{
       component: (resolve) => require(['../views/shop/nav9/tab11.vue'], resolve)
     }, {
       path: 'tab8-v',
-      name: '已绑定会员-v',
+      name: '已绑定会员',
       meta: {
-        title: '已绑定会员-v',
+        title: '已绑定会员',
         icon: 'table',
         noCache: true,
         code: '20180319104742_11',
@@ -420,173 +336,25 @@ export default [{
       },
       component: (resolve) => require(['../views/shop/nav9/tab8.vue'], resolve)
     }, {
-      path: 'tab12-v',
-      name: '创建计次卡-v',
-      meta: {
-        title: '创建计次卡-v',
-        icon: 'table',
-        noCache: true,
-        code: '',
-        hidden: true
-      },
-      component: (resolve) => require(['../views/shop/tab7s-metering-v.vue'], resolve)
-    }, {
       path: 'tab13-v',
-      name: '会员积分记录-v',
+      name: '会员积分记录',
       meta: {
-        title: '会员积分记录-v',
+        title: '会员积分记录',
         icon: 'table',
         noCache: true,
         code: '20180316114906_58'
       },
       component: (resolve) => require(['../views/shop/nav9/tab13.vue'], resolve)
-    }, {
-      path: 'tab14-v',
-      name: '计次卡领取-v',
-      meta: {
-        title: '计次卡领取-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab14.vue'], resolve)
-    }, {
-      path: 'tab15-v',
-      name: '计次卡核销-v',
-      meta: {
-        title: '计次卡核销-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab15.vue'], resolve)
-    }, {
-      path: 'tab16-v',
-      name: '消费有礼-v',
-      meta: {
-        title: '消费有礼-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab16.vue'], resolve)
-    }, {
-      path: 'tab17-v',
-      name: '添加消费有礼-v',
-      meta: {
-        title: '添加消费有礼-v',
-        icon: 'table',
-        noCache: true,
-        hidden: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab17.vue'], resolve)
-    }, {
-      path: 'tab18-v',
-      name: '充值有礼-v',
-      meta: {
-        title: '充值有礼-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab18.vue'], resolve)
-    }, {
-      path: 'tab19-v',
-      name: '添加充值有礼-v',
-      meta: {
-        title: '添加充值有礼-v',
-        icon: 'table',
-        noCache: true,
-        hidden: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab19.vue'], resolve)
-    }, {
-      path: 'tab20-v',
-      name: '开卡有礼-v',
-      meta: {
-        title: '开卡有礼-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab20.vue'], resolve)
-    }, {
-      path: 'tab21-v',
-      name: '添加开卡有礼-v',
-      meta: {
-        title: '添加开卡有礼-v',
-        icon: 'table',
-        noCache: true,
-        hidden: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab21.vue'], resolve)
-    }, {
-      path: 'tab22-v',
-      name: '充值规则明细-v',
-      meta: {
-        title: '充值规则明细-v',
-        icon: 'table',
-        noCache: true,
-        hidden: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab22.vue'], resolve)
-    }, {
-      path: 'tab23-v',
-      name: '消费规则明细-v',
-      meta: {
-        title: '消费规则明细-v',
-        icon: 'table',
-        noCache: true,
-        hidden: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab23.vue'], resolve)
-    }, {
+    },{
       path: 'tab24-v',
-      name: '会员分享记录-v',
+      name: '会员分享记录',
       meta: {
-        title: '会员分享记录-v',
+        title: '会员分享记录',
         icon: 'table',
         noCache: true,
         code: '20180316114906_58'
       },
       component: (resolve) => require(['../views/shop/nav9/tab24.vue'], resolve)
-    }, {
-      path: 'tab25-v',
-      name: '购买会员卡管理-v',
-      meta: {
-        title: '购买会员卡管理-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab25.vue'], resolve)
-    }, {
-      path: 'tab26-v',
-      name: '礼包券规则-v',
-      meta: {
-        title: '礼包券规则-v',
-        icon: 'table',
-        noCache: true,
-        hidden: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab26.vue'], resolve)
-    }, {
-      path: 'tab27-v',
-      name: '会员卡等级-v',
-      meta: {
-        title: '会员卡等级-v',
-        icon: 'table',
-        noCache: true,
-        hidden: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab27.vue'], resolve)
     }]
   }, 
   // {
@@ -626,6 +394,265 @@ export default [{
   //     component: (resolve) => require(['../views/shop/nav7/package04.vue'], resolve)
   //   }]
   // },
+  {
+    path: '/index3',
+    name: '会员卡管理',
+    meta: {
+      icon: 'icon-jifen'
+    },
+    component: Abstract,
+    children: [{
+      path: 'tab2-v',
+      name: '微信门店',
+      meta: {
+        title: '微信门店',
+        icon: 'table',
+        noCache: true,
+        code: '20180316112031_51'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab2.vue'], resolve)
+    }, {
+      path: 'tab1-v',
+      name: '微信会员卡',
+      meta: {
+        title: '微信会员卡',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114730_38'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab1.vue'], resolve)
+    }, {
+      path: 'tab1s-v',
+      name: '新增会员卡',
+      meta: {
+        title: '新增会员卡',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115424_52',
+        hidden: true
+      },
+      component: (resolve) => require(['../views/shop/tab1s-v.vue'], resolve)
+    }, {
+      path: 'tab1-modify-v',
+      name: '修改会员卡',
+      meta: {
+        title: '修改会员卡',
+        icon: 'table',
+        noCache: true,
+        code: '20180316142852_80',
+        hidden: true
+      },
+      component: (resolve) => require(['../views/shop/tab1-modify-v.vue'], resolve)
+    }, {
+      path: 'tab27-v',
+      name: '会员卡等级',
+      meta: {
+        title: '会员卡等级',
+        icon: 'table',
+        noCache: true,
+        hidden: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab27.vue'], resolve)
+    }]
+  },
+  {
+    path: '/index3',
+    name: '营销活动',
+    meta: {
+      icon: 'icon-jifen'
+    },
+    component: Abstract,
+    children: [{
+      path: 'tab16-v',
+      name: '消费有礼',
+      meta: {
+        title: '消费有礼',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab16.vue'], resolve)
+    }, {
+      path: 'tab17-v',
+      name: '添加消费有礼',
+      meta: {
+        title: '添加消费有礼',
+        icon: 'table',
+        noCache: true,
+        hidden: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab17.vue'], resolve)
+    }, {
+      path: 'tab18-v',
+      name: '充值有礼',
+      meta: {
+        title: '充值有礼',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab18.vue'], resolve)
+    }, {
+      path: 'tab19-v',
+      name: '添加充值有礼',
+      meta: {
+        title: '添加充值有礼',
+        icon: 'table',
+        noCache: true,
+        hidden: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab19.vue'], resolve)
+    }, {
+      path: 'tab20-v',
+      name: '开卡有礼',
+      meta: {
+        title: '开卡有礼',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab20.vue'], resolve)
+    }, {
+      path: 'tab21-v',
+      name: '添加开卡有礼',
+      meta: {
+        title: '添加开卡有礼',
+        icon: 'table',
+        noCache: true,
+        hidden: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab21.vue'], resolve)
+    }, {
+      path: 'tab22-v',
+      name: '充值规则明细',
+      meta: {
+        title: '充值规则明细',
+        icon: 'table',
+        noCache: true,
+        hidden: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab22.vue'], resolve)
+    }, {
+      path: 'tab23-v',
+      name: '消费规则明细',
+      meta: {
+        title: '消费规则明细',
+        icon: 'table',
+        noCache: true,
+        hidden: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab23.vue'], resolve)
+    }, {
+      path: 'tab25-v',
+      name: '付费购卡',
+      meta: {
+        title: '付费购卡',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab25.vue'], resolve)
+    }]
+  },
+  {
+    path: '/index3',
+    name: '营销券管理',
+    meta: {
+      icon: 'icon-jifen'
+    },
+    component: Abstract,
+    children: [, {
+      path: 'tab7-v',
+      name: '卡券管理',
+      meta: {
+        title: '卡券管理',
+        icon: 'table',
+        noCache: true,
+        code: '20180308145701_36'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab7.vue'], resolve)
+    }, {
+      path: 'tab5-v',
+      name: '卡券核销',
+      meta: {
+        title: '卡券核销',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114852_92'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab5.vue'], resolve)
+    }, {
+      path: 'tab14-v',
+      name: '计次卡领取',
+      meta: {
+        title: '计次卡领取',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab14.vue'], resolve)
+    }, {
+      path: 'tab15-v',
+      name: '计次卡核销',
+      meta: {
+        title: '计次卡核销',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab15.vue'], resolve)
+    }, {
+      path: 'tab26-v',
+      name: '礼包券规则',
+      meta: {
+        title: '礼包券规则',
+        icon: 'table',
+        noCache: true,
+        hidden: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab26.vue'], resolve)
+    }, {
+      path: 'tab7s-v',
+      name: '新增券',
+      meta: {
+        title: '新增券',
+        icon: 'table',
+        noCache: true,
+        code: '20180316115406_91',
+        hidden: true
+      },
+      component: (resolve) => require(['../views/shop/tab7s-v.vue'], resolve)
+    }, {
+      path: 'tab7-modify-v',
+      name: '修改券',
+      meta: {
+        title: '修改券',
+        icon: 'table',
+        noCache: true,
+        code: '',
+        hidden: true
+      },
+      component: (resolve) => require(['../views/shop/tab7-modify-v.vue'], resolve)
+    }, {
+      path: 'tab12-v',
+      name: '创建计次卡',
+      meta: {
+        title: '创建计次卡',
+        icon: 'table',
+        noCache: true,
+        code: '',
+        hidden: true
+      },
+      component: (resolve) => require(['../views/shop/tab7s-metering-v.vue'], resolve)
+    }]
+  },
   {
     path: '/index3',
     name: '积分商城',
@@ -744,7 +771,7 @@ export default [{
   //   }]
   // }, 
   {
-    path: '/index4',
+    path: '/index3',
     name: '小程序管理',
     meta: {
       icon: 'icon-xiaochengxu'
@@ -752,64 +779,20 @@ export default [{
     component: Abstract,
     children: [{
       path: 'miniprogram2-v',
-      name: '轮播图列表-v',
+      name: '轮播图列表',
       meta: {
-        title: '轮播图列表-v',
+        title: '轮播图列表',
         icon: 'table',
         noCache: true,
         code: '20180316115233_28'
-      },
+      }, 
       component: (resolve) => require(['../views/shop/nav10/miniprogram2.vue'], resolve)
     }, 
-    // {
-    //   path: 'miniprogram1-v',
-    //   name: '导航列表-v',
-    //   meta: {
-    //     title: '导航列表-v',
-    //     icon: 'table',
-    //     noCache: true,
-    //     code: '20180316115233_28'
-    //   },
-    //   component: (resolve) => require(['../views/shop/nav10/miniprogram1.vue'], resolve)
-    // }, 
-    // {
-    //   path: 'miniprogram4-v',
-    //   name: '资讯列表-v',
-    //   meta: {
-    //     title: '资讯列表-v',
-    //     icon: 'table',
-    //     noCache: true,
-    //     code: '20180316115233_28'
-    //   },
-    //   component: (resolve) => require(['../views/shop/nav10/miniprogram4.vue'], resolve)
-    // }, 
     {
-      path: 'miniprogram3-v',
-      name: '新增资讯-v',
-      meta: {
-        title: '新增资讯-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316115233_28',
-        hidden: true
-      },
-      component: (resolve) => require(['../views/shop/nav10/miniprogram3.vue'], resolve)
-    }, {
-      path: 'miniprogram5-v',
-      name: '资讯修改-v',
-      meta: {
-        title: '资讯修改-v',
-        icon: 'table',
-        noCache: true,
-        code: '20180316115233_28',
-        hidden: true
-      },
-      component: (resolve) => require(['../views/shop/nav10/miniprogram5.vue'], resolve)
-    }, {
       path: 'miniprogram6-v',
-      name: '评价列表-v',
+      name: '评价列表',
       meta: {
-        title: '评价列表-v',
+        title: '评价列表',
         icon: 'table',
         noCache: true,
         code: '20180316115233_28'
@@ -817,9 +800,9 @@ export default [{
       component: (resolve) => require(['../views/shop/nav10/miniprogram6.vue'], resolve)
     }, {
       path: 'miniprogram7-v',
-      name: '团购商品列表-v',
+      name: '团购商品列表',
       meta: {
-        title: '团购商品列表-v',
+        title: '团购商品列表',
         icon: 'table',
         noCache: true,
         code: '20180316115233_28'
@@ -827,9 +810,9 @@ export default [{
       component: (resolve) => require(['../views/shop/nav10/miniprogram7.vue'], resolve)
     }, {
       path: 'miniprogram8-v',
-      name: '团购订单列表-v',
+      name: '团购订单列表',
       meta: {
-        title: '团购订单列表-v',
+        title: '团购订单列表',
         icon: 'table',
         noCache: true,
         code: '20180316115233_28'
@@ -837,9 +820,9 @@ export default [{
       component: (resolve) => require(['../views/shop/nav10/miniprogram8.vue'], resolve)
     }, {
       path: 'miniprogram9-v',
-      name: '拼团商品列表-v',
+      name: '拼团商品列表',
       meta: {
-        title: '拼团商品列表-v',
+        title: '拼团商品列表',
         icon: 'table',
         noCache: true,
         code: '20180316115233_28'
@@ -847,9 +830,9 @@ export default [{
       component: (resolve) => require(['../views/shop/nav10/miniprogram9.vue'], resolve)
     }, {
       path: 'miniprogram10-v',
-      name: '拼团订单列表-v',
+      name: '拼团订单列表',
       meta: {
-        title: '拼团订单列表-v',
+        title: '拼团订单列表',
         icon: 'table',
         noCache: true,
         code: '20180316115233_28'
@@ -857,16 +840,330 @@ export default [{
       component: (resolve) => require(['../views/shop/nav10/miniprogram10.vue'], resolve)
     }, {
       path: 'miniprogram11-v',
-      name: '爆款活动-v',
+      name: '爆款活动',
       meta: {
-        title: '爆款活动-v',
+        title: '爆款活动',
         icon: 'table',
         noCache: true,
         code: '20180316115233_28'
       },
       component: (resolve) => require(['../views/shop/nav10/miniprogram11.vue'], resolve)
     }]
+  },
+  
+, {
+  path: '/index4',
+  name: '会员管理',
+  meta: {
+    icon: 'icon-qiaquan'
+  },
+  component: Abstract,
+  children: [{
+    path: 'tab2',
+    name: '微信门店',
+    meta: {
+      title: '微信门店',
+      icon: 'table',
+      noCache: true,
+      code: '20180316112031_51'
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab2.vue'], resolve)
   }, {
+    path: 'tab1',
+    name: '微信会员卡',
+    meta: {
+      title: '微信会员卡',
+      icon: 'table',
+      noCache: true,
+      code: '20180316114730_38'
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab1.vue'], resolve)
+  }, {
+    path: 'tab4',
+    name: '会员信息',
+    meta: {
+      title: '会员信息',
+      icon: 'table',
+      noCache: true,
+      code: '20180316114844_54'
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab4.vue'], resolve)
+  }, {
+    path: 'tab7',
+    name: '卡券管理',
+    meta: {
+      title: '卡券管理',
+      icon: 'table',
+      noCache: true,
+      code: '20180308145701_36'
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab7.vue'], resolve)
+  }, {
+    path: 'tab5',
+    name: '卡券核销',
+    meta: {
+      title: '卡券核销',
+      icon: 'table',
+      noCache: true,
+      code: '20180316114852_92'
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab5.vue'], resolve)
+  }, {
+    path: 'tab3',
+    name: '公司账户',
+    meta: {
+      title: '公司账户',
+      icon: 'table',
+      noCache: true,
+      code: '20180316114859_79'
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab3.vue'], resolve)
+  }, {
+    path: 'tab6',
+    name: '消费记录',
+    meta: {
+      title: '消费记录',
+      icon: 'table',
+      noCache: true,
+      code: '20180316114906_58'
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab6.vue'], resolve)
+  }, {
+    path: 'tab10',
+    name: '余额统计',
+    meta: {
+      title: '余额统计',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115031_33'
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab10.vue'], resolve)
+  }, {
+    path: 'tab9',
+    name: '交易账单',
+    meta: {
+      title: '交易账单',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115044_29'
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab9.vue'], resolve)
+  }, {
+    path: 'tab1s',
+    name: '新增会员卡',
+    meta: {
+      title: '新增会员卡',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115424_52',
+      hidden: true
+    },
+    component: (resolve) => require(['../views/shop/tab1s.vue'], resolve)
+  }, {
+    path: 'tab7s',
+    name: '新增券',
+    meta: {
+      title: '新增券',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115406_91',
+      hidden: true
+    },
+    component: (resolve) => require(['../views/shop/tab7s.vue'], resolve)
+  }, {
+    path: 'tab3s',
+    name: '添加公司账户',
+    meta: {
+      title: '添加公司账户',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115416_58',
+      hidden: true
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab3s.vue'], resolve)
+  }, {
+    path: 'tab1-modify',
+    name: '修改会员卡',
+    meta: {
+      title: '修改会员卡',
+      icon: 'table',
+      noCache: true,
+      code: '20180316142852_80',
+      hidden: true
+    },
+    component: (resolve) => require(['../views/shop/tab1-modify.vue'], resolve)
+  }, {
+    path: 'tab7-modify',
+    name: '修改券',
+    meta: {
+      title: '修改券',
+      icon: 'table',
+      noCache: true,
+      code: '20180316142914_71',
+      hidden: true
+    },
+    component: (resolve) => require(['../views/shop/tab7-modify.vue'], resolve)
+  }, {
+    path: 'tab11',
+    name: '充值设置',
+    meta: {
+      title: '充值设置',
+      icon: 'table',
+      noCache: true,
+      code: '20180319104742_11',
+      hidden: true
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab11.vue'], resolve)
+  }, {
+    path: 'tab8',
+    name: '已绑定会员',
+    meta: {
+      title: '已绑定会员',
+      icon: 'table',
+      noCache: true,
+      code: '20180319104742_11',
+      hidden: true
+    },
+    component: (resolve) => require(['../views/shop/nav4/tab8.vue'], resolve)
+  }]
+}, {
+  path: '/index4',
+  name: '会员套餐',
+  meta: {
+    icon: 'icon-huiyuan'
+  },
+  component: Abstract,
+  children: [{
+    path: 'package01',
+    name: '套餐购买记录',
+    meta: {
+      title: '套餐购买记录',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115052_26'
+    },
+    component: (resolve) => require(['../views/shop/nav7/package01.vue'], resolve)
+  }, {
+    path: 'package02',
+    name: '会员邀请记录',
+    meta: {
+      title: '会员邀请记录',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115102_40'
+    },
+    component: (resolve) => require(['../views/shop/nav7/package02.vue'], resolve)
+  }, {
+    path: 'package03',
+    name: '套餐激活汇总',
+    meta: {
+      title: '套餐激活汇总',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115216_15'
+    },
+    component: (resolve) => require(['../views/shop/nav7/package03.vue'], resolve)
+  }, {
+    path: 'package04',
+    name: '套餐列表',
+    meta: {
+      title: '套餐列表',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115226_96'
+    },
+    component: (resolve) => require(['../views/shop/nav7/package04.vue'], resolve)
+  }]
+}, {
+  path: '/index4',
+  name: '积分商城',
+  meta: {
+    icon: 'icon-jifen'
+  },
+  component: Abstract,
+  children: [{
+    path: 'shop1',
+    name: '商品管理',
+    meta: {
+      title: '商品管理',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115233_28'
+    },
+    component: (resolve) => require(['../views/shop/nav5/shop1.vue'], resolve)
+  }, {
+    path: 'shop2',
+    name: '订单管理',
+    meta: {
+      title: '订单管理',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115239_61'
+    },
+    component: (resolve) => require(['../views/shop/nav5/shop2.vue'], resolve)
+  }]
+}, {
+  path: '/index4',
+  name: '小程序管理',
+  meta: {
+    icon: 'icon-xiaochengxu'
+  },
+  component: Abstract,
+  children: [{
+    path: 'miniprogram2',
+    name: '轮播图列表',
+    meta: {
+      title: '轮播图列表',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115233_28'
+    },
+    component: (resolve) => require(['../views/shop/nav8/miniprogram2.vue'], resolve)
+  }, {
+    path: 'miniprogram1',
+    name: '导航列表',
+    meta: {
+      title: '导航列表',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115233_28'
+    },
+    component: (resolve) => require(['../views/shop/nav8/miniprogram1.vue'], resolve)
+  }, {
+    path: 'miniprogram4',
+    name: '资讯列表',
+    meta: {
+      title: '资讯列表',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115233_28'
+    },
+    component: (resolve) => require(['../views/shop/nav8/miniprogram4.vue'], resolve)
+  }, {
+    path: 'miniprogram3',
+    name: '新增资讯',
+    meta: {
+      title: '新增资讯',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115233_28',
+      hidden: true
+    },
+    component: (resolve) => require(['../views/shop/nav8/miniprogram3.vue'], resolve)
+  }, {
+    path: 'miniprogram5',
+    name: '资讯修改',
+    meta: {
+      title: '资讯修改',
+      icon: 'table',
+      noCache: true,
+      code: '20180316115233_28',
+      hidden: true
+    },
+    component: (resolve) => require(['../views/shop/nav8/miniprogram5.vue'], resolve)
+  }]
+},
+   {
     path: '/bill1',
     name: '对账单下载',
     meta: {
