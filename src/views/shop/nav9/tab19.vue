@@ -212,7 +212,7 @@ export default {
                 type: "success"
               });
               this.$router.push({
-                path: "/index3/tab18-v"
+                path: "/index4/tab18-v"
               });
             });
           } else {
@@ -222,7 +222,7 @@ export default {
                 type: "success"
               });
               this.$router.push({
-                path: "/index3/tab18-v"
+                path: "/index4/tab18-v"
               });
             });
           }

@@ -206,9 +206,11 @@
       <el-form-item :label="card_type_label01" prop="least_cost" style="width:300px;" v-if='least_cost_show'>
         <el-input v-model="form_01.least_cost" placeholder="代金券专用，表示起用金额"></el-input>
       </el-form-item>
-      <el-form-item :label="card_type_label" prop="gift" style="width:300px;">
-        <el-input v-model="form_01.gift" :placeholder="card_type_placeholder"></el-input>
+      <el-form-item :label="card_type_label" prop="gift">
+        <el-input style="width:200px;" v-model="form_01.gift" :placeholder="card_type_placeholder"></el-input>
+        <span style="color:#f44">示例：{{card_type_warning}}</span>
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" @click="Form2">下一步</el-button>
       </el-form-item>
@@ -361,6 +363,7 @@ export default {
       card_type_placeholder: '',
       card_type_label: '',
       card_type_label01: '起用金额',
+      card_type_warning: '',
       least_cost_show: false,
       formDate1: true,
       formDate2: false,
@@ -785,7 +788,7 @@ export default {
                     type: 'success'
                   });
                   _this.$router.push({
-                    path: '/index3/tab7-v'
+                    path: '/index4/tab7-v'
                   })
                 } else {
                   this.$notify.error({
@@ -793,6 +796,8 @@ export default {
                     message: message
                   });
                 }
+                this.submitLoading = false;
+              }).catch(() => {
                 this.submitLoading = false;
               })
             } else {
@@ -813,23 +818,28 @@ export default {
       case '1':
         this.card_type_placeholder = '团购券专用，团购详情';
         this.card_type_label = '兑换内容';
+        this.card_type_warning = '双人套餐\n -进口红酒一支。\n孜然牛肉一份。'
         break;
       case '2':
         this.card_type_placeholder = '代金券专用，表示减免金额';
         this.card_type_label = '减免金额';
         this.least_cost_show = true;
+        this.card_type_warning = '10000'
         break;
       case '3':
-        this.card_type_placeholder = '折扣券专用，表示打折额度';
+        this.card_type_placeholder = '折扣券专用，表示打折额度（百分比）。填30就是七折';
         this.card_type_label = '打折额度';
+        this.card_type_warning = '30'
         break;
       case '4':
         this.card_type_placeholder = '兑换券专用，填写兑换内容的名称';
         this.card_type_label = '兑换内容';
+        this.card_type_warning = '可兑换音乐木盒一个。'
         break;
       case '5':
         this.card_type_placeholder = '优惠券专用，填写优惠详情';
         this.card_type_label = '优惠内容';
+        this.card_type_warning = '音乐木盒。'
         break;
       default:
         console.log('未知');

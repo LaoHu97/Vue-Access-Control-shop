@@ -1128,7 +1128,7 @@ export default {
                     type: "success"
                   });
                   _this.$router.push({
-                    path: "/index3/tab1-v"
+                    path: "/index4/tab1-v"
                   });
                 } else {
                   this.$notify.error({

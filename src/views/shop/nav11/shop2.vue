@@ -50,7 +50,7 @@
 <script>
 	import * as util from '../../../util/util.js'
 	//
-	import { queryShopOrderList } from '../../../api/shop';
+	import { shopMallOrderList } from '../../../api/shop';
 	export default {
 		data() {
 			return {
@@ -90,13 +90,14 @@
 			//获取用户列表
 			getList() {
 				let para = {
-					pagNum: this.page,
-					status: this.filters.status
+					pageNum: this.page,
+					status: this.filters.status,
+					pageSize: 20
 				};
 				this.listLoading = true;
-				queryShopOrderList(para).then((res) => {
+				shopMallOrderList(para).then((res) => {
 					this.total = res.data.total;
-					this.users = res.data.shopOrderList;
+					this.users = res.data.dataInfo;
 					this.listLoading = false;
 				});
 			},

@@ -116,12 +116,18 @@ export default {
       menu(para).then(res=>{
         loading.close();
         let userInfo = res.data;
+        console.log(userInfo);
+        
         //获得实际路由
         let allowedRouter = vm.getRoutes(userInfo);
+        console.log(allowedRouter);
+        
         //若无可用路由限制访问
         if (!allowedRouter || !allowedRouter.length) {
           return vm.$router.push({ path: '/login', query: { from: vm.$router.currentRoute.path } });
         }
+        console.log(allowedRouter);
+        
         //动态注入路由
         vm.extendRoutes(allowedRouter);
         //保存数据用作他处，非必需

@@ -414,7 +414,7 @@ export default {
                   type: "success"
                 });
                 this.$router.push({
-                  path: "/index3/tab7-v"
+                  path: "/index4/tab7-v"
                 });
               });
             }else{
@@ -424,7 +424,7 @@ export default {
                   type: "success"
                 });
                 this.$router.push({
-                  path: "/index3/tab7-v"
+                  path: "/index4/tab7-v"
                 });
               });
             }
@@ -437,7 +437,7 @@ export default {
                   type: "success"
                 });
                 this.$router.push({
-                  path: "/index3/tab7-v"
+                  path: "/index4/tab7-v"
                 });
               });
             }else{
@@ -447,7 +447,7 @@ export default {
                   type: "success"
                 });
                 this.$router.push({
-                  path: "/index3/tab7-v"
+                  path: "/index4/tab7-v"
                 });
               });
             }

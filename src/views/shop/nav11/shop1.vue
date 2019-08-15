@@ -30,8 +30,6 @@
       <el-table border :data="users" highlight-current-row style="width: 100%;">
         <el-table-column prop="name" label="商品名称" min-width="180">
         </el-table-column>
-        <el-table-column prop="oprice" label="商品原价" min-width="120" :formatter="format_oprice">
-        </el-table-column>
         <el-table-column prop="nprice" label="商品现价" min-width="120" :formatter="format_nprice">
         </el-table-column>
         <el-table-column prop="stock" label="库存" min-width="120">
@@ -63,9 +61,6 @@
 		<!--编辑界面-->
 		<el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false" width="600px">
 			<el-form :model="editForm" label-width="120px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="商户名称：" prop="name">
-          <el-input v-model="editForm.name" auto-complete="off" style="width:200px;"></el-input>
-        </el-form-item>
         <el-form-item label="商品缩略图：" prop="small_url">
           <el-upload class="avatar-uploader" :action="uploadImage" :data="uploaddata" :show-file-list="false" :on-success="small_urlSuccess" :before-upload="beforeAvatarUpload">
             <img :src="editForm.small_url" style="width:50px;height:50px;float:left">
@@ -78,36 +73,38 @@
             <el-button size="small" type="primary" style="float:right;margin-left:15px;">点击上传</el-button>
           </el-upload>
         </el-form-item>
-        <el-form-item label="商品原价：" prop="oprice">
-          <el-input v-model="editForm.oprice" auto-complete="off" style="width:50%;"></el-input>
+				<el-form-item label="选择优惠券：" prop="card_id">
+					<el-select v-model="editForm.card_id" placeholder="请选择优惠券" :multiple="false" filterable remote :remote-method="remoteCard" :loading="loading" clearable @visible-change="clickCard">
+						<el-option v-for="item in optionsCard" :key="item.card_id" :value="item.card_id" :label="item.title">
+						</el-option>
+					</el-select>
+				</el-form-item>
+        <el-form-item label="商品名称：" prop="name">
+          <el-input v-model="editForm.name" auto-complete="off" style="width:200px;"></el-input>
         </el-form-item>
-        <el-form-item label="商品现价：" prop="nprice">
-          <el-input v-model="editForm.nprice" auto-complete="off" style="width:50%;"></el-input>
+        <el-form-item label="兑换积分：" prop="nprice">
+          <el-input-number
+            :controls="false"
+            :min="0"
+            :precision="0"
+            v-model="editForm.nprice"
+            label="兑换积分："
+          ></el-input-number>
         </el-form-item>
         <el-form-item label="商品库存：" prop="stock">
-          <el-input v-model="editForm.stock" auto-complete="off" style="width:50%;"></el-input>
+          <el-input-number
+            :controls="false"
+            :min="0"
+            :precision="0"
+            v-model="editForm.stock"
+            label="商品库存："
+          ></el-input-number>
         </el-form-item>
-        <!-- <el-form-item label="开始时间：" prop="start_time">
-          <el-date-picker
-            v-model="editForm.start_time"
-            type="date"
-            :editable="false"
-            placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="结束时间：" prop="end_time">
-          <el-date-picker
-            v-model="editForm.end_time"
-            type="date"
-            :editable="false"
-            placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item> -->
-        <el-form-item label="描述：" prop="desc">
-          <el-input type="textarea" :rows="2" v-model="editForm.depict" auto-complete="off"></el-input>
+        <el-form-item label="描述：" prop="depict">
+          <el-input type="textarea" :rows="2" v-model="editForm.depict"></el-input>
         </el-form-item>
         <el-form-item label="规则：" prop="rule">
-          <el-input type="textarea" :rows="2" v-model="editForm.rule" auto-complete="off"></el-input>
+          <el-input type="textarea" :rows="2" v-model="editForm.rule"></el-input>
         </el-form-item>
       </el-form>
 			<div slot="footer" class="dialog-footer">
@@ -117,59 +114,54 @@
 		</el-dialog>
 
 		<!--新增界面-->
-		<el-dialog title="新增商品" :visible.sync="addFormVisible" :close-on-click-modal="false" width="600px">
+		<el-dialog title="新增商品" :visible.sync="addFormVisible" :close-on-click-modal="false" @close="dialogClose('addForm')" width="600px">
 			<el-form :model="addForm" label-width="120px" :rules="addFormRules" ref="addForm">
         <el-form-item label="商品缩略图：" prop="small_url">
           <el-upload class="avatar-uploader" :action="uploadImage" :data="uploaddata" :show-file-list="false" :on-success="small_urlSuccess" :before-upload="beforeAvatarUpload">
-            <img :src="addForm.small_url" style="width:50px;height:50px;float:left">
+            <i class="el-icon-plus" style="width:50px;height:50px;float:left;line-height: 50px" v-if="!addForm.small_url"></i>
+            <img :src="addForm.small_url" style="width:50px;height:50px;float:left" v-else>
             <el-button size="small" type="primary" style="float:right;margin-left:15px;">点击上传</el-button>
           </el-upload>
         </el-form-item>
         <el-form-item label="商品详情图：" prop="pic_url">
           <el-upload class="avatar-uploader" :action="uploadImage" :data="uploaddata" :show-file-list="false" :on-success="pic_urlSuccess" :before-upload="beforeAvatarUpload">
-            <img :src="addForm.pic_url" style="width:50px;height:50px;float:left">
+            <i class="el-icon-plus" style="width:50px;height:50px;float:left;line-height: 50px" v-if="!addForm.pic_url"></i>
+            <img :src="addForm.pic_url" style="width:50px;height:50px;float:left" v-else>
             <el-button size="small" type="primary" style="float:right;margin-left:15px;">点击上传</el-button>
           </el-upload>
         </el-form-item>
-				<el-form-item label="选择优惠券：">
+				<el-form-item label="选择优惠券：" prop="card_id">
 					<el-select v-model="addForm.card_id" placeholder="请选择优惠券" :multiple="false" filterable remote :remote-method="remoteCard" :loading="loading" clearable @visible-change="clickCard">
-						<el-option v-for="item in optionsCard" :key="item.wxcard_id" :value="item.wxcard_id" :label="item.title">
+						<el-option v-for="item in optionsCard" :key="item.card_id" :value="item.card_id" :label="item.title">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="商品名称：" prop="name">
-					<el-input v-model="addForm.name" auto-complete="off" style="width:50%;"></el-input>
+					<el-input v-model="addForm.name" style="width:50%;"></el-input>
 				</el-form-item>
-        <el-form-item label="商品原价：" prop="oprice">
-          <el-input v-model="addForm.oprice" auto-complete="off" style="width:50%;"></el-input>
-        </el-form-item>
-        <el-form-item label="商品现价：" prop="nprice">
-          <el-input v-model="addForm.nprice" auto-complete="off" style="width:50%;"></el-input>
+        <el-form-item label="兑换积分：" prop="nprice">
+          <el-input-number
+            :controls="false"
+            :min="0"
+            :precision="0"
+            v-model="addForm.nprice"
+            label="兑换积分："
+          ></el-input-number>
         </el-form-item>
         <el-form-item label="商品库存：" prop="stock">
-          <el-input v-model="addForm.stock" auto-complete="off" style="width:50%;"></el-input>
+          <el-input-number
+            :controls="false"
+            :min="0"
+            :precision="0"
+            v-model="addForm.stock"
+            label="商品库存："
+          ></el-input-number>
         </el-form-item>
-        <!-- <el-form-item label="开始时间：" prop="start_time">
-          <el-date-picker
-            v-model="addForm.start_time"
-            type="date"
-            :editable="false"
-            placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="结束时间：" prop="end_time">
-          <el-date-picker
-            v-model="addForm.end_time"
-            type="date"
-            :editable="false"
-            placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item> -->
         <el-form-item label="描述：" prop="desc">
-          <el-input type="textarea" :rows="2" v-model="addForm.desc" auto-complete="off"></el-input>
+          <el-input type="textarea" :rows="2" v-model="addForm.desc"></el-input>
         </el-form-item>
         <el-form-item label="规则：" prop="rule">
-          <el-input type="textarea" :rows="2" v-model="addForm.rule" auto-complete="off"></el-input>
+          <el-input type="textarea" :rows="2" v-model="addForm.rule"></el-input>
         </el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -183,11 +175,11 @@
 <script>
 	import * as util from '../../../util/util.js'
 	//
-	import { insertProduct, queryProductList, updateStatus, updateProduct, getCouponByInPro, uploadimg} from '../../../api/shop';
+	import { insertProduct, queryProductListNew, updateStatus, updateProduct, getCouponByInPro, uploadimg, uploadAgentImage, queryCouponListNew, insertProductNew } from '../../../api/shop';
 	export default {
 		data() {
 			return {
-        uploadImage:uploadimg,//上传图片变量
+        uploadImage:uploadAgentImage,//上传图片变量
         uploaddata:{
           mid:''
         },
@@ -210,9 +202,36 @@
 				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
 				editFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
+					name: [{
+						required: true,
+						message: '请输入商品名称',
+						trigger: 'blur'
+					}, ],
+					nprice: [{
+						required: true,
+						message: '请输入商品现价',
+						trigger: 'blur'
+					}, ],
+					vprice: [{
+						required: true,
+						message: '请输入商品会员价',
+						trigger: 'blur'
+					}, ],
+					stock: [{
+						required: true,
+						message: '请输入商品库存',
+						trigger: 'blur'
+					}, ],
+					depict: [{
+						required: true,
+						message: '请输入商品描述',
+						trigger: 'blur'
+					}, ],
+					rule: [{
+						required: true,
+						message: '请输入兑换规则',
+						trigger: 'blur'
+					}, ],
 				},
 				//编辑界面数据
 				loading: false,
@@ -222,14 +241,15 @@
           small_url: '',
           pic_url: '',
 					card:'',
-          oprice: '',
           nprice: '',
 					vprice:'0.00',
           stock:'',
           start_time:'',
           end_time:'',
           depict:'',
-          rule:''
+          rule:'',
+          card_id: '',
+          desc: ''
 				},
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
@@ -237,11 +257,6 @@
 					name: [{
 						required: true,
 						message: '请输入商品名称',
-						trigger: 'blur'
-					}, ],
-					oprice: [{
-						required: true,
-						message: '请输入商品原价',
 						trigger: 'blur'
 					}, ],
 					nprice: [{
@@ -276,7 +291,6 @@
           small_url: '',
 					pic_url: '',
 					card_id:'',
-					oprice: '',
 					nprice: '',
 					vprice:'0.00',
           stock:'',
@@ -295,14 +309,17 @@
       format_nprice(row, column) {
         return util.number_format(row.nprice, 2, ".", ",")
       },
+      dialogClose(fromName){
+        this.$refs[fromName].resetFields()
+      },
 			//商户远程搜索
 			clickCard:function () {
-				getCouponByInPro({title:''}).then((res) => {
+				queryCouponListNew({title:''}).then((res) => {
 					let {
 						status,
 						data
 					} = res
-					this.optionsCard = data.CouponList
+					this.optionsCard = data.couponList
 				})
 			},
 			remoteCard(query) {
@@ -310,14 +327,14 @@
 					this.loading = true;
 					setTimeout(() => {
 						this.loading = false;
-						getCouponByInPro({
+						queryCouponListNew({
 							title: query
 						}).then((res) => {
 							let {
 								status,
 								data
 							} = res
-							this.optionsCard = data.CouponList
+							this.optionsCard = data.couponList
 						})
 					}, 200);
 				} else {
@@ -326,18 +343,19 @@
 			},
       //上传缩略图
       small_urlSuccess(res, file) {
-        this.addForm.small_url = res.data.locationUrl;
-        this.editForm.small_url = res.data.locationUrl;
+        this.addForm.small_url = res.data.locationPath;
+        this.editForm.small_url = res.data.locationPath;
       },
       //上传详情图
       pic_urlSuccess(res, file) {
-        this.addForm.pic_url = res.data.locationUrl;
-        this.editForm.pic_url = res.data.locationUrl;
+        this.addForm.pic_url = res.data.locationPath;
+        this.editForm.pic_url = res.data.locationPath;
       },
       //图片限制
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
+
         if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG 格式!');
         }
@@ -362,7 +380,7 @@
             id: row.id,
             status: row.status == true ? "Y" : row.status == false ? "N" : "未知"
           }
-          updateStatus(para).then((res) => {
+          insertProductNew(para).then((res) => {
             let {
               status
             } = res
@@ -385,6 +403,7 @@
             message: '取消修改'
           });
         });
+
       },
       getUsers(){
         this.page = 1
@@ -395,13 +414,14 @@
 				let para = {
 					pagNum: this.page,
 					name: this.filters.name,
-          status:this.filters.status
+          status:this.filters.status,
+          pageSize: 20
 				};
 				this.listLoading = true;
 				//
-				queryProductList(para).then((res) => {
+				queryProductListNew(para).then((res) => {
 					this.total = res.data.total;
-					this.users = res.data.productList;
+					this.users = res.data.dataInfo;
 					this.listLoading = false;
           var sta;
           for (var i = 0; i < this.users.length; i++) {
@@ -418,6 +438,7 @@
 			handleEdit: function (index, row) {
 				this.editFormVisible = true;
 				this.editForm = Object.assign({}, row);
+        this.clickCard()
 			},
 			//显示新增界面
 			handleAdd: function () {
@@ -434,15 +455,15 @@
                 name: String(this.editForm.name),
                 small_url: String(this.editForm.small_url),
                 pic_url: String(this.editForm.pic_url),
-                oprice: String(this.editForm.oprice),
                 nprice: String(this.editForm.nprice),
                 stock:String(this.editForm.stock),
                 start_time:'',
                 end_time:'',
                 desc:String(this.editForm.depict),
-                rule:String(this.editForm.rule)
+                rule:String(this.editForm.rule),
+                card_id: this.editForm.card_id
               }
-							updateProduct(para).then((res) => {
+							insertProductNew(para).then((res) => {
                 let {status,message}=res;
                 if (status==200) {
                   this.$notify({
@@ -460,7 +481,9 @@
                   });
                 }
 								this.editLoading = false;
-							});
+							}).catch(() => {
+                this.editLoading = false;
+              });
 						});
 					}
 				});
@@ -472,7 +495,7 @@
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.addLoading = true;
 							let para = Object.assign({}, this.addForm);
-							insertProduct(para).then((res) => {
+							insertProductNew(para).then((res) => {
                 let {status,message}=res;
                 if (status==200) {
                   this.$notify({
@@ -504,4 +527,5 @@
 </script>
 
 <style scoped>
+
 </style>

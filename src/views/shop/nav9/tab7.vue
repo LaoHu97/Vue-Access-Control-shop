@@ -310,7 +310,7 @@ export default {
     },
 		editQ(index, row) {
       this.$router.push({
-        path: "/index3/tab26-v",
+        path: "/index4/tab26-v",
         query: { card_id: row.card_id }
       });
 		},
@@ -321,12 +321,12 @@ export default {
       sessionStorage.setItem("channel_type", JSON.stringify(channel_type));
       if (row.card_type === "WDGIFT_COUPON" || row.card_type === "FREQUENCY") {
         this.$router.push({
-          path: "/index3/tab12-v",
+          path: "/index4/tab12-v",
           query: { card_type: row.card_type, card_id: row.card_id }
         });
       } else {
         this.$router.push({
-          path: "/index3/tab7-modify-v"
+          path: "/index4/tab7-modify-v"
         });
       }
     },
@@ -430,12 +430,12 @@ export default {
             ? "WDGIFT_COUPON"
             : "weizhi";
         this.$router.push({
-          path: "/index3/tab12-v",
+          path: "/index4/tab12-v",
           query: { card_type: card_type_cope }
         });
       } else {
         this.$router.push({
-          path: "/index3/tab7s-v"
+          path: "/index4/tab7s-v"
         });
       }
     }

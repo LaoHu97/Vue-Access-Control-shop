@@ -587,12 +587,12 @@ export default {
     handleEdit: function(index, row) {
       var card_no = row.card_no;
       sessionStorage.setItem("card_no", JSON.stringify(card_no));
-      this.$router.push("/index3/tab6-v");
+      this.$router.push("/index4/tab6-v");
     },
     handleJiLog: function(index, row) {
       var card_no = row.card_no;
       sessionStorage.setItem("card_no", JSON.stringify(card_no));
-      this.$router.push("/index3/tab13-v");
+      this.$router.push("/index4/tab13-v");
     }
   },
   mounted() {

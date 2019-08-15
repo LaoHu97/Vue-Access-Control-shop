@@ -117,13 +117,13 @@ export default {
     },
     handleEdits(index,row){
       this.$router.push({
-        path: "/index3/tab23-v",
+        path: "/index4/tab23-v",
         query: {id: row.id, sid: row.apply_sid}
       });
     },
     handleEdit(index, row){
       this.$router.push({
-        path: "/index3/tab17-v",
+        path: "/index4/tab17-v",
         query: {id: row.id}
       });
     },
@@ -139,7 +139,7 @@ export default {
     },
     addExpense() {
       this.$router.push({
-        path: "/index3/tab17-v"
+        path: "/index4/tab17-v"
       });
     },
     handleCurrentChange(val) {

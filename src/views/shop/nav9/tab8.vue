@@ -201,7 +201,7 @@ export default {
     //新增公司账户
     handleAdd: function() {
       var _this = this;
-      _this.$router.push('/index3/tab3s');
+      _this.$router.push('/index4/tab3s');
     }
   },
   mounted() {

@@ -299,7 +299,7 @@
     methods: {
       levelClick(index, row) {
         this.$router.push({
-          path: '/index3/tab27-v',
+          path: '/index4/tab27-v',
           query: {id: row.wxcard_id}
         });
       },
@@ -429,7 +429,7 @@
         var id = row.id;
         sessionStorage.setItem('id', JSON.stringify(id));
         this.$router.push({
-          path: '/index3/tab1-modify-v',
+          path: '/index4/tab1-modify-v',
         });
       },
       //充值设置
@@ -437,7 +437,7 @@
         var wxcard_id = row.wxcard_id;
         sessionStorage.setItem('wxcard_id', JSON.stringify(wxcard_id));
         this.$router.push({
-          path: '/index3/tab11',
+          path: '/index4/tab11',
         });
       },
       //修改库存
@@ -507,7 +507,7 @@
       //新增
       handleAdd: function () {
         var _this = this;
-        _this.$router.push('/index3/tab1s-v');
+        _this.$router.push('/index4/tab1s-v');
       },
       //上传微信
       uploadWinxin: function (index, row) {

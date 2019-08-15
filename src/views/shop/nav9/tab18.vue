@@ -121,19 +121,19 @@ export default {
     },
     handleEdits(index,row){
       this.$router.push({
-        path: "/index3/tab22-v",
+        path: "/index4/tab22-v",
         query: {id: row.id, sid: row.apply_sid}
       });
     },
     handleEdit(index,row){
       this.$router.push({
-        path: "/index3/tab19-v",
+        path: "/index4/tab19-v",
         query: {id: row.id}
       });
     },
     addExpense() {
       this.$router.push({
-        path: "/index3/tab19-v"
+        path: "/index4/tab19-v"
       });
     },
     handleCurrentChange(val) {

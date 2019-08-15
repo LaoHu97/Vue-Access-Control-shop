@@ -120,13 +120,13 @@ export default {
     },
     handleEdit(index, row) {
       this.$router.push({
-        path: "/index3/tab21-v",
+        path: "/index4/tab21-v",
         query: {id: row.id}
       });
     },
     addExpense() {
       this.$router.push({
-        path: "/index3/tab21-v"
+        path: "/index4/tab21-v"
       });
     },
     handleCurrentChange(val) {

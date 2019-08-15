@@ -107,7 +107,7 @@ export default {
                 type: "success"
               });
               this.$router.push({
-                path: "/index3/tab16-v"
+                path: "/index4/tab16-v"
               });
             });
           }else{
@@ -117,7 +117,7 @@ export default {
                 type: "success"
               });
               this.$router.push({
-                path: "/index3/tab16-v"
+                path: "/index4/tab16-v"
               });
             });
           }
