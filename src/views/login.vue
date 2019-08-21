@@ -151,7 +151,10 @@
           } else {
             this.clickCode()
           }
-        }).catch(util.catchError);
+        }).catch((err) => {
+          vm.isBtnLoading = false;
+          this.clickCode()
+        });
       }
     },
     created() {

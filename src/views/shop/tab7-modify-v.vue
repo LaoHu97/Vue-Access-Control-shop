@@ -236,6 +236,8 @@ export default {
         return callback(new Error('请输入负责人电话'));
       }else if (!(/(^(\d{3,4}-)?\d{7,8})$|(1[3|5|7|8]\d{9})/.test(value))) {
         return callback(new Error('请输入正确的电话号码'));
+      }else if(value.length >= 13){
+        return callback(new Error('请输入正确的电话号码位数'));
       }else {
         callback();
       }

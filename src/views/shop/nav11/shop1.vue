@@ -73,11 +73,45 @@
             <el-button size="small" type="primary" style="float:right;margin-left:15px;">点击上传</el-button>
           </el-upload>
         </el-form-item>
+        <!-- <el-form-item label="所属门店" prop="sid">
+          <el-select
+            v-model="editForm.sid"
+            placeholder="门店名称"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteStore"
+            :loading="searchLoading"
+            clearable
+            @focus="clickStore"
+            @change="storeChange"
+          >
+            <el-option
+              v-for="item in optionsStore"
+              :key="item.id"
+              :value="item.id"
+              :label="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item> -->
 				<el-form-item label="选择优惠券：" prop="card_id">
-					<el-select v-model="editForm.card_id" placeholder="请选择优惠券" :multiple="false" filterable remote :remote-method="remoteCard" :loading="loading" clearable @visible-change="clickCard">
-						<el-option v-for="item in optionsCard" :key="item.card_id" :value="item.card_id" :label="item.title">
-						</el-option>
-					</el-select>
+          <el-select
+            v-model="editForm.card_id"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteCoupon"
+            :loading="couponSearchLoading"
+            clearable
+            @focus="clickCoupon"
+          >
+            <el-option
+              v-for="item in optionsCoupon"
+              :key="item.card_id"
+              :value="item.card_id"
+              :label="item.title"
+            ></el-option>
+          </el-select>
 				</el-form-item>
         <el-form-item label="商品名称：" prop="name">
           <el-input v-model="editForm.name" auto-complete="off" style="width:200px;"></el-input>
@@ -130,11 +164,45 @@
             <el-button size="small" type="primary" style="float:right;margin-left:15px;">点击上传</el-button>
           </el-upload>
         </el-form-item>
+        <!-- <el-form-item label="所属门店" prop="sid">
+          <el-select
+            v-model="addForm.sid"
+            placeholder="门店名称"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteStore"
+            :loading="searchLoading"
+            clearable
+            @focus="clickStore"
+            @change="storeChange"
+          >
+            <el-option
+              v-for="item in optionsStore"
+              :key="item.id"
+              :value="item.id"
+              :label="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item> -->
 				<el-form-item label="选择优惠券：" prop="card_id">
-					<el-select v-model="addForm.card_id" placeholder="请选择优惠券" :multiple="false" filterable remote :remote-method="remoteCard" :loading="loading" clearable @visible-change="clickCard">
-						<el-option v-for="item in optionsCard" :key="item.card_id" :value="item.card_id" :label="item.title">
-						</el-option>
-					</el-select>
+          <el-select
+            v-model="addForm.card_id"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteCoupon"
+            :loading="couponSearchLoading"
+            clearable
+            @focus="clickCoupon"
+          >
+            <el-option
+              v-for="item in optionsCoupon"
+              :key="item.card_id"
+              :value="item.card_id"
+              :label="item.title"
+            ></el-option>
+          </el-select>
 				</el-form-item>
 				<el-form-item label="商品名称：" prop="name">
 					<el-input v-model="addForm.name" style="width:50%;"></el-input>
@@ -175,7 +243,7 @@
 <script>
 	import * as util from '../../../util/util.js'
 	//
-	import { insertProduct, queryProductListNew, updateStatus, updateProduct, getCouponByInPro, uploadimg, uploadAgentImage, queryCouponListNew, insertProductNew } from '../../../api/shop';
+	import { insertProduct, queryProductListNew,queryCouponWithOutWDGifi, selectStoreListNew, updateStatus, updateProduct, getCouponByInPro, uploadimg, uploadAgentImage, queryCouponListNew, insertProductNew } from '../../../api/shop';
 	export default {
 		data() {
 			return {
@@ -249,7 +317,8 @@
           depict:'',
           rule:'',
           card_id: '',
-          desc: ''
+          desc: '',
+          card_id: ''
 				},
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
@@ -297,8 +366,13 @@
           start_time:'',
           end_time:'',
           desc:'',
-          rule:''
-				}
+          rule:'',
+          card_id: ''
+				},
+        searchLoading: false,
+        optionsStore: [],
+        optionsCoupon: [],
+        couponSearchLoading: false
 			}
 		},
 		methods: {
@@ -311,6 +385,66 @@
       },
       dialogClose(fromName){
         this.$refs[fromName].resetFields()
+      },
+      clickCoupon: function() {
+        this.couponSearchLoading = true;
+        let para = {
+          title: "",
+          sid: 0
+        };
+        queryCouponWithOutWDGifi(para).then(res => {
+          this.couponSearchLoading = false;
+          this.optionsCoupon = res.data.couponList;
+        });
+      },
+      remoteCoupon(query) {
+        if (query !== "") {
+          this.couponSearchLoading = true;
+          setTimeout(() => {
+            this.couponSearchLoading = false;
+            let para = {
+              title: query,
+              sid: 0
+            };
+            queryCouponWithOutWDGifi(para).then(res => {
+              this.optionsCoupon = res.data.couponList;
+            });
+          }, 200);
+        } else {
+          this.optionsCoupon = [];
+        }
+      },
+      storeChange(e){
+        this.editForm.card_id = ''
+        this.addForm.card_id = ''
+      },
+      clickStore: function() {
+        this.searchLoading = true;
+        selectStoreListNew({
+          sname: "",
+          use_all_locations: 'N'
+        }).then(res => {
+          this.searchLoading = false;
+          let { status, data } = res;
+          this.optionsStore = data.storeList;
+        });
+      },
+      remoteStore(query) {
+        if (query !== "") {
+          this.searchLoading = true;
+          setTimeout(() => {
+            this.searchLoading = false;
+            selectStoreListNew({
+              sname: query,
+              use_all_locations: 'N'
+            }).then(res => {
+              let { status, data } = res;
+              this.optionsStore = data.storeList;
+            });
+          }, 200);
+        } else {
+          this.optionsStore = [];
+        }
       },
 			//商户远程搜索
 			clickCard:function () {
@@ -513,7 +647,9 @@
                   });
                 }
                 this.addLoading = false;
-							});
+							}).catch(() => {
+                this.addLoading = false;
+              });
 						});
 					}
 				});

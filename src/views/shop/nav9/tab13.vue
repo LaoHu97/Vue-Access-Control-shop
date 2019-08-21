@@ -164,6 +164,9 @@ export default {
       }, {
         value: 'OLDBIND',
         label: '老会员绑定'
+      }, {
+        value: 'PCDEPOSITBONUS',
+        label: 'PC充值积分'
       }],
       editFormRules: {
         code: [{
@@ -189,7 +192,7 @@ export default {
   },
   methods: {
     reason_idformatter(row, column){
-      return row.reason_id === 'OLDBIND' ? '老会员绑定': row.reason_id === 'POSDEPOSIT' ? 'POS会员充值': row.reason_id === 'POSXF' ? 'POS收款': row.reason_id === 'CZLK' ? '充值领卡': row.reason_id === 'CZZS' ? '充值赠送': row.reason_id === 'CZ' ? '充值' : row.reason_id === 'XF' ? '消费' : row.reason_id === 'REFUND' ? '退款' : row.reason_id === 'TG' ? '团购' : row.reason_id === 'PT' ? '拼团' : row.reason_id === 'DH' ? '积分兑换' : '未知'
+      return row.reason_id === 'PCDEPOSITBONUS' ? 'PC充值积分': row.reason_id === 'OLDBIND' ? '老会员绑定': row.reason_id === 'POSDEPOSIT' ? 'POS会员充值': row.reason_id === 'POSXF' ? 'POS收款': row.reason_id === 'CZLK' ? '充值领卡': row.reason_id === 'CZZS' ? '充值赠送': row.reason_id === 'CZ' ? '充值' : row.reason_id === 'XF' ? '消费' : row.reason_id === 'REFUND' ? '退款' : row.reason_id === 'TG' ? '团购' : row.reason_id === 'PT' ? '拼团' : row.reason_id === 'DH' ? '积分兑换' : '未知'
     },
     codeClick() {
       sendVerCode({

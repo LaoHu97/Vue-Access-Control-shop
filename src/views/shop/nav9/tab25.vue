@@ -8,7 +8,7 @@
         </el-form-item>
         <el-form-item style="float:right">
           <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
-          <el-button type="success" v-on:click="addGoods">新增会员卡</el-button>
+          <el-button type="success" v-on:click="addGoods">新增付费购卡</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -40,7 +40,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog :title="goodsForm.id ? '修改会员卡' : '新增会员卡'" :visible.sync="dialogAddGoodsFormVisible" @close="handleClose('goodsForm')" width="600px">
+    <el-dialog :title="goodsForm.id ? '修改付费购卡' : '新增付费购卡'" :visible.sync="dialogAddGoodsFormVisible" @close="handleClose('goodsForm')" width="600px">
       <el-form
         :model="goodsForm"
         :rules="goodsFormRules"

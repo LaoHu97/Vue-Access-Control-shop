@@ -32,8 +32,8 @@
   <el-table :data="users" border highlight-current-row style="width: 100%;">
     <el-table-column prop="card_name" label="计次卡名称">
     </el-table-column>
-    <el-table-column prop="name" label="所属人" min-width="120">
-    </el-table-column>
+    <!-- <el-table-column prop="name" label="所属人" min-width="120">
+    </el-table-column> -->
     <el-table-column prop="code" label="计次卡号" min-width="120">
     </el-table-column>
     <el-table-column prop="creat_time" label="领取时间" :formatter="creat_stamp" min-width="160">

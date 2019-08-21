@@ -70,7 +70,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="商品名称" prop="card_id">
+        <el-form-item label="商品名称" prop="card_id" v-if="goodsForm.sid">
           <el-select
             v-model="goodsForm.card_id"
             :multiple="false"
@@ -352,14 +352,17 @@ export default {
           if (!para.id) {
             delete para.id
           }
-          console.log(para);
           para.n_price = para.n_price * 100
           para.o_price = para.o_price * 100
           para.v_price = para.v_price * 100
           updateProductNew(para).then(res => {
             this.dialogAddGoodsFormVisible = false;
             this.getUsers()
-          });
+            this.$message({
+              message: res.message,
+              type: 'success'
+            });
+          })
         } else {
           console.log("error submit!!");
           return false;
