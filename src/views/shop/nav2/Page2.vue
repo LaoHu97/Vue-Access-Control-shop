@@ -11,7 +11,7 @@
         </el-form-item>
         <el-form-item style="float: right;">
           <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
-         <!-- <el-button type="primary" @click="handleAdd" size="medium" round>新增</el-button>-->
+         <el-button type="primary" @click="handleAdd" size="medium" round>新增</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -39,10 +39,10 @@
             <el-button type="success" size="mini" @click="handleVipCode(scope.$index, scope.row)">会员支付二维码</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180">
+        <el-table-column label="操作" width="260">
           <template slot-scope="scope">
             <el-button type="danger" size="mini" @click="handleReset(scope.$index, scope.row)">密码重置</el-button>
-          <!--  <el-button type="warning" size="mini" @click="handleModify(scope.$index, scope.row)">修改</el-button>-->
+           <el-button type="warning" size="mini" @click="handleModify(scope.$index, scope.row)">修改</el-button>
             <el-button type="info" size="mini" @click="handleDetail(scope.$index, scope.row)">详情</el-button>
           </template>
         </el-table-column>
