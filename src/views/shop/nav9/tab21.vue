@@ -32,7 +32,7 @@
         <el-form-item label="活动名称" prop="name">
           <el-input v-model="expenseForm.name" placeholder="活动名称"></el-input>
         </el-form-item>
-        <el-form-item label="活动时间" prop="dateTimes">
+        <!-- <el-form-item label="活动时间" prop="dateTimes">
           <el-date-picker
             v-model="expenseForm.dateTimes"
             type="datetimerange"
@@ -41,7 +41,7 @@
             value-format="timestamp"
             :default-time="['00:00:00', '23:59:59']"
           ></el-date-picker>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="优惠券" prop="wd_coupon_card_id">
           <el-select v-model="expenseForm.wd_coupon_card_id" placeholder="请选择">
             <el-option

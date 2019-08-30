@@ -56,7 +56,7 @@
         <el-form-item style="width:100%" prop="input_01" :rules="[
           { type: 'url', message: '请填写正确的URL', trigger: 'blur' },
         ]">
-          <el-input v-model="minifrom.input_01" placeholder="请输入链接地址" style="width:240px;"></el-input>
+          <!-- <el-input v-model="minifrom.input_01" placeholder="请输入链接地址" style="width:240px;"></el-input> -->
           <el-button type="text" style="float:right" @click="deleteImg01">删除图片</el-button>
         </el-form-item>
         <el-form-item>
@@ -68,7 +68,7 @@
         <el-form-item style="width:100%" prop="input_02" :rules="[
           { type: 'url', message: '请填写正确的URL', trigger: 'blur' },
         ]">
-          <el-input v-model="minifrom.input_02" placeholder="请输入链接地址" style="width:240px;"></el-input>
+          <!-- <el-input v-model="minifrom.input_02" placeholder="请输入链接地址" style="width:240px;"></el-input> -->
           <el-button type="text" style="float:right" @click="deleteImg02">删除图片</el-button>
         </el-form-item>
         <el-form-item>
@@ -80,7 +80,7 @@
         <el-form-item style="width:100%" prop="input_03" :rules="[
           { type: 'url', message: '请填写正确的URL', trigger: 'blur' },
         ]">
-          <el-input v-model="minifrom.input_03" placeholder="请输入链接地址" style="width:240px;"></el-input>
+          <!-- <el-input v-model="minifrom.input_03" placeholder="请输入链接地址" style="width:240px;"></el-input> -->
           <el-button type="text" style="float:right" @click="deleteImg03">删除图片</el-button>
         </el-form-item>
         <el-form-item>
@@ -92,7 +92,7 @@
         <el-form-item style="width:100%" prop="input_04" :rules="[
           { type: 'url', message: '请填写正确的URL', trigger: 'blur' },
         ]">
-          <el-input v-model="minifrom.input_04" placeholder="请输入链接地址" style="width:240px;"></el-input>
+          <!-- <el-input v-model="minifrom.input_04" placeholder="请输入链接地址" style="width:240px;"></el-input> -->
           <el-button type="text" style="float:right" @click="deleteImg04">删除图片</el-button>
         </el-form-item>
         <el-form-item>
@@ -104,7 +104,7 @@
         <el-form-item style="width:100%" prop="input_05" :rules="[
           { type: 'url', message: '请填写正确的URL', trigger: 'blur' },
         ]">
-          <el-input v-model="minifrom.input_05" placeholder="请输入链接地址" style="width:240px;"></el-input>
+          <!-- <el-input v-model="minifrom.input_05" placeholder="请输入链接地址" style="width:240px;"></el-input> -->
           <el-button type="text" style="float:right" @click="deleteImg05">删除图片</el-button>
         </el-form-item>
       </el-form>

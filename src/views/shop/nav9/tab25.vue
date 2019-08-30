@@ -20,7 +20,6 @@
         <el-table-column prop="depict" label="商品描述"></el-table-column>
         <el-table-column prop="n_price" label="现价(￥)"></el-table-column>
         <el-table-column prop="o_price" label="原价(￥)"></el-table-column>
-        <el-table-column prop="v_price" label="会员价(￥)"></el-table-column>
         <el-table-column prop="status" label="商品状态" :formatter="formatterStatus"></el-table-column>
         <el-table-column label="状态">
             <template slot-scope="scope">
@@ -108,7 +107,7 @@
             label="现价"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="会员价" prop="v_price" v-if="goodsForm.is_buy === 'Y'">
+        <!-- <el-form-item label="会员价" prop="v_price" v-if="goodsForm.is_buy === 'Y'">
           <el-input-number
             :controls="false"
             :min="0"
@@ -116,10 +115,10 @@
             v-model="goodsForm.v_price"
             label="会员价"
           ></el-input-number>
-        </el-form-item>
-        <el-form-item label="库存" prop="stock">
+        </el-form-item> -->
+        <!-- <el-form-item label="库存" prop="stock">
           <el-input v-model="goodsForm.stock" placeholder="库存"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="开卡有礼规则" prop="pay_rule_id" v-if="goodsForm.is_buy === 'Y'">
           <el-select v-model="goodsForm.pay_rule_id" placeholder="请选择">
             <el-option

@@ -572,7 +572,7 @@
 			handleEdit: function (index, row) {
 				this.editFormVisible = true;
 				this.editForm = Object.assign({}, row);
-        this.clickCard()
+        this.clickCoupon()
 			},
 			//显示新增界面
 			handleAdd: function () {

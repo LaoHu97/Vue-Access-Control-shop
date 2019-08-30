@@ -186,7 +186,7 @@ export default {
           let arr = this.optionsStore.find(res => {
             return res.id == this.goodsForm.productId
           })
-          return time.getTime() <= arr.start_time || time.getTime() >= arr.end_time
+          return time.getTime() < arr.start_time || time.getTime() > arr.end_time
         }
       }
     };

@@ -35,10 +35,10 @@
             ></el-option>
           </el-select>
       </el-form-item>
-      <el-form-item label="是否分享" prop="can_share" v-if="$route.query.card_type == 'FREQUENCY'">
+      <!-- <el-form-item label="是否分享" prop="can_share" v-if="$route.query.card_type == 'FREQUENCY'">
         <el-radio v-model="meterForm.can_share" label="1">分享</el-radio>
         <el-radio v-model="meterForm.can_share" label="2">不分享</el-radio>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="卡券图片" prop="logo_url">
         <el-upload
           class="avatar-uploader"

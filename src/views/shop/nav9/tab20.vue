@@ -3,7 +3,7 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item label="日期时间">
+        <!-- <el-form-item label="日期时间">
           <el-date-picker
             v-model="filters.startTime"
             class="fixed_search_input_datetime"
@@ -21,7 +21,7 @@
             placeholder="选择结束日期"
             :editable="false"
           ></el-date-picker>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item style="float:right">
           <el-button type="primary" @click="getUsers" round>查询</el-button>
           <el-button type="success" @click="addExpense" plain>添加开卡有礼</el-button>
@@ -34,7 +34,7 @@
       <el-table :data="users" border highlight-current-row style="width: 100%;">
         <el-table-column prop="id" label="编号"></el-table-column>
         <el-table-column prop="rule_name" label="活动名称"></el-table-column>
-        <el-table-column label="活动时间" :formatter="create_time"></el-table-column>
+        <!-- <el-table-column label="活动时间" :formatter="create_time"></el-table-column> -->
         <el-table-column prop="status" label="活动状态" :formatter="formatterStatus"></el-table-column>
         <el-table-column prop="status" label="状态更改">
           <template slot-scope="scope">

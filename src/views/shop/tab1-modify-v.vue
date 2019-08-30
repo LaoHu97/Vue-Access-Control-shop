@@ -440,7 +440,7 @@
 </template>
 <script>
 import * as util from "../../util/util.js";
-import { updateMemCard, queryMemCardByKey, uploadimg } from "../../api/shop";
+import { updateMemCard, queryMemCardByKey, uploadImgNew } from "../../api/shop";
 export default {
   data() {
     var validate_service_phone = (rule, value, callback) => {
@@ -472,7 +472,7 @@ export default {
           return time.getTime() < Date.now() - 8.64e7;
         }
       },
-      uploadimg: uploadimg,
+      uploadimg: uploadImgNew,
       uploaddata: {
         mid: ""
       },

@@ -91,8 +91,8 @@
                   :value="item.card_id"
                 ></el-option>
               </el-select>金额
-              <el-input-number v-model="item.bonus" style="width:80px" :precision="2" :step="0.00" :controls="false"></el-input-number>积分
-              <el-input-number v-model="item.balance" style="width:80px" :precision="0" :step="0.00" :controls="false"></el-input-number>
+              <el-input-number v-model="item.balance" style="width:80px" :precision="2" :step="0.00" :controls="false"></el-input-number>积分
+              <el-input-number v-model="item.bonus" style="width:80px" :precision="0" :step="0.00" :controls="false"></el-input-number>
             </div>
           </el-form-item>
         </div>
