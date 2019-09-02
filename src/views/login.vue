@@ -7,9 +7,9 @@
             <div style="height: 60px;background-color: #fff;">
               <img src="../assets/images/webwxgetmsgimg.png" alt="logo" height="35px;" style="margin-top: 12px;margin-left: 20px;">
               <div class="topList">
-                <a href="http://weixin.weupay.com/pay/web/shop.html#/login">商户登录</a>
-                <a href="http://weixin.weupay.com/pay/web/store.html#/login">门店登录</a>
-                <a href="http://weixin.weupay.com/pay/web/emp.html#/login">款台登录</a>
+                <a href="https://pay.wandingkeji.cn/admin/web/shop.html#/login">商户登录</a>
+                <a href="https://pay.wandingkeji.cn/admin/web/store.html#/login">门店登录</a>
+                <a href="https://pay.wandingkeji.cn/admin/web/emp.html#/login">款台登录</a>
               </div>
             </div>
           </el-col>
