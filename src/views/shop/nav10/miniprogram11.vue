@@ -58,7 +58,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="链接类型" prop="url_type">
-          <el-radio v-model="goodsForm.url_type" label="IN">webView链接</el-radio>
+          <!-- <el-radio v-model="goodsForm.url_type" label="IN">webView链接</el-radio> -->
           <el-radio v-model="goodsForm.url_type" label="OUT">内链</el-radio>
         </el-form-item>
         <el-form-item label="链接地址" prop="url">

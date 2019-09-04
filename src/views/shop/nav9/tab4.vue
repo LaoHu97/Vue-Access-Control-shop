@@ -9,6 +9,16 @@
         <el-form-item label="会员卡号">
           <el-input v-model="filters.card_no" class="fixed_search_input" placeholder="会员卡号"></el-input>
         </el-form-item>
+        <el-form-item label="日期时间">
+          <el-date-picker
+            v-model="filters.queryDate"
+            type="daterange"
+            range-separator="至"
+            value-format="timestamp"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          ></el-date-picker>
+        </el-form-item>
         <el-form-item style="float:right">
           <el-button type="primary" @click="getUsers" round>查询</el-button>
           <el-button type="primary" v-on:click="cogradientCard" round>同步会员卡</el-button>
@@ -21,6 +31,7 @@
           >
             <el-button size="small" type="primary">批量绑定老会员</el-button>
           </el-upload>
+          <el-button type="text" @click="clickEx" round>下载报表</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -208,7 +219,8 @@ import {
   sysMemberInsertNew,
   addBalanceByPc,
   addBonusByPc,
-  uploadExcel
+  uploadExcel,
+  exportBuyCardToExcel
 } from "../../../api/shop";
 export default {
   data() {
@@ -227,7 +239,8 @@ export default {
       uploadExcel: uploadExcel,
       filters: {
         name: "",
-        card_no: ""
+        card_no: "",
+        queryDate: [new Date().getTime(), new Date().getTime()],
       },
       prop: "",
       order: "",
@@ -300,6 +313,15 @@ export default {
     format_actual_balance(row, column) {
       return util.number_format(row.actual_balance, 2, ".", ",");
     },
+    clickEx() {
+      let para = util.deepcopy(this.filters);
+      para.startTime = para.queryDate[0].toString()
+      para.endTime = para.queryDate[1].toString()
+      delete para.queryDate
+      exportBuyCardToExcel(para).then(res => {
+        window.open(res.data.data, "_blank")
+      });
+    },
     uploadExcelSuccess(res, file) {
       if (res.status === 200) {
         this.$message({
@@ -339,18 +361,20 @@ export default {
             code: this.formIntegralRecharge.memberId.toString()
           };
           this.IntegralrechargeLoading = true;
-          addBonusByPc(para).then(res => {
-            this.IntegralrechargeLoading = false;
-            this.dialogIntegralRechargeVisible = false;
-            this.$message({
-              message: "恭喜你，充值成功",
-              type: "success"
+          addBonusByPc(para)
+            .then(res => {
+              this.IntegralrechargeLoading = false;
+              this.dialogIntegralRechargeVisible = false;
+              this.$message({
+                message: "恭喜你，充值成功",
+                type: "success"
+              });
+              this.getUsers();
+              this.$refs[formName].resetFields();
+            })
+            .catch(() => {
+              this.IntegralrechargeLoading = false;
             });
-            this.getUsers();
-            this.$refs[formName].resetFields();
-          }).catch(() => {
-            this.IntegralrechargeLoading = false;
-          });
         } else {
           return false;
         }
@@ -576,6 +600,9 @@ export default {
         name: this.filters.name,
         card_no: this.filters.card_no
       };
+      para.startTime = this.filters.queryDate[0].toString()
+      para.endTime = this.filters.queryDate[1].toString()
+      delete para.queryDate
       this.listLoading = true;
       queryMemberListNew(para).then(res => {
         this.listLoading = false;

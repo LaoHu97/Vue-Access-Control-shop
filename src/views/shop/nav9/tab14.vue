@@ -4,12 +4,12 @@
   <el-row>
     <el-form :inline="true" :model="filters">
       <el-form-item label="日期时间">
-        <el-date-picker v-model="filters.startTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false" :editable='false'>
+        <el-date-picker v-model="filters.startTime" value-format="timestamp" class="fixed_search_input_datetime" type="datetime" placeholder="选择开始日期" :picker-options="pickerOptions1" :clearable="false" :editable='false'>
         </el-date-picker>
       </el-form-item>
       <el-form-item>至</el-form-item>
       <el-form-item>
-        <el-date-picker v-model="filters.endTime" class="fixed_search_input_datetime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false" :editable='false'>
+        <el-date-picker v-model="filters.endTime" value-format="timestamp" class="fixed_search_input_datetime" type="datetime" placeholder="选择结束日期" :picker-options="pickerOptions2" :clearable="false" :editable='false'>
         </el-date-picker>
       </el-form-item>
       <el-form-item label="计次卡号">
@@ -23,6 +23,7 @@
       </el-form-item>
       <el-form-item style="float:right">
         <el-button type="primary" @click="getUsers" round>查询</el-button>
+        <el-button type="text" @click="clickEx" round>下载报表</el-button>
       </el-form-item>
     </el-form>
   </el-row>
@@ -62,7 +63,8 @@ import * as util from '../../../util/util.js'
 import {
   queryFrequencyList,
   sendVerCode,
-  checkVerCode
+  checkVerCode,
+  exportConsumeCountList
 } from '../../../api/shop';
 export default {
   data() {
@@ -81,8 +83,8 @@ export default {
       },
       filters: {
         card_no: '',
-        startTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate()),
-        endTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate(), 23, 59, 59),
+        startTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate()).getTime() ,
+        endTime: new Date(myDate.getFullYear(), myDate.getMonth(), myDate.getDate(), 23, 59, 59).getTime(),
         openidType: ''
       },
 
@@ -100,6 +102,15 @@ export default {
     openid_type: function (row, column) {
       return row.openid_type === 'MINI' ? '小程序' : row.openid_type === 'MP' ? '公众号' : '未知'
     },
+			clickEx(){
+				let para = util.deepcopy(this.filters)
+        para.startTime = para.startTime.toString()
+        para.endTime = para.endTime.toString()
+				para.excelType = '6'
+				exportConsumeCountList(para).then(res => {
+					window.open(res.data, "_blank")
+				})
+			},
     handleCurrentChange(val) {
       this.page = val;
       this.getList();
@@ -113,12 +124,10 @@ export default {
       let para = {
         pagNum: this.page,
         card_no: this.filters.card_no,
-        startTime: this.filters.startTime,
-        endTime: this.filters.endTime,
+        startTime: this.filters.startTime.toString(),
+        endTime: this.filters.endTime.toString(),
         openidType: this.filters.openidType
       };
-      para.startTime = (!para.startTime || para.startTime == '') ? '' : String(Date.parse(util.formatDate.format(new Date(para.startTime), 'yyyy/MM/dd hh:mm:ss'))); //开始时间
-      para.endTime = (!para.endTime || para.endTime == '') ? '' : String(Date.parse(util.formatDate.format(new Date(para.endTime), 'yyyy/MM/dd hh:mm:ss'))); //开始时间
       this.listLoading = true;
       queryFrequencyList(para).then((res) => {
         this.total = res.data.total;

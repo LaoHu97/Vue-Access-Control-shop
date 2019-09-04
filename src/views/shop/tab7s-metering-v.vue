@@ -96,6 +96,16 @@
           </div>
         </template>
       </el-form-item>
+      <el-form-item label="房间类型" prop="roomType"  v-if="$route.query.card_type == 'WDGIFT_COUPON'">
+        <el-select v-model="meterForm.roomType" multiple placeholder="请选择">
+          <el-option
+            v-for="item in roomTypeOptions"
+            :key="item"
+            :label="item"
+            :value="item">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="可用时段" prop="resource">
         <template>
           <el-radio class="radio" v-model="meterForm.time_limit" label="0">全部时段</el-radio>
@@ -209,7 +219,8 @@ import {
   queryCouponDetails,
   updateWdFrequencyCard,
   updateWdGiftCoupon,
-  selectStoreListNew
+  selectStoreListNew,
+  getRoomType
 } from "../../api/shop";
 export default {
   data() {
@@ -243,7 +254,8 @@ export default {
         begin_hour_minute: "",
         end_hour_minute: "",
         initialTotal: "",
-        logo_url: ""
+        logo_url: "",
+        roomType: []
       },
       optionsCoupons: [],
       searchLoading: false,
@@ -296,8 +308,13 @@ export default {
         ],
         numWriteOff: [
           { required: true, message: "请输入活动名称", trigger: "blur" }
-        ]
-      }
+        ],
+        roomType: [
+          { required: true, message: "请选择房间类型", trigger: "change" }
+        ],
+      },
+
+      roomTypeOptions: []
     };
   },
   methods: {
@@ -404,7 +421,6 @@ export default {
         if (valid) {
           let para = util.deepcopy(this.meterForm);
           para.card_type = this.$route.query.card_type
-          console.log(this.$route.query.card_type);
           if (this.$route.query.card_type == "FREQUENCY") {
             if (this.$route.query.card_id) {
               para.card_id = this.$route.query.card_id
@@ -457,9 +473,15 @@ export default {
           return false;
         }
       });
+    },
+    getRoomTypeOptions() {
+      getRoomType().then(res => {
+        this.roomTypeOptions = res.data.roomType
+      })
     }
   },
   mounted() {
+    this.getRoomTypeOptions()
     if (this.$route.query.card_id) {
       this.returnDisplay();
     }

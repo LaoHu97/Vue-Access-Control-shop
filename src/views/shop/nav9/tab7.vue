@@ -33,8 +33,8 @@
     <!--列表-->
     <div v-loading="listLoading">
       <el-table border :data="users" highlight-current-row style="width: 100%;">
-        <el-table-column prop="card_type" label="卡券类型" :formatter="card_type"></el-table-column>
         <el-table-column prop="title" label="卡券名称" min-width="120"></el-table-column>
+        <el-table-column prop="card_type" label="卡券类型" :formatter="card_type"></el-table-column>
         <el-table-column prop="quantity" label="库存"></el-table-column>
         <el-table-column prop="get_limit" label="限领次数"></el-table-column>
         <el-table-column prop="status" label="状态" min-width="90" :formatter="status"></el-table-column>

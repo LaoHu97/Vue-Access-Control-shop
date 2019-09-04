@@ -277,7 +277,7 @@ export const debounce = function (func, wait, immediate) {
 }
 //格式化支付方式
 export const formatPayment = function (data) {
-  return data === 'WX' ? '微信' : data === 'ALI' ? '支付宝' : data === 'DEBIT' ? '借记卡' : data === 'CREDIT' ? '贷记卡' : data === 'BEST' ? '翼支付' : data === 'UNIONPAY' ? '银联二维码' : data === 'BANK' ? '银行卡' : '其它';
+  return data === 'WX' ? '微信' : data === 'CASH' ? '现金' : data === 'ALI' ? '支付宝' : data === 'DEBIT' ? '借记卡' : data === 'CREDIT' ? '贷记卡' : data === 'BEST' ? '翼支付' : data === 'UNIONPAY' ? '银联二维码' : data === 'BANK' ? '银行卡' : data === 'JSAPI' ? '公众号' : data === 'MEMBER' ? '会员' : '其它';
 }
 //格式化支付状态
 export const formatPayStatus = function (data, val) {

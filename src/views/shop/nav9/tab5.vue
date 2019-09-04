@@ -4,14 +4,45 @@
 		<el-row>
 			<el-form :inline="true" :model="filters" ref="filters">
 				<el-form-item label="卡券名称">
-					<el-input v-model="filters.title" class="fixed_search_input" placeholder="卡券名称"></el-input>
+					<el-input v-model="filters.title" placeholder="卡券名称"></el-input>
 				</el-form-item>
 				<el-form-item label="卡券号码">
-					<el-input v-model="filters.code" class="fixed_search_input" placeholder="卡券号码"></el-input>
+					<el-input v-model="filters.code" placeholder="卡券号码"></el-input>
 				</el-form-item>
+				<el-form-item label="日期时间">
+					<el-date-picker
+						v-model="filters.dateTime"
+						type="datetimerange"
+						value-format="timestamp"
+						start-placeholder="开始日期"
+						end-placeholder="结束日期"
+						:default-time="['00:00:00', '23:59:59']">
+					</el-date-picker>
+				</el-form-item>
+        <el-form-item label="所属门店">
+          <el-select
+            v-model="filters.sid"
+            placeholder="门店名称"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteTopStore"
+            :loading="searchTopLoading"
+            clearable
+            @focus="clickTopStore"
+          >
+            <el-option
+              v-for="item in optionsTopStore"
+              :key="item.id"
+              :value="item.id"
+              :label="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
 				<el-form-item style="float:right">
 					<el-button type="primary" @click="getUsers" round>查询</el-button>
 					<el-button type="primary" @click="dialogClick" round>核销卡券</el-button>
+					<el-button type="text" @click="clickEx" round>下载报表</el-button>
 				</el-form-item>
 			</el-form>
 		</el-row>
@@ -74,13 +105,27 @@
 		<!--列表-->
 		<div v-loading="listLoading">
 			<el-table :data="users" highlight-current-row style="width: 100%;" border>
-				<el-table-column prop="title" label="卡券名称" min-width="140">
+				<el-table-column prop="title" label="卡券名称">
 				</el-table-column>
-				<el-table-column prop="code" label="卡券号" min-width="120">
+				<el-table-column prop="code" label="卡券号">
 				</el-table-column>
-				<el-table-column prop="consume_source" label="核销方式" :formatter="consume_source" min-width="120">
+				<el-table-column prop="card_type" label="卡券类型" :formatter="card_type">
 				</el-table-column>
-				<el-table-column prop="status" label="核销状态" :formatter="statusformatter" min-width="120">
+				<el-table-column prop="stoName" label="核销门店">
+				</el-table-column>
+				<el-table-column prop="use_time" label="核销时间" :formatter="update_time">
+				</el-table-column>
+				<el-table-column prop="receiveType" label="领取渠道" :formatter="formatterReceiveType">
+				</el-table-column>
+				<el-table-column prop="receiveOrder" label="订单号">
+				</el-table-column>
+				<el-table-column prop="memName" label="会员名称">
+				</el-table-column>
+				<el-table-column prop="memPhone" label="会员手机号">
+				</el-table-column>
+				<el-table-column prop="consume_source" label="核销方式" :formatter="consume_source">
+				</el-table-column>
+				<el-table-column prop="status" label="核销状态" :formatter="statusformatter">
 				</el-table-column>
 			</el-table>
 		</div>
@@ -96,14 +141,16 @@
 <script>
 	import * as util from '../../../util/util.js'
 	//
-	import { queryCodeNew, consumeCodeNew, queryConsumeListNew, selectStoreListNew } from '../../../api/shop';
+	import { queryCodeNew, consumeCodeNew, queryConsumeListNew, selectStoreListNew, exportConsumeCountList } from '../../../api/shop';
 	export default {
 		data() {
 			return {
 				users: [],
 				filters: {
 					title: '',
-					code:''
+					code:'',
+					dateTime: null,
+					sid: ''
 				},
 				total: 0,
 				page: 1,
@@ -125,10 +172,33 @@
 
 				optionsStore: [],
 				sid: '',
-				searchLoading: false
+				searchLoading: false,
+
+				optionsTopStore: [],
+				searchTopLoading: false
 			}
 		},
 		methods: {
+      formatterReceiveType(row,column) {
+        return row.receiveType === 'TB' ? '团购' : row.receiveType === 'CZ' ? '充值' : row.receiveType === 'DH' ? '积分兑换' : row.receiveType === 'CZLK' ? '充值领卡' : row.receiveType === 'CONSUME' ? '消费送劵': row.receiveType === 'PB' ? '拼购' : '未知'
+      },
+      card_type: function(row, column) {
+        return row.card_type == "GIFT"
+          ? "兑换券"
+          : row.card_type == "GENERAL_COUPON"
+          ? "优惠券"
+          : row.card_type == "GROUPON"
+          ? "团购券"
+          : row.card_type == "CASH"
+          ? "代金券"
+          : row.card_type == "DISCOUNT"
+          ? "折扣券"
+          : row.card_type == "FREQUENCY"
+          ? "计次卡"
+          : row.card_type == "WDGIFT_COUPON"
+          ? "礼包券"
+          : "未知";
+      },
 			statusformatter:function (row,column) {
 				return row.status === '1' ? '已领取' : row.status === '2' ? '已核销' : '未知';
 			},
@@ -138,7 +208,14 @@
 			},
 			//卡劵核销时间
 			update_time:function (row,column) {
-					return row.update_time=util.formatDate.format(new Date(row.update_time), 'yyyy-MM-dd hh:mm:ss')
+				return util.formatDate.format(new Date(row.use_time), 'yyyy-MM-dd hh:mm:ss')
+			},
+			clickEx(){
+				let para = util.deepcopy(this.filters)
+				para.excelType = '5'
+				exportConsumeCountList(para).then(res => {
+					window.open(res.data, "_blank")
+				})
 			},
 			dialogClick:function () {
 				this.dialogVisible=true;
@@ -187,6 +264,34 @@
 						this.$message.error(message);
 					}
 				})
+			},
+			clickTopStore: function() {
+				this.searchTopLoading = true;
+				selectStoreListNew({
+					title: "",
+					use_all_locations: 'Y'
+				}).then(res => {
+					this.searchTopLoading = false;
+					let { status, data } = res;
+					this.optionsTopStore = data.storeList;
+				});
+			},
+			remoteTopStore(query) {
+				if (query !== "") {
+					this.searchTopLoading = true;
+					setTimeout(() => {
+						this.searchTopLoading = false;
+						selectStoreListNew({
+							title: query,
+							use_all_locations: 'Y'
+						}).then(res => {
+							let { status, data } = res;
+							this.optionsTopStore = data.storeList;
+						});
+					}, 200);
+				} else {
+					this.optionsTopStore = [];
+				}
 			},
 			clickStore: function() {
 				this.searchLoading = true;
@@ -256,7 +361,9 @@
 				let para={
 					pagNum: this.page,
 					title:this.filters.title,
-					code:this.filters.code
+					code:this.filters.code,
+					dateTime: this.filters.dateTime,
+					sid: this.filters.sid
 				};
 				queryConsumeListNew(para).then((res) => {
 					this.total = res.data.total;

@@ -536,6 +536,26 @@ export default [{
           code: '20180316114906_58'
         },
         component: (resolve) => require(['../views/shop/nav9/tab24.vue'], resolve)
+      }, {
+        path: 'tab29-v',
+        name: '充值记录 ',
+        meta: {
+          title: '充值记录 ',
+          icon: 'table',
+          noCache: true,
+          code: '20180316114906_58'
+        },
+        component: (resolve) => require(['../views/shop/nav9/tab29.vue'], resolve)
+      }, {
+        path: 'tab30-v',
+        name: '消费记录 ',
+        meta: {
+          title: '消费记录 ',
+          icon: 'table',
+          noCache: true,
+          code: '20180316114906_58'
+        },
+        component: (resolve) => require(['../views/shop/nav9/tab30.vue'], resolve)
       }
     ]
   },
@@ -733,6 +753,26 @@ export default [{
       },
       component: (resolve) => require(['../views/shop/nav9/tab5.vue'], resolve)
     }, {
+      path: 'tab33-v',
+      name: '卡券领取 ',
+      meta: {
+        title: '卡券领取 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114852_92'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab33.vue'], resolve)
+    }, {
+      path: 'tab28-v',
+      name: '卡券核销统计 ',
+      meta: {
+        title: '卡券核销统计 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114852_92'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab28.vue'], resolve)
+    }, {
       path: 'tab14-v',
       name: '计次卡领取 ',
       meta: {
@@ -743,6 +783,16 @@ export default [{
       },
       component: (resolve) => require(['../views/shop/nav9/tab14.vue'], resolve)
     }, {
+      path: 'tab31-v',
+      name: '计次卡领取统计 ',
+      meta: {
+        title: '计次卡领取统计 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114852_92'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab31.vue'], resolve)
+    }, {
       path: 'tab15-v',
       name: '计次卡核销 ',
       meta: {
@@ -752,6 +802,16 @@ export default [{
         code: '20180316114906_58'
       },
       component: (resolve) => require(['../views/shop/nav9/tab15.vue'], resolve)
+    }, {
+      path: 'tab32-v',
+      name: '计次卡核销统计 ',
+      meta: {
+        title: '计次卡核销统计 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab32.vue'], resolve)
     }, {
       path: 'tab26-v',
       name: '礼包券规则 ',
