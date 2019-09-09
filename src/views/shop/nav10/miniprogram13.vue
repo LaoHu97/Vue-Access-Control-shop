@@ -47,19 +47,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="房间类型" prop="roomId">
-          <el-select v-model="goodsForm.roomId" placeholder="请选择">
-            <el-option value="大包"></el-option>
-            <el-option value="中包"></el-option>
-            <el-option value="小包"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="房间号" prop="roomId">
-          <el-select v-model="goodsForm.roomId" placeholder="请选择">
-            <el-option value="大包"></el-option>
-            <el-option value="中包"></el-option>
-            <el-option value="小包"></el-option>
-          </el-select>
+        <el-form-item label="房间号" prop="roomNumber">
+          <el-input v-model="goodsForm.roomNumber" placeholder="房间号"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -99,12 +88,13 @@ export default {
       dialogAddGoodsFormVisible: false,
       goodsForm: {
         id: "",
-        roomId: ""
+        roomId: "",
+        roomNumber: ""
       },
       goodsFormRules: {
         roomId: [
           {
-            required: true,
+            required: false,
             message: "请选择管理员",
             trigger: "change"
           }
