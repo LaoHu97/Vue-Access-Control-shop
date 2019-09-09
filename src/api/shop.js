@@ -1069,3 +1069,38 @@ export const queryConsumeFrequencyCountList = params => {
 export const getRoomType = params => {
   return instance.post(`${preUrlPath}/admin/mer/mall/getRoomType`, params).then(res => res.data);
 };
+
+export const getRoomList = params => {
+  return instance.post(`${preUrlPath}/admin/mer/room/query`, params).then(res => res.data);
+};
+
+export const getRoomManage = params => {
+  return instance.post(`${preUrlPath}/admin/mer/room/manage`, params).then(res => res.data);
+};
+
+export const saveRoomManage = params => {
+  return instance.post(`${preUrlPath}/admin/mer/room/save`, params).then(res => res.data);
+};
+
+export const generator = params => {
+  return instance.post(`${preUrlPath}/admin/mer/room/generator`, params).then(res => res.data);
+};
+
+export const selectEmployeeList = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/selectEmployeeList`, params).then(res => res.data);
+};
+
+export const selectEmployeeadd = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/add`, params).then(res => res.data);
+};
+
+export const selectEmployeeupdate = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/update`, params).then(res => res.data);
+};
+export const selectEmployeedelete = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/delete`, params).then(res => res.data);
+};
+
+export const getAllStoreByMid = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/getAllStoreByMid`, params).then(res => res.data);
+};

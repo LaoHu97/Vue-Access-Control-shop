@@ -536,26 +536,6 @@ export default [{
           code: '20180316114906_58'
         },
         component: (resolve) => require(['../views/shop/nav9/tab24.vue'], resolve)
-      }, {
-        path: 'tab29-v',
-        name: '充值记录 ',
-        meta: {
-          title: '充值记录 ',
-          icon: 'table',
-          noCache: true,
-          code: '20180316114906_58'
-        },
-        component: (resolve) => require(['../views/shop/nav9/tab29.vue'], resolve)
-      }, {
-        path: 'tab30-v',
-        name: '消费记录 ',
-        meta: {
-          title: '消费记录 ',
-          icon: 'table',
-          noCache: true,
-          code: '20180316114906_58'
-        },
-        component: (resolve) => require(['../views/shop/nav9/tab30.vue'], resolve)
       }
     ]
   },
@@ -763,16 +743,6 @@ export default [{
       },
       component: (resolve) => require(['../views/shop/nav9/tab33.vue'], resolve)
     }, {
-      path: 'tab28-v',
-      name: '卡券核销统计 ',
-      meta: {
-        title: '卡券核销统计 ',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114852_92'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab28.vue'], resolve)
-    }, {
       path: 'tab14-v',
       name: '计次卡领取 ',
       meta: {
@@ -783,16 +753,6 @@ export default [{
       },
       component: (resolve) => require(['../views/shop/nav9/tab14.vue'], resolve)
     }, {
-      path: 'tab31-v',
-      name: '计次卡领取统计 ',
-      meta: {
-        title: '计次卡领取统计 ',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114852_92'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab31.vue'], resolve)
-    }, {
       path: 'tab15-v',
       name: '计次卡核销 ',
       meta: {
@@ -802,16 +762,6 @@ export default [{
         code: '20180316114906_58'
       },
       component: (resolve) => require(['../views/shop/nav9/tab15.vue'], resolve)
-    }, {
-      path: 'tab32-v',
-      name: '计次卡核销统计 ',
-      meta: {
-        title: '计次卡核销统计 ',
-        icon: 'table',
-        noCache: true,
-        code: '20180316114906_58'
-      },
-      component: (resolve) => require(['../views/shop/nav9/tab32.vue'], resolve)
     }, {
       path: 'tab26-v',
       name: '礼包券规则 ',
@@ -965,8 +915,114 @@ export default [{
           code: '20180316115233_28'
         },
         component: (resolve) => require(['../views/shop/nav10/miniprogram11.vue'], resolve)
+      }, {
+        path: 'miniprogram12-v',
+        name: '房间列表 ',
+        meta: {
+          title: '房间列表 ',
+          icon: 'table',
+          noCache: true,
+          code: '20180316115233_28'
+        },
+        component: (resolve) => require(['../views/shop/nav10/miniprogram12.vue'], resolve)
+      }, {
+        path: 'miniprogram13-v',
+        name: '房间管理 ',
+        meta: {
+          title: '房间管理 ',
+          icon: 'table',
+          noCache: true,
+          code: '20180316115233_28'
+        },
+        component: (resolve) => require(['../views/shop/nav10/miniprogram13.vue'], resolve)
       }
     ]
+  }, {
+    path: '/index4',
+    name: '报表统计 ',
+    meta: {
+      icon: 'icon-xiaochengxu'
+    },
+    component: Abstract,
+    children: [{
+      path: 'tab34-v',
+      name: '开卡统计 ',
+      meta: {
+        title: '开卡统计 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab34.vue'], resolve)
+    }, {
+      path: 'tab29-v',
+      name: '充值统计 ',
+      meta: {
+        title: '充值统计 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab29.vue'], resolve)
+    }, {
+      path: 'tab30-v',
+      name: '消费统计 ',
+      meta: {
+        title: '消费统计 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab30.vue'], resolve)
+    }, {
+      path: 'tab28-v',
+      name: '卡券核销统计 ',
+      meta: {
+        title: '卡券核销统计 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114852_92'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab28.vue'], resolve)
+    }, {
+      path: 'tab31-v',
+      name: '计次卡领取统计 ',
+      meta: {
+        title: '计次卡领取统计 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114852_92'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab31.vue'], resolve)
+    }, {
+      path: 'tab32-v',
+      name: '计次卡核销统计 ',
+      meta: {
+        title: '计次卡核销统计 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav9/tab32.vue'], resolve)
+    }]
+  }, {
+    path: '/index4',
+    name: '店员管理 ',
+    meta: {
+      icon: 'icon-xiaochengxu'
+    },
+    component: Abstract,
+    children: [{
+      path: 'employees01-v',
+      name: '店员列表 ',
+      meta: {
+        title: '店员列表 ',
+        icon: 'table',
+        noCache: true,
+        code: '20180316114906_58'
+      },
+      component: (resolve) => require(['../views/shop/nav12/employees01.vue'], resolve)
+    }]
   }, {
     path: '/bill1',
     name: '对账单下载',

@@ -143,16 +143,16 @@
     },
     methods: {
       isTab() {
-        let para = {
-          code: this.$route.meta.code
-        }
-        checkPermission(para).then(res=>{
-          if (res.status === 200) {
-            this.accessPerMission = false
-          } else {
-            this.accessPerMission = true
-          }
-        })
+        // let para = {
+        //   code: this.$route.meta.code
+        // }
+        // checkPermission(para).then(res=>{
+        //   if (res.status === 200) {
+        //     this.accessPerMission = false
+        //   } else {
+        //     this.accessPerMission = true
+        //   }
+        // })
       },
       //退出登录
       logout: function () {

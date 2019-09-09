@@ -197,6 +197,8 @@
           ? "计次卡"
           : row.card_type == "WDGIFT_COUPON"
           ? "礼包券"
+          : row.card_type == "CZSJ"
+          ? "充值送劵"
           : "未知";
       },
 			statusformatter:function (row,column) {

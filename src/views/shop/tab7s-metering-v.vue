@@ -96,7 +96,7 @@
           </div>
         </template>
       </el-form-item>
-      <el-form-item label="房间类型" prop="roomType"  v-if="$route.query.card_type == 'WDGIFT_COUPON'">
+      <!-- <el-form-item label="房间类型" prop="roomType"  v-if="$route.query.card_type == 'WDGIFT_COUPON'">
         <el-select v-model="meterForm.roomType" multiple placeholder="请选择">
           <el-option
             v-for="item in roomTypeOptions"
@@ -105,7 +105,7 @@
             :value="item">
           </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="可用时段" prop="resource">
         <template>
           <el-radio class="radio" v-model="meterForm.time_limit" label="0">全部时段</el-radio>

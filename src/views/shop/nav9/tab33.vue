@@ -54,7 +54,7 @@
 				</el-table-column>
 				<el-table-column prop="card_type" label="卡券类型" :formatter="card_type">
 				</el-table-column>
-				<el-table-column prop="store_name" label="适用门店">
+				<el-table-column prop="store_name" label="适用门店" :formatter="formatterStore">
 				</el-table-column>
 				<el-table-column prop="use_time" label="领取时间" :formatter="update_time">
 				</el-table-column>
@@ -92,7 +92,7 @@
 				filters: {
 					title: '',
 					code:'',
-					dateTime: [new Date().getTime(), new Date().getTime()],
+					dateTime: null,
 					sid: ''
 				},
 				total: 0,
@@ -121,6 +121,9 @@
           : row.card_type == "WDGIFT_COUPON"
           ? "礼包券"
           : "未知";
+      },
+			formatterStore(row,column) {
+        return row.store_name ? row.store_name : '全部门店'
       },
       formatterReceiveType(row,column) {
         return row.receiveType === 'TB' ? '团购' : row.receiveType === 'CZ' ? '充值' : row.receiveType === 'DH' ? '积分兑换' : row.receiveType === 'CZLK' ? '充值领卡' : row.receiveType === 'CONSUME' ? '消费送劵': row.receiveType === 'PB' ? '拼购' : '未知'

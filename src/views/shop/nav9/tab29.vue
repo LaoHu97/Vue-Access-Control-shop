@@ -65,8 +65,7 @@
 					<el-input v-model="filters.order_id" placeholder="手机号"></el-input>
 				</el-form-item> -->
 				<el-form-item label="交易状态">
-					<el-select v-model="filters.scence" placeholder="请选择">
-						<el-option value="0" label="初始添加"></el-option>
+					<el-select v-model="filters.status" placeholder="请选择">
 						<el-option value="1" label="支付成功"></el-option>
 						<el-option value="2" label="支付失败"></el-option>
 					</el-select>
@@ -119,7 +118,7 @@
 			return {
 				filters: {
           order_id: '',
-          queryDate: [new Date().getTime(), new Date().getTime()],
+          queryDate: null,
           pay_way: '',
 					scence: '',
 					phone: '',
@@ -149,8 +148,8 @@
 			},
 			clickEx(){
 				let para = util.deepcopy(this.filters)
-        para.startTime = para.queryDate[0].toString()
-        para.endTime = para.queryDate[1].toString()
+        para.startTime = para.queryDate ? para.queryDate[0].toString() : ''
+        para.endTime = para.queryDate ? para.queryDate[1].toString() : ''
         delete para.queryDate
 				exportDepositeToExcel(para).then(res => {
 					console.log(res);
@@ -173,8 +172,8 @@
 				let para = util.deepcopy(this.filters)
         para.pageNum = this.page
 				para.pageFlag = 'Y'
-        para.startTime = para.queryDate[0].toString()
-        para.endTime = para.queryDate[1].toString()
+        para.startTime = para.queryDate ? para.queryDate[0].toString() : ''
+        para.endTime = para.queryDate ? para.queryDate[1].toString() : ''
         delete para.queryDate
 				queryDepositOrderList(para).then((res) => {
 					this.total = res.data.totalMap.stroke_number;

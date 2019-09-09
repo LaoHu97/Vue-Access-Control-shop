@@ -65,8 +65,7 @@
 					<el-input v-model="filters.order_id" placeholder="手机号"></el-input>
 				</el-form-item> -->
 				<el-form-item label="交易状态">
-					<el-select v-model="filters.scence" placeholder="请选择">
-						<el-option value="0" label="初始添加"></el-option>
+					<el-select v-model="filters.status" placeholder="请选择">
 						<el-option value="1" label="支付成功"></el-option>
 						<el-option value="2" label="支付失败"></el-option>
 					</el-select>
@@ -88,10 +87,10 @@
 				</el-table-column>
 				<el-table-column prop="phone" label="电话号码">
 				</el-table-column>
-				<el-table-column prop="total_amount" label="订单金额">
+				<!-- <el-table-column prop="total_amount" label="订单金额">
 				</el-table-column>
 				<el-table-column prop="discount" label="消费折扣">
-				</el-table-column>
+				</el-table-column> -->
 				<el-table-column prop="paid_amount" label="消费金额">
 				</el-table-column>
 				<el-table-column prop="pay_way" label="支付方式" :formatter="formatterPayWay">
@@ -118,7 +117,7 @@
 			return {
 				filters: {
           order_id: '',
-          queryDate: [new Date().getTime(), new Date().getTime()],
+          queryDate: null,
           pay_way: '',
 					scence: '',
 					phone: '',
@@ -148,8 +147,8 @@
 			},
 			clickEx(){
 				let para = util.deepcopy(this.filters)
-        para.startTime = para.queryDate[0].toString()
-        para.endTime = para.queryDate[1].toString()
+        para.startTime = para.queryDate ? para.queryDate[0].toString() : ''
+        para.endTime = para.queryDate ? para.queryDate[1].toString() : ''
         delete para.queryDate
 				exportConsumeToExcel(para).then(res => {
 					window.open(res.data.data, "_blank")
@@ -170,8 +169,8 @@
 				let para = util.deepcopy(this.filters)
         para.pageNum = this.page
 				para.pageFlag = 'Y'
-        para.startTime = para.queryDate[0].toString()
-        para.endTime = para.queryDate[1].toString()
+        para.startTime = para.queryDate ? para.queryDate[0].toString() : ''
+        para.endTime = para.queryDate ? para.queryDate[1].toString() : ''
         delete para.queryDate
 				queryConsumeOrderList(para).then((res) => {
 					this.total = res.data.totalMap.stroke_number;

@@ -3,12 +3,12 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item label="持卡人姓名">
+        <!-- <el-form-item label="持卡人姓名">
           <el-input v-model="filters.name" class="fixed_search_input" placeholder="持卡人姓名"></el-input>
         </el-form-item>
         <el-form-item label="会员卡号">
           <el-input v-model="filters.card_no" class="fixed_search_input" placeholder="会员卡号"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="日期时间">
           <el-date-picker
             v-model="filters.queryDate"
@@ -21,7 +21,7 @@
         </el-form-item>
         <el-form-item style="float:right">
           <el-button type="primary" @click="getUsers" round>查询</el-button>
-          <el-button type="primary" v-on:click="cogradientCard" round>同步会员卡</el-button>
+          <!-- <el-button type="primary" v-on:click="cogradientCard" round>同步会员卡</el-button>
           <el-upload
             class="upload_class"
             :action="uploadExcel"
@@ -30,7 +30,7 @@
             :before-upload="uploadExcelUpload"
           >
             <el-button size="small" type="primary">批量绑定老会员</el-button>
-          </el-upload>
+          </el-upload> -->
           <el-button type="text" @click="clickEx" round>下载报表</el-button>
         </el-form-item>
       </el-form>
@@ -240,7 +240,7 @@ export default {
       filters: {
         name: "",
         card_no: "",
-        queryDate: [new Date().getTime(), new Date().getTime()],
+        queryDate: null,
       },
       prop: "",
       order: "",
@@ -315,8 +315,8 @@ export default {
     },
     clickEx() {
       let para = util.deepcopy(this.filters);
-      para.startTime = para.queryDate[0].toString()
-      para.endTime = para.queryDate[1].toString()
+      para.startTime = para.queryDate ? para.queryDate[0].toString() : ''
+      para.endTime = para.queryDate ? para.queryDate[1].toString() : ''
       delete para.queryDate
       exportBuyCardToExcel(para).then(res => {
         window.open(res.data.data, "_blank")

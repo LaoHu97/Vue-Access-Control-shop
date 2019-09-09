@@ -4,10 +4,10 @@
 		<el-row>
 			<el-form :inline="true" :model="filters" ref="filters">
 				<el-form-item label="卡券名称">
-					<el-input v-model="filters.title" placeholder="卡券名称"></el-input>
+					<el-input v-model="filters.card_name" placeholder="卡券名称"></el-input>
 				</el-form-item>
-				<el-form-item label="卡券号码">
-					<el-input v-model="filters.card_no" placeholder="卡券号码"></el-input>
+				<el-form-item label="卡券类型号码">
+					<el-input v-model="filters.card_id" placeholder="卡券类型号码"></el-input>
 				</el-form-item>
 				<el-form-item label="日期时间">
           <el-date-picker
@@ -31,7 +31,7 @@
 			<el-table :data="users" highlight-current-row style="width: 100%;" border>
 				<el-table-column prop="card_name" label="卡券名称">
 				</el-table-column>
-				<el-table-column prop="card_id" label="卡券号">
+				<el-table-column prop="card_id" label="卡券类型号码">
 				</el-table-column>
 				<el-table-column prop="sum_count" label="总数">
 				</el-table-column>
@@ -60,9 +60,9 @@
 		data() {
 			return {
 				filters: {
-          card_no: '',
+          card_id: '',
           queryDate: [new Date().getTime(), new Date().getTime()],
-          title: ''
+          card_name: ''
 				},
         pickerOptions: {
           shortcuts: [{
