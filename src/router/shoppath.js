@@ -295,7 +295,7 @@ export default [{
       component: (resolve) => require(['../views/shop/nav5/shop2.vue'], resolve)
     }]
   },{
-    path: '/index4',
+    path: '/index3',
     name: '小程序管理',
     meta: {
       icon: 'icon-xiaochengxu'
