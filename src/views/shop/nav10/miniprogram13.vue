@@ -37,7 +37,7 @@
         label-position="left"
         label-width="120px"
       >
-        <el-form-item label="管理员" prop="title">
+        <el-form-item label="管理员" prop="roomId">
           <el-select v-model="goodsForm.roomId" placeholder="请选择">
             <el-option
               v-for="item in roomManageOptions"
@@ -45,6 +45,20 @@
               :label="item.name"
               :value="item.id"
             ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="房间类型" prop="roomId">
+          <el-select v-model="goodsForm.roomId" placeholder="请选择">
+            <el-option value="大包"></el-option>
+            <el-option value="中包"></el-option>
+            <el-option value="小包"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="房间号" prop="roomId">
+          <el-select v-model="goodsForm.roomId" placeholder="请选择">
+            <el-option value="大包"></el-option>
+            <el-option value="中包"></el-option>
+            <el-option value="小包"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
