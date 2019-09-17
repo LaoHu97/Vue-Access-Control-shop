@@ -47,6 +47,8 @@
         <el-table-column prop="pay_way" label="支付方式" :formatter="pay_wayFormatter"></el-table-column>
         <el-table-column prop="total_price" label="交易金额"></el-table-column>
         <el-table-column prop="creatTime" label="创建时间" :formatter="creatTimeFormatter"></el-table-column>
+        <el-table-column prop="username" label="适用场次"></el-table-column>
+        <el-table-column prop="phone" label="适用房型"></el-table-column>
       </el-table>
     </div>
 

@@ -161,6 +161,13 @@ export default {
             bonus: "",
             name: "",
             balance: ""
+          },
+          {
+            amount: "",
+            coupon_card_id: "",
+            bonus: "",
+            name: "",
+            balance: ""
           }
         ]
       },

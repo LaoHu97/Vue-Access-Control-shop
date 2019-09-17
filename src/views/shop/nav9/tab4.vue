@@ -38,11 +38,14 @@
     <!--列表-->
     <template v-loading="listLoading">
       <el-table :data="users" border highlight-current-row @sort-change="sortChange">
+        <el-table-column prop="sex" label="性别" min-width="120"></el-table-column>
+        <el-table-column prop="brithDate" label="生日" min-width="120"></el-table-column>
         <el-table-column prop="card_no" label="会员卡号" min-width="120"></el-table-column>
         <el-table-column prop="wx_name" label="微信昵称" min-width="120"></el-table-column>
         <el-table-column prop="name" label="持卡人" min-width="120"></el-table-column>
         <el-table-column prop="phone" label="手机号" min-width="120"></el-table-column>
         <el-table-column prop="creat_time" label="领卡时间" :formatter="creat_time" min-width="95"></el-table-column>
+        <el-table-column prop="update_paytime" label="最近消费时间" min-width="120"></el-table-column>
         <el-table-column prop="account_bouns" label="积分" sortable="custom" min-width="120"></el-table-column>
         <el-table-column
           prop="actual_balance"
@@ -240,7 +243,7 @@ export default {
       filters: {
         name: "",
         card_no: "",
-        queryDate: [new Date().getTime(), new Date().getTime()],
+        queryDate: null,
       },
       prop: "",
       order: "",

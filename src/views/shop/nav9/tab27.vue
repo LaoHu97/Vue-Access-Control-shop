@@ -60,8 +60,8 @@
             label="描述文字"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="描述" prop="comments">
-          <el-input v-model="levelForm.comments" placeholder="请输入描述"></el-input>
+        <el-form-item label="会员权益" prop="comments">
+          <el-input type="textarea" :rows="3" v-model="levelForm.comments" placeholder="请输入会员权益"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

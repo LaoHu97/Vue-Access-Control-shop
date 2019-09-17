@@ -38,7 +38,7 @@
         <el-table-column prop="quantity" label="库存"></el-table-column>
         <el-table-column prop="get_limit" label="限领次数"></el-table-column>
         <el-table-column prop="status" label="状态" min-width="90" :formatter="status"></el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column label="操作" width="280">
           <template slot-scope="scope">
             <el-button type="warning" size="mini" @click="editCard(scope.$index, scope.row)">修改</el-button>
             <el-button
@@ -51,6 +51,7 @@
               {{scope.row.status == 2 ? '已上传': '上传'}}
             </el-button>
             <el-button type="info" size="mini" @click="editQ(scope.$index, scope.row)" v-else >券规则</el-button>
+            <el-button size="mini" type="danger" @click="removeCard(scope.$index, scope.row)">删除</el-button>
             <!-- <el-button
               type="success"
               size="mini"
@@ -168,7 +169,8 @@ import {
   queryCouponListNew,
   uploadCouponNew,
   selectStoreList,
-  getUrlCode
+  getUrlCode,
+  deleteCoupon
 } from "../../../api/shop";
 export default {
   data() {
@@ -259,6 +261,28 @@ export default {
     },
     clickCode: function() {
       window.location.href = this.editVipCode.vipCode;
+    },
+    removeCard(index, row) {
+      this.$confirm("删除消费有礼规则, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          deleteCoupon({card_id: row.card_id}).then(res => {
+            this.getUsers()
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     codeSubmit() {
       this.codeLoading = true;

@@ -96,16 +96,16 @@
           </div>
         </template>
       </el-form-item>
-      <!-- <el-form-item label="房间类型" prop="roomType"  v-if="$route.query.card_type == 'WDGIFT_COUPON'">
+      <el-form-item label="房间类型" prop="roomType"  v-if="$route.query.card_type == 'WDGIFT_COUPON'">
         <el-select v-model="meterForm.roomType" multiple placeholder="请选择">
           <el-option
             v-for="item in roomTypeOptions"
-            :key="item"
-            :label="item"
-            :value="item">
+            :key="item.roomType"
+            :label="item.roomType"
+            :value="item.roomType">
           </el-option>
         </el-select>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="可用时段" prop="resource">
         <template>
           <el-radio class="radio" v-model="meterForm.time_limit" label="0">全部时段</el-radio>
@@ -127,7 +127,7 @@
             <div style="margin-bottom: 5px" v-if="hour_minute">
               <el-time-select
                 placeholder="起始时间"
-                v-model="meterForm.begin_hour_minute"
+                v-model="meterForm.begin_hour_minute_1"
                 :picker-options="{
                     start: '00:00',
                     step: '00:10',
@@ -136,7 +136,7 @@
               ></el-time-select>
               <el-time-select
                 placeholder="结束时间"
-                v-model="meterForm.end_hour_minute"
+                v-model="meterForm.end_hour_minute_1"
                 :picker-options="{
                     start: '00:00',
                     step: '00:10',
@@ -145,10 +145,10 @@
                   }"
               ></el-time-select>
             </div>
-            <!-- <div v-if="two_begin_hour_minute">
+            <div v-if="two_begin_hour_minute">
               <el-time-select
                 placeholder="起始时间"
-                v-model="begin_hour_minute_2"
+                v-model="meterForm.begin_hour_minute_2"
                 :picker-options="{
                 start: '00:00',
                 step: '00:10',
@@ -157,17 +157,17 @@
               ></el-time-select>
               <el-time-select
                 placeholder="结束时间"
-                v-model="end_hour_minute_2"
+                v-model="meterForm.end_hour_minute_2"
                 :picker-options="{
                 start: '00:00',
                 step: '00:10',
                 end: '24:59',
-                minTime: begin_hour_minute_2
+                minTime: meterForm.begin_hour_minute_2
               }"
               ></el-time-select>
-            </div>-->
-            <el-button type="text" @click="hour_minute=true">添加时间</el-button>
-            <el-button type="text" @click="hour_minute=false">删除时间</el-button>
+            </div>
+              <el-button type="text" @click="two_begin_hour_minute=true">添加时间</el-button>
+              <el-button type="text" @click="two_begin_hour_minute=false">删除时间</el-button>
           </div>
         </template>
       </el-form-item>
@@ -255,7 +255,11 @@ export default {
         end_hour_minute: "",
         initialTotal: "",
         logo_url: "",
-        roomType: []
+        roomType: [],
+        begin_hour_minute_1: "",
+        end_hour_minute_1: "",
+        begin_hour_minute_2: "",
+        end_hour_minute_2: "",
       },
       optionsCoupons: [],
       searchLoading: false,
@@ -314,10 +318,15 @@ export default {
         ],
       },
 
-      roomTypeOptions: []
+      roomTypeOptions: [],
+      hour_minute: true,
+
+
+        two_begin_hour_minute:false
     };
   },
   methods: {
+
     returnDisplay(){
       let para={
         card_id:String(JSON.parse(sessionStorage.getItem('id'))),

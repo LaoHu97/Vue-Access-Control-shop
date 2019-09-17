@@ -1104,3 +1104,19 @@ export const selectEmployeedelete = params => {
 export const getAllStoreByMid = params => {
   return instance.post(`${preUrlPath}/admin/wp/mer/member/getAllStoreByMid`, params).then(res => res.data);
 };
+
+export const deleteActivity = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/deleteActivity`, params).then(res => res.data);
+};
+
+export const deleteByActivity_idAndId = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/deleteByActivity_idAndId`, params).then(res => res.data);
+};
+
+export const deleteCoupon = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/deleteCoupon`, params).then(res => res.data);
+};
+
+export const deleteByCard_idAndId = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/deleteByCard_idAndId`, params).then(res => res.data);
+};

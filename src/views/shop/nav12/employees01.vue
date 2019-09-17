@@ -17,8 +17,9 @@
     <div v-loading="listLoading">
       <el-table :data="users" border style="width: 100%">
         <el-table-column prop="name" label="姓名"></el-table-column>
-        <el-table-column prop="sex" label="性别"></el-table-column>
+        <el-table-column prop="sex" label="性别" :formatter="formatterSex"></el-table-column>
         <el-table-column prop="staffWork" label="职位"></el-table-column>
+        <el-table-column prop="tel" label="联系方式"></el-table-column>
         <el-table-column align="center" label="操作" width="280">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEditor(scope.$index, scope.row)">修改店员</el-button>
@@ -120,6 +121,9 @@ export default {
     };
   },
   methods: {
+    formatterSex(row, column){
+      return row.sex === '1' ? '男' : row.sex === '2' ? '女' : '未知'
+    },
     handleRemove(index, row) {
       this.$confirm("此操作将删除店员, 是否继续?", "提示", {
         confirmButtonText: "确定",

@@ -47,10 +47,11 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="操作" width="240">
+        <el-table-column align="center" label="操作" width="300">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">修改活动</el-button>
             <el-button size="mini" type="warning" @click="handleEdits(scope.$index, scope.row)">活动规则</el-button>
+            <el-button size="mini" type="danger" @click="removeCard(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>s
       </el-table>
@@ -78,7 +79,8 @@ import {
   queryConsumeActivity,
   sendVerCode,
   checkVerCode,
-  updateConsumeStatus
+  updateConsumeStatus,
+  deleteActivity
 } from "../../../api/shop";
 export default {
   data() {
@@ -114,6 +116,28 @@ export default {
         : row.status === "N"
         ? "已结束"
         : "未知";
+    },
+    removeCard(index, row) {
+      this.$confirm("删除消费有礼规则, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          deleteActivity({id: row.id}).then(res => {
+            this.getUsers()
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     handleEdits(index,row){
       this.$router.push({

@@ -137,18 +137,16 @@
       <el-form-item label="领券限制" prop="get_limit" style="width:300px;">
         <el-input v-model="form_02.get_limit" placeholder="每个用户领券上限，默认为1"></el-input>
       </el-form-item>
-      <el-form-item label="卡券领取页面是否可分享" label-width="180px">
+      <!-- <el-form-item label="卡券领取页面是否可分享" label-width="180px">
         <template>
-          <!-- `checked` 为 true 或 false -->
           <el-checkbox v-model="form_02.can_share" :disabled="true"></el-checkbox>
         </template>
       </el-form-item>
       <el-form-item label="用户领券后可转赠其他好友" label-width="180px">
         <template>
-          <!-- `checked` 为 true 或 false -->
           <el-checkbox v-model="form_02.can_give_friend" :disabled="true"></el-checkbox>
         </template>
-      </el-form-item>
+      </el-form-item> -->
       <h3>销劵设置</h3>
       <h4>二维码 ： 包含卡券信息的二维码，扫描后可进行销券</h4>
       <el-form-item label="操作提示" prop="notice" style="width:300px;">

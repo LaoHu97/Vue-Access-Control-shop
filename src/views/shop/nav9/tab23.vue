@@ -16,9 +16,10 @@
         <el-table-column prop="name" label="规则名称"></el-table-column>
         <el-table-column prop="amount" label="消费面额"></el-table-column>
         <el-table-column prop="coupon_name" label="赠送券"></el-table-column>
-        <el-table-column align="center" label="操作" width="140">
+        <el-table-column align="center" label="操作" width="200">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">修改规则</el-button>
+            <el-button size="mini" type="danger" @click="removeCard(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -78,7 +79,8 @@ import {
   updateReceiveCardAcStatus,
   queryCouponWithOutWDGifi,
   updateConsumeDetailList,
-  addConsumeDetailActivity
+  addConsumeDetailActivity,
+  deleteByActivity_idAndId
 } from "../../../api/shop";
 export default {
   data() {
@@ -124,7 +126,7 @@ export default {
       optionsCoupons: "",
       activityDialogFormVisible: false,
       activityForm: {
-        name: '',
+        name: "",
         amount: 0,
         coupon_card_id: ""
       }
@@ -150,6 +152,28 @@ export default {
         ? "未启用"
         : "未知";
     },
+    removeCard(index, row) {
+      this.$confirm("删除消费有礼规则, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          deleteByActivity_idAndId({id: row.id, activity_id: row.activity_id}).then(res => {
+            this.getUsers()
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
     switchChange(row) {
       let para = {
         id: row.id,
@@ -160,44 +184,44 @@ export default {
       });
     },
     submiltForm() {
-      let para = util.deepcopy(this.activityForm)
+      let para = util.deepcopy(this.activityForm);
       if (!para.id) {
-        para.id = parseInt(this.$route.query.id)
+        para.id = parseInt(this.$route.query.id);
         addConsumeDetailActivity(para).then(res => {
-          this.activityDialogFormVisible = false
-          this.getUsers()
+          this.activityDialogFormVisible = false;
+          this.getUsers();
           this.$message({
-            message: '修改成功',
-            type: 'success'
+            message: "修改成功",
+            type: "success"
           });
-        })
-      }else{
+        });
+      } else {
         updateConsumeDetailList(para).then(res => {
-          this.activityDialogFormVisible = false
-          this.getUsers()
+          this.activityDialogFormVisible = false;
+          this.getUsers();
           this.$message({
-            message: '修改成功',
-            type: 'success'
+            message: "修改成功",
+            type: "success"
           });
-        })
+        });
       }
     },
     addguize() {
       this.activityDialogFormVisible = true;
       this.activityForm = {
-        name: '',
+        name: "",
         amount: 0,
         coupon_card_id: ""
-      }
+      };
     },
     handleEdit(index, row) {
       this.activityDialogFormVisible = true;
       this.$nextTick(() => {
-        this.activityForm.id = row.id
-        this.activityForm.name = row.name
-        this.activityForm.amount = row.amount
-        this.activityForm.coupon_card_id = row.coupon_card_id
-      })
+        this.activityForm.id = row.id;
+        this.activityForm.name = row.name;
+        this.activityForm.amount = row.amount;
+        this.activityForm.coupon_card_id = row.coupon_card_id;
+      });
     },
     handleCurrentChange(val) {
       this.page = val;
@@ -247,7 +271,7 @@ export default {
   },
   mounted() {
     this.getUsers();
-    queryCouponWithOutWDGifi({sid: this.$route.query.sid}).then(res => {
+    queryCouponWithOutWDGifi({ sid: this.$route.query.sid }).then(res => {
       this.optionsCoupons = res.data.couponList;
     });
   }

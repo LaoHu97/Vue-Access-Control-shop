@@ -14,9 +14,10 @@
     <div v-loading="listLoading">
       <el-table :data="users" border highlight-current-row style="width: 100%;">
         <el-table-column prop="coupon_name" label="赠送券"></el-table-column>
-        <el-table-column align="center" label="操作" width="140">
+        <el-table-column align="center" label="操作" width="240">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">修改规则</el-button>
+            <el-button size="mini" type="danger" @click="removeCard(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -68,7 +69,8 @@ import {
   addConsumeDetailActivity,
   queryWdGiftCouponDetail,
   addWdGiftCouponDetail,
-  updateWdGiftCouponDetail
+  updateWdGiftCouponDetail,
+  deleteByCard_idAndId
 } from "../../../api/shop";
 export default {
   data() {
@@ -137,6 +139,28 @@ export default {
         : row.status === "N"
         ? "未启用"
         : "未知";
+    },
+    removeCard(index, row) {
+      this.$confirm("删除消费有礼规则, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          deleteByCard_idAndId({id: row.id, card_id: row.card_id}).then(res => {
+            this.getUsers()
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     switchChange(row) {
       let para = {

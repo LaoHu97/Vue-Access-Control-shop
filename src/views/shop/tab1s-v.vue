@@ -299,7 +299,7 @@
         <el-form-item label="单次赠送上限" v-if="this.form_01.supply_bonus" style="width:300px;">
           <el-input v-model="form_01.max_increase_bonus" placeholder="如：10000"></el-input>
         </el-form-item>
-        <el-form-item label="积分抵扣" v-if="this.form_01.supply_bonus">
+        <!-- <el-form-item label="积分抵扣" v-if="this.form_01.supply_bonus">
           <div class>
             <span class="title_xiaofei">每使用</span>
             <input class="title_inpu" v-model="form_01.cost_bonus_unit" placeholder="如：100">
@@ -313,8 +313,8 @@
               style="border-top-left-radius: 0px;border-bottom-left-radius: 0px;border-top-right-radius: 4px;border-bottom-right-radius: 4px;"
             >分</span>
           </div>
-        </el-form-item>
-        <el-form-item label="抵扣条件" v-if="this.form_01.supply_bonus">
+        </el-form-item> -->
+        <!-- <el-form-item label="抵扣条件" v-if="this.form_01.supply_bonus">
           <div class>
             <span class="title_xiaofei">订单满</span>
             <input
@@ -333,7 +333,7 @@
               style="border-top-left-radius: 0px;border-bottom-left-radius: 0px;border-top-right-radius: 4px;border-bottom-right-radius: 4px;"
             >积分</span>
           </div>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="有效期">
           <template>
             <el-radio class="radio" v-model="date_info" label="0">永久有效</el-radio>
@@ -447,12 +447,11 @@
         <el-form-item label="领券限制" prop="get_limit" style="width:300px;">
           <el-input v-model="form_02.get_limit" placeholder="每个用户领券上限，默认为1"></el-input>
         </el-form-item>
-        <el-form-item label="卡券领取页面是否可分享" label-width="180px">
+        <!-- <el-form-item label="卡券领取页面是否可分享" label-width="180px">
           <template>
-            <!-- `checked` 为 true 或 false -->
             <el-checkbox v-model="form_02.can_share"></el-checkbox>
           </template>
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item label="用户领券后可转赠其他好友" label-width="180px">
         <template>
           <el-checkbox v-model="form_02.can_give_friend"></el-checkbox>
@@ -921,13 +920,13 @@ export default {
             trigger: "blur"
           }
         ],
-        service_phone: [
-          {
-            required: true,
-            validator: validate_service_phone,
-            trigger: "blur"
-          }
-        ]
+        // service_phone: [
+        //   {
+        //     required: false,
+        //     validator: validate_service_phone,
+        //     trigger: "blur"
+        //   }
+        // ]
       }
     };
   },
