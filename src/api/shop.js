@@ -711,10 +711,6 @@ export const uploadCouponNew = params => {
   return instance.post(`${preUrlPath}/admin/wp/mer/member/uploadCoupon`, params).then(res => res.data);
 };
 
-export const modifyCouponStock = params => {
-  return instance.post(`${preUrlPath}/admin/wp/mer/member/modifyCouponStock`, params).then(res => res.data);
-};
-
 export const addWdFrequencyCard = params => {
   return instance.post(`${preUrlPath}/admin/wp/mer/member/addWdFrequencyCard`, params).then(res => res.data);
 };
@@ -1119,4 +1115,8 @@ export const deleteCoupon = params => {
 
 export const deleteByCard_idAndId = params => {
   return instance.post(`${preUrlPath}/admin/wp/mer/member/deleteByCard_idAndId`, params).then(res => res.data);
+};
+
+export const modifyCouponStock = params => {
+  return instance.post(`${preUrlPath}/admin/wp/mer/member/modifyCouponStock`, params).then(res => res.data);
 };

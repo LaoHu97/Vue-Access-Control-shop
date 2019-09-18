@@ -35,9 +35,15 @@
       <el-table border :data="users" highlight-current-row style="width: 100%;">
         <el-table-column prop="title" label="卡券名称" min-width="120"></el-table-column>
         <el-table-column prop="card_type" label="卡券类型" :formatter="card_type"></el-table-column>
-        <el-table-column prop="quantity" label="库存"></el-table-column>
         <el-table-column prop="get_limit" label="限领次数"></el-table-column>
         <el-table-column prop="status" label="状态" min-width="90" :formatter="status"></el-table-column>
+        <el-table-column label="剩余库存" width="250">
+          <template slot-scope="scope">
+            <el-tag type="gray" style="width:80px;text-align: center;">{{scope.row.quantity}}</el-tag>
+            <el-input style="width:80px;" v-model="scope.row.addQuantity" :maxlength="6"></el-input>
+            <el-button plain type="success" @click="stockClick(scope.$index, scope.row)">增加</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="280">
           <template slot-scope="scope">
             <el-button type="warning" size="mini" @click="editCard(scope.$index, scope.row)">修改</el-button>
@@ -170,7 +176,8 @@ import {
   uploadCouponNew,
   selectStoreList,
   getUrlCode,
-  deleteCoupon
+  deleteCoupon,
+  modifyCouponStock
 } from "../../../api/shop";
 export default {
   data() {
@@ -254,6 +261,37 @@ export default {
     };
   },
   methods: {
+      //修改库存
+      stockClick(index, row) {
+        console.log(row.addQuantity);
+        var reg = /^\+?[1-9][0-9]*$/;
+        if (reg.test(row.addQuantity)) {
+          let para = {
+            id: row.id,
+            increase_stock_value: parseInt(row.addQuantity, 10)
+          }
+          modifyCouponStock(para).then((res) => {
+            let {
+              status,
+              message
+            } = res;
+            if (status == 200) {
+              this.$message({
+                message: message,
+                type: 'success'
+              });
+              this.getUsers();
+            } else {
+              this.$message({
+                message: message,
+                type: 'warning'
+              });
+            }
+          })
+        } else {
+          this.$message.error('请输入正确库存数量');
+        }
+      },
     closeDialog() {
       this.codeMode = false;
       this.codeForm.scene = "";

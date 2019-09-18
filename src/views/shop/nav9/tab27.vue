@@ -53,7 +53,7 @@
         <el-form-item label="折扣" prop="discount">
           <el-input-number
             v-model="levelForm.discount"
-            :min="1"
+            :min="0"
             :max="10"
             :precision="1"
             :controls="false"

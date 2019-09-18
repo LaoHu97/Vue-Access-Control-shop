@@ -268,7 +268,7 @@
         <el-form-item label="单次赠送上限" v-if="this.form_01.supply_bonus" style="width:300px;">
           <el-input v-model="form_01.max_increase_bonus" placeholder="如：10000"></el-input>
         </el-form-item>
-        <el-form-item label="积分抵扣" v-if="this.form_01.supply_bonus">
+        <!-- <el-form-item label="积分抵扣" v-if="this.form_01.supply_bonus">
           <div class>
             <span class="title_xiaofei">每使用</span>
             <input class="title_inpu" v-model="form_01.cost_bonus_unit" placeholder="如：100" style />
@@ -302,7 +302,7 @@
               style="border-top-left-radius: 0px;border-bottom-left-radius: 0px;border-top-right-radius: 4px;border-bottom-right-radius: 4px;"
             >积分</span>
           </div>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" @click="Form2">下一步</el-button>
         </el-form-item>
