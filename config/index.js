@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/admin': {
-        target: 'https://mp.wandingkeji.cn',
+        target: 'http://ycks85.natappfree.cc',
         changeOrigin: true,
         pathRewrite: {
           '^/admin': '/admin'

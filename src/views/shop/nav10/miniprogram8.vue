@@ -34,6 +34,26 @@
             <el-option label="支付失败" value="2"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="所属门店">
+          <el-select
+            v-model="filters.sid"
+            placeholder="门店名称"
+            :multiple="false"
+            filterable
+            remote
+            :remote-method="remoteStore"
+            :loading="searchLoading"
+            clearable
+            @focus="clickStore"
+          >
+            <el-option
+              v-for="item in optionsStore"
+              :key="item.id"
+              :value="item.id"
+              :label="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item style="float: right;">
           <el-button type="primary" v-on:click="getUsers" size="medium" round>查询</el-button>
         </el-form-item>
@@ -63,30 +83,61 @@
         style="text-align:center;background:#fff;padding:15px;"
       ></el-pagination>
     </el-row>
-  </section> 
+  </section>
 </template>
 
 <script>
 import * as util from "../../../util/util.js";
-import { queryProductOrderList } from "../../../api/shop";
+import { queryProductOrderList, selectStoreListNew } from "../../../api/shop";
 
 export default {
   data() {
     return {
       filters: {
-        startTime: '',
-        endTime: '',
-        status: '',
-        product_name: '',
-        order_id: ''
+        startTime: "",
+        endTime: "",
+        status: "",
+        product_name: "",
+        order_id: "",
+        sid: ""
       },
       total: 0,
       page: 1,
       users: [],
-      listLoading: false
+      listLoading: false,
+      searchLoading: false,
+      optionsStore: []
     };
   },
   methods: {
+    clickStore: function() {
+      this.searchLoading = true;
+      selectStoreListNew({
+        sname: "",
+        use_all_locations: 'N'
+      }).then(res => {
+        this.searchLoading = false;
+        let { status, data } = res;
+        this.optionsStore = data.storeList;
+      });
+    },
+    remoteStore(query) {
+      if (query !== "") {
+        this.searchLoading = true;
+        setTimeout(() => {
+          this.searchLoading = false;
+          selectStoreListNew({
+            sname: query,
+            use_all_locations: 'N'
+          }).then(res => {
+            let { status, data } = res;
+            this.optionsStore = data.storeList;
+          });
+        }, 200);
+      } else {
+        this.optionsStore = [];
+      }
+    },
     creatTimeFormatter: function(row, column) {
       return util.formatDate.format(
         new Date(row.creatTime),
@@ -94,7 +145,11 @@ export default {
       );
     },
     pay_wayFormatter: function(row, column) {
-      return row.pay_way === 'WX' ? '微信' : row.pay_way === 'vip' ? '会员支付' : '未知'
+      return row.pay_way === "WX"
+        ? "微信"
+        : row.pay_way === "vip"
+        ? "会员支付"
+        : "未知";
     },
     handleCurrentChange(val) {
       this.page = val;
@@ -107,10 +162,11 @@ export default {
       this.gerList();
     },
     gerList() {
-      let para = util.deepcopy(this.filters)
-      para.pageNum = this.page
-      para.startTime = para.startTime.toString()
-      para.endTime = para.endTime.toString()
+      let para = util.deepcopy(this.filters);
+      para.pageNum = this.page;
+      para.sid = para.sid.toString()
+      para.startTime = para.startTime.toString();
+      para.endTime = para.endTime.toString();
       this.listLoading = true;
       queryProductOrderList(para).then(res => {
         this.total = res.data.total;

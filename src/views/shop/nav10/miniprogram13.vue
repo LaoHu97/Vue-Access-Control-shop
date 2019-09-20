@@ -1,11 +1,23 @@
+<style scoped>
+.grid-content{
+  font-size: 18px;
+  text-align: center;
+}
+</style>
 <template>
   <section>
+    <el-row :gutter="20">
+      <el-col :span="6" v-for="(item, index) in roomCount" :key="index">
+        <div class="grid-content">
+          <div><el-tag>{{item.name}}</el-tag></div>
+          <div>已用{{item.total - item.unUse}}</div>
+          <div>总数{{item.total}}</div>
+        </div>
+      </el-col>
+    </el-row>
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <!-- <el-form-item label="爆款名称">
-          <el-input v-model="filters.title" placeholder="爆款名称"></el-input>
-        </el-form-item>-->
         <el-form-item style="float:right">
           <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
         </el-form-item>
@@ -82,6 +94,7 @@ export default {
       },
       listLoading: false,
       users: [],
+      roomCount: [],
       pageNum: 1,
       total: 0,
 
@@ -142,6 +155,7 @@ export default {
       getRoomManage(para).then(res => {
         this.listLoading = false;
         this.users = res.data.roomList;
+        this.roomCount = res.data.roomCount
         this.total = res.data.total;
         this.roomManageOptions = res.data.employeeList;
       });

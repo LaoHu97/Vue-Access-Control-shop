@@ -848,13 +848,6 @@ export default {
             message: "请输入使用须知",
             trigger: "blur"
           }
-        ],
-        service_phone: [
-          {
-            required: true,
-            validator: validate_service_phone,
-            trigger: "blur"
-          }
         ]
       }
     };

@@ -3,9 +3,9 @@
     <!--工具条-->
     <el-row>
       <el-form :inline="true" :model="filters">
-        <el-form-item label="爆款名称">
+        <!-- <el-form-item label="爆款名称">
           <el-input v-model="filters.title" placeholder="爆款名称"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item style="float:right">
           <el-button type="primary" v-on:click="getUsers" round>查询</el-button>
         </el-form-item>
