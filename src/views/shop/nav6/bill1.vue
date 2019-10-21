@@ -142,6 +142,9 @@
         }],
         //账单类型
         optionsPayType: [{
+          value: 'ALL',
+          label: '所有'
+        }, {
           value: '0',
           label: '支付成功'
         }, {
