@@ -12,14 +12,14 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/admin': {
-        target: 'https://pay.wandingkeji.cn',
+        target: 'https://devpay.wandingkeji.cn',
         changeOrigin: true,
         pathRewrite: {
           '^/admin': '/admin'
         }
       },
       '/download': {
-        target: 'http://test.weupay.com:8081',
+        target: 'https://devdownload.wandingkeji.cn',
         changeOrigin: true,
         pathRewrite: {
           '^/download': '/download'

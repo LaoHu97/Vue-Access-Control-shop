@@ -359,3 +359,11 @@ export const memberAccountDeposit = params => { return instance.post(`${preUrlPa
 */
 export const checkFuiouDataExcel = params => { return instance.get(`${downloadPath}/download/wp/mer/checkFuiouDataExcel`, { params: params }); };
 
+
+/**
+ * 2019-11-19
+ */
+
+export const queryDownloadFileUrl = params => { return instance.post(`${downloadPath}/download/downloadFileUrl/queryDownloadFileUrl`,params).then(res => res.data); };
+
+export const downloadExcelFile = `${downloadPath}/download/downloadFileUrl/downloadExcelFile`;

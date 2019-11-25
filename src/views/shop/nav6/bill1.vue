@@ -273,8 +273,13 @@
             para.endTime = (!para.endTime || para.endTime == '') ? '' : String(Date.parse(util.formatDate.format(
               new Date(para.endTime), 'yyyy/MM/dd hh:mm:ss')));
             checkDataExcel(para).then(res => {
+              console.log(res);
+              
               if (res.data.status === 200) {
-                window.open(res.data.data)
+                this.$message({
+                  message: res.data.message,
+                  type: 'success'
+                });
               }
             })
           }
