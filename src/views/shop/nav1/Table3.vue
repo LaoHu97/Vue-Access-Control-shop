@@ -57,7 +57,7 @@
         </el-table-column>
         <el-table-column prop="refund_amt" label="退款金额" :formatter="format_refund_amt">
         </el-table-column>
-        <el-table-column prop="factorage" label="交易手续费" min-width="120" :formatter="format_factorage">
+        <el-table-column prop="factorage" label="交易手续费" min-width="120" :render-header="renderHeaderFactorage" :formatter="format_factorage">
         </el-table-column>
         <el-table-column prop="amount" label="实收金额" min-width="180" align="center" :render-header="renderHeaderMoney" :formatter="format_surplus">
         </el-table-column>
@@ -135,6 +135,16 @@
           h('span', {}, column.label),
           h('br'),
           h('span', {style: 'color: #F56C6C;font-weight: normal'}, '（*交易金额-退款金额）')
+        ])
+      },
+      renderHeaderFactorage(h, {
+        column,
+        $index
+      }) {
+        return h('span', {}, [
+          h('span', {}, column.label),
+          h('br'),
+          h('span', { style: 'color: #F56C6C;font-weight: normal' }, '（*此数据仅供参考）')
         ])
       },
       format_pay_type(row, column) {

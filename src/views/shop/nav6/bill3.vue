@@ -31,7 +31,7 @@
     <!--列表-->
     <div v-loading="listLoading">
       <el-table :data="users" border highlight-current-row style="width: 100%;">
-        <el-table-column prop="fileUrl" label="文件名">
+        <el-table-column prop="fileName" label="文件名">
         </el-table-column>
         <el-table-column prop="startTime" label="开始时间">
         </el-table-column>
@@ -112,7 +112,7 @@
     },
     methods: {
         downLoadClick(index, row){
-            window.open(`${downloadExcelFile}?id=${row.id}`)
+          window.open(`${row.fileUrl}`)
         },
       //门店远程搜索
       clickShop: function () {
