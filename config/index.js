@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/admin': {
-        target: 'https://devpay.wandingkeji.cn',
+        target: 'https://pay.wandingkeji.cn',
         changeOrigin: true,
         pathRewrite: {
           '^/admin': '/admin'

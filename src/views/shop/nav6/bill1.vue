@@ -69,8 +69,8 @@
       <el-row>
         <el-form-item label="注：">
           <span style="color:#999;">每次下载区间最多为3个月。如果下载出现乱码，请选择office2003打开</span><br>
-          <span style="color:#f00;">* 系统每日中午12点前进行对账及汇总统计，请于每日中午12点之后下载前一日对账单明细；</span><br>
-          <span style="color:#f00;">* 如部分商户无法下载2019年11月之前的交易数据，请致电400-888-5400咨询客服。</span>
+          <!-- <span style="color:#f00;">* 系统每日中午12点前进行对账及汇总统计，请于每日中午12点之后下载前一日对账单明细；</span><br>
+          <span style="color:#f00;">* 如部分商户无法下载2019年11月之前的交易数据，请致电400-888-5400咨询客服。</span> -->
         </el-form-item>
       </el-row>
       <el-row>
@@ -275,13 +275,8 @@
             para.endTime = (!para.endTime || para.endTime == '') ? '' : String(Date.parse(util.formatDate.format(
               new Date(para.endTime), 'yyyy/MM/dd hh:mm:ss')));
             checkDataExcel(para).then(res => {
-              console.log(res);
-              
               if (res.data.status === 200) {
-                this.$message({
-                  message: res.data.message,
-                  type: 'success'
-                });
+                window.open(res.data.data)
               }
             })
           }
